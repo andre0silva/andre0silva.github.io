@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>André Ferreira · Portfólio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,600;112,800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: dossiê executivo — resumo e escopo no topo, pilares de gestão, trajetória completa em linha do tempo, cases com contexto/atuação/resultado */
+:root{
+  --bg:#f3f6f7; --surface:#ffffff; --fg:#14232b; --muted:#5a6b73; --line:#d5dee2;
+  --accent:#0d5e6e; --accent-soft:#e1eff1; --signal:#b86a12; --signal-soft:#f7ecdd;
+  --ok:#2f7a4b; --ok-soft:#e3f1e8; --ink:#14232b; --on-ink:#eef4f6;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f171b; --surface:#16222a; --fg:#e4ecef; --muted:#97a9b1; --line:#2a3a42;
+  --accent:#5fbccd; --accent-soft:#183840; --signal:#e3a456; --signal-soft:#3a2b18;
+  --ok:#7cc896; --ok-soft:#1b3424; --ink:#0a1115; --on-ink:#e4ecef; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f171b; --surface:#16222a; --fg:#e4ecef; --muted:#97a9b1; --line:#2a3a42;
+  --accent:#5fbccd; --accent-soft:#183840; --signal:#e3a456; --signal-soft:#3a2b18;
+  --ok:#7cc896; --ok-soft:#1b3424; --ink:#0a1115; --on-ink:#e4ecef; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6}
+.wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);font-stretch:112%;text-wrap:balance;margin:0;line-height:1.12}
+h2{font-size:clamp(1.6rem,3.4vw,2.3rem);font-weight:800}
+h3{font-size:1.1rem;font-weight:600}
+p{margin:0}
+ul{margin:0}
+.mono{font-family:var(--mono);font-size:.82em}
+.label{font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+section{padding-block:60px;border-top:1px solid var(--line)}
+.sec-head{display:grid;gap:10px;margin-bottom:34px;max-width:70ch}
+.sec-head p{color:var(--muted)}
+
+/* Nav */
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+nav .wrap{display:flex;gap:22px;align-items:center;overflow-x:auto;padding-block:12px;scrollbar-width:none}
+nav a{font-size:.9rem;color:var(--muted);text-decoration:none;white-space:nowrap}
+nav a:hover{color:var(--fg)}
+nav .brand{font-family:var(--display);font-stretch:112%;font-weight:800;color:var(--fg);margin-right:auto}
+
+/* Hero */
+header{padding-block:56px 0}
+.hero{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:44px;align-items:start}
+.hero h1{font-size:clamp(2.4rem,6.2vw,4.3rem);font-weight:800;letter-spacing:-.01em}
+.hero h1 span{color:var(--accent)}
+.role{font-size:1.22rem;margin-top:16px;max-width:48ch;font-weight:600}
+.lead{color:var(--muted);margin-top:14px;max-width:62ch}
+.targets{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.targets span{font-size:.88rem;border:1px solid var(--accent);color:var(--accent);padding:4px 12px;border-radius:999px}
+.brief{background:var(--ink);color:var(--on-ink);border-radius:6px;padding:24px;display:grid;gap:14px}
+.brief .label{color:var(--on-ink);opacity:.7}
+.brief dl{margin:0;display:grid;gap:12px}
+.brief dt{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;opacity:.65}
+.brief dd{margin:0;font-size:.98rem}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:48px}
+.stat{background:var(--bg);padding:18px}
+.stat b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.85rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{color:var(--muted);font-size:.9rem;display:block;margin-top:4px}
+
+/* Pillars */
+.pillars{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.pillar{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:24px;display:grid;gap:10px;align-content:start}
+.pillar p{color:var(--muted)}
+.pillar ul{padding-left:18px;font-size:.96rem}
+.pillar li{margin-bottom:3px}
+
+/* Timeline */
+.tl{display:grid}
+.job{display:grid;grid-template-columns:210px minmax(0,1fr);gap:30px;padding-block:26px;border-bottom:1px solid var(--line)}
+.job:last-child{border-bottom:0}
+.when{font-family:var(--mono);font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums;display:grid;gap:4px;align-content:start}
+.when b{color:var(--fg);font-family:var(--display);font-stretch:112%;font-size:1.06rem;font-weight:600}
+.job-body{display:grid;gap:10px;min-width:0}
+.job-title{font-weight:600;font-size:1.05rem}
+.job-body ul{padding-left:18px;max-width:72ch}
+.job-body li{margin-bottom:4px}
+.scope{display:flex;flex-wrap:wrap;gap:6px}
+.scope span{font-family:var(--mono);font-size:.72rem;padding:3px 8px;border-radius:3px;background:var(--accent-soft);color:var(--accent)}
+.scope span.lead-chip{background:var(--signal-soft);color:var(--signal)}
+.note{color:var(--muted);font-size:.9rem;margin-top:18px;max-width:72ch}
+
+/* Cases */
+.cases{display:grid;gap:22px}
+.case{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:28px;display:grid;gap:18px}
+.case-head{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:baseline}
+.case-head h3{font-size:1.35rem}
+.case-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.case-cols div{display:grid;gap:6px;align-content:start;min-width:0}
+.case-cols p,.case-cols li{color:var(--muted);font-size:.96rem}
+.case-cols ul{padding-left:18px}
+.pipe{display:flex;flex-wrap:wrap;align-items:stretch}
+.node{flex:1 1 150px;border:1px solid var(--line);background:var(--bg);padding:10px 14px;min-width:0}
+.node b{font-family:var(--display);font-stretch:112%;font-weight:600;font-size:.95rem;display:block}
+.node small{color:var(--muted);font-size:.8rem}
+.arrow{flex:0 0 26px;display:grid;place-items:center;color:var(--accent);font-family:var(--mono)}
+.ws-table{width:100%;border-collapse:collapse;font-size:.94rem}
+.ws-wrap{overflow-x:auto}
+.ws-table th{text-align:left;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:8px 10px;border-bottom:1px solid var(--line)}
+.ws-table td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+.ws-table td:first-child{font-weight:600;white-space:nowrap}
+.chip{font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap}
+.c-prd{background:var(--ok-soft);color:var(--ok)}
+.c-hml{background:var(--accent-soft);color:var(--accent)}
+.c-poc{background:var(--signal-soft);color:var(--signal)}
+
+/* Method */
+.method{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:26px}
+.method div{display:grid;gap:6px;align-content:start;border-top:2px solid var(--accent);padding-top:14px}
+.method b{font-family:var(--display);font-stretch:112%;font-weight:600}
+.method p{color:var(--muted);font-size:.94rem}
+
+/* Skills */
+.skills{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:26px}
+.skills div{display:grid;gap:10px;align-content:start}
+.skills ul{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.skills li{background:var(--surface);border:1px solid var(--line);padding:4px 10px;border-radius:3px;font-size:.9rem}
+
+/* Education */
+.edu{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:40px}
+.list{list-style:none;padding:0;margin:0}
+.list li{display:flex;justify-content:space-between;gap:16px;padding-block:11px;border-bottom:1px solid var(--line)}
+.list li span:last-child{color:var(--muted);font-size:.88rem;text-align:right;flex-shrink:0;max-width:45%}
+.list h3{margin-bottom:6px}
+
+/* Contact */
+.contact{display:flex;flex-wrap:wrap;gap:18px 44px;align-items:center}
+.contact .item{display:grid;gap:2px}
+.copy{font:inherit;font-size:.82rem;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:4px 10px;border-radius:3px;cursor:pointer;margin-left:8px}
+footer{padding-block:28px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
+
+@media (max-width:900px){
+  .hero,.edu{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat:last-child{grid-column:1/-1}
+  .pillars{grid-template-columns:1fr}
+  .case-cols{grid-template-columns:1fr}
+  .method,.skills{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .job{grid-template-columns:1fr;gap:8px}
+  .when{grid-template-columns:auto auto;justify-content:start;gap:4px 12px;align-items:baseline}
+  .arrow{flex-basis:100%;height:20px;transform:rotate(90deg)}
+}
+@media (max-width:520px){.method,.skills{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+</head>
+<body>
+
+<nav aria-label="Seções">
+  <div class="wrap">
+    <span class="brand">André Ferreira</span>
+    <a href="#atuacao">Atuação</a>
+    <a href="#trajetoria">Trajetória</a>
+    <a href="#cases">Cases</a>
+    <a href="#competencias">Competências</a>
+    <a href="#formacao">Formação</a>
+    <a href="#contato">Contato</a>
+  </div>
+</nav>
+
+<header class="wrap">
+  <div class="hero">
+    <div>
+      <p class="label">Liderança em Infraestrutura e Segurança de TI</p>
+      <h1>André <span>Ferreira</span></h1>
+      <p class="role">Coordenação e gestão de infraestrutura, cloud híbrida e segurança da identidade em ambientes de grande porte.</p>
+      <p class="lead">Mais de 11 anos conduzindo operações e projetos de infraestrutura em empresas e clientes de alta criticidade, de datacenter on-premises a cloud híbrida. Já gerenciei equipe de infraestrutura, planejei TI junto à diretoria, administrei contratos e fornecedores e liderei modernização em ambiente bancário. Hoje somo a isso a governança de identidades de uma operação com cerca de 70 mil colaboradores.</p>
+      <div class="targets" aria-label="Posições-alvo">
+        <span>Coordenação de Infraestrutura</span>
+        <span>Gestão de TI</span>
+        <span>Especialista Sênior</span>
+      </div>
+    </div>
+    <aside class="brief" aria-label="Resumo executivo">
+      <p class="label">Resumo executivo</p>
+      <dl>
+        <div><dt>Posição atual</dt><dd>Especialista em Cibersegurança, IAM e Infraestrutura Cloud · DBC Company, alocado no Grupo DPSP</dd></div>
+        <div><dt>Gestão</dt><dd>Gerente de Infraestrutura por 4+ anos; equipes de 21 pessoas em média; contratos, fornecedores e field services</dd></div>
+        <div><dt>Escala</dt><dd>Até ~50 mil servidores e ~70 mil identidades sob gestão</dd></div>
+        <div><dt>Formação</dt><dd>Ciência da Computação · MBA em Gestão de Projetos de TI (em curso)</dd></div>
+        <div><dt>Base</dt><dd>São Paulo, SP · disponível para híbrido, remoto ou mudança</dd></div>
+      </dl>
+    </aside>
+  </div>
+  <div class="stats">
+    <div class="stat"><b>11+</b><span>anos em infraestrutura de TI</span></div>
+    <div class="stat"><b>4+</b><span>anos como Gerente de Infraestrutura</span></div>
+    <div class="stat"><b>21</b><span>pessoas lideradas, em média</span></div>
+    <div class="stat"><b>~50 mil</b><span>servidores em ambiente bancário</span></div>
+    <div class="stat"><b>~70 mil</b><span>colaboradores sob governança de identidade</span></div>
+  </div>
+</header>
+
+<main>
+<section id="atuacao">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label">Atuação</p>
+      <h2>Quatro frentes que eu assumo</h2>
+      <p>Perfil de gestor técnico: entendo a operação por dentro e respondo pelo resultado dela diante da liderança.</p>
+    </div>
+    <div class="pillars">
+      <article class="pillar">
+        <h3>Gestão de operações e equipes</h3>
+        <p>Times de infraestrutura e field services com disponibilidade como meta.</p>
+        <ul>
+          <li>Liderança de equipes de 21 pessoas em média, em ambientes com mais de 30 mil usuários.</li>
+          <li>Gestão de contratos, fornecedores e escalonamentos com fabricantes.</li>
+          <li>Planejamento estratégico de TI junto à diretoria.</li>
+        </ul>
+      </article>
+      <article class="pillar">
+        <h3>Modernização e arquitetura híbrida</h3>
+        <p>Decisões de arquitetura que reduzem risco e custo de operação.</p>
+        <ul>
+          <li>Migração de workloads VMware para OpenShift Virtualization em ambiente bancário.</li>
+          <li>Arquiteturas on-premises, multicloud e híbridas; Oracle Cloud certificado.</li>
+          <li>Disaster Recovery com RPO e RTO definidos e alta disponibilidade.</li>
+          <li>Redes Cisco Meraki e observabilidade com Zabbix, Grafana, Elastic e Kibana.</li>
+        </ul>
+      </article>
+      <article class="pillar">
+        <h3>Governança, processos e mudança</h3>
+        <p>Mudança previsível, documentada e auditável.</p>
+        <ul>
+          <li>GMUD com análise de impacto, testes, rollback e aprovação em CAB.</li>
+          <li>Práticas ITIL 4, gestão por processos e OKR.</li>
+          <li>Base de conhecimento para que analistas executem sem depender de mim.</li>
+        </ul>
+      </article>
+      <article class="pillar">
+        <h3>Segurança e identidade</h3>
+        <p>Acesso certo, para a pessoa certa, pelo tempo certo.</p>
+        <ul>
+          <li>Ciclo de vida de identidade integrado ao RH (SuccessFactors, AD, Entra ID).</li>
+          <li>Acesso condicional, autenticação sem senha, SSO e RBAC.</li>
+          <li>Indicadores executivos de segurança em Power BI; ISO 27001 Foundation.</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="trajetoria">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label">Trajetória</p>
+      <h2>De suporte a gestão de infraestrutura</h2>
+      <p>Entre 2012 e 2025 atuei principalmente como consultor PJ pela minha empresa, a Now Technology, atendendo mais de um cliente em paralelo. Por isso alguns períodos se sobrepõem.</p>
+    </div>
+    <div class="tl">
+      <article class="job">
+        <div class="when"><b>DBC Company</b>06/2026 – atual</div>
+        <div class="job-body">
+          <p class="job-title">Especialista em Cibersegurança, IAM e Infraestrutura Cloud · cliente Grupo DPSP</p>
+          <ul>
+            <li>Conduzo a governança de identidades de uma operação com cerca de 70 mil colaboradores, integrando RH, Active Directory e Entra ID.</li>
+            <li>Respondo por 12 frentes simultâneas, de sincronização de atributos a RBAC, autenticação sem senha e dashboards executivos de segurança.</li>
+            <li>Interlocução entre RH, Cibersegurança, gestão e fabricantes; mudanças aprovadas em CAB.</li>
+          </ul>
+          <div class="scope"><span>~70 mil colaboradores</span><span>Varejo</span><span>Entra ID Governance</span></div>
+        </div>
+      </article>
+      <article class="job">
+        <div class="when"><b>Logicalis</b>01/2026 – 05/2026</div>
+        <div class="job-body">
+          <p class="job-title">Sr Cloud Specialist · Infraestrutura Red Hat · projeto Bradesco</p>
+          <ul>
+            <li>Referência técnica na migração de workloads VMware para OpenShift Virtualization: ambiente de ~50 mil servidores, ~10 mil migrados.</li>
+            <li>Definição de arquitetura híbrida e de estratégia de Disaster Recovery (RPO/RTO).</li>
+            <li>Administração avançada de OpenShift e Kubernetes, com automação em Ansible, Shell e Python.</li>
+          </ul>
+          <div class="scope"><span>~50 mil servidores</span><span>Bancário</span><span>Missão crítica</span></div>
+        </div>
+      </article>
+      <article class="job">
+        <div class="when"><b>MDS Group</b>04/2023 – 09/2025 · PJ</div>
+        <div class="job-body">
+          <p class="job-title">Especialista de Infraestrutura de TI Sênior</p>
+          <ul>
+            <li>Responsável técnico pelo time de infraestrutura e field services, com distribuição de demandas, priorização e acompanhamento de entregas.</li>
+            <li>Gestão da rede corporativa em Cisco Meraki com mais de 200 switches: padronização de configuração, gestão centralizada pelo dashboard e atendimento a unidades remotas.</li>
+            <li>Estruturação da observabilidade de infraestrutura com Zabbix, Grafana, Elastic/Kibana e Uptime Kuma: monitoramento de disponibilidade, alertas, centralização de logs e painéis operacionais.</li>
+            <li>Gestão de contratos e fornecedores de infraestrutura, incluindo escalonamentos técnicos com fabricantes.</li>
+            <li>Sustentação de ambientes multicloud e on-premises: Windows Server, VMware, Hyper-V e Kubernetes.</li>
+          </ul>
+          <div class="scope"><span class="lead-chip">Liderança de equipe</span><span>200+ switches Meraki</span><span>Observabilidade</span><span>Contratos e fornecedores</span><span>Multicloud</span></div>
+        </div>
+      </article>
+      <article class="job">
+        <div class="when"><b>Brave Business Solutions</b>10/2019 – 02/2024 · PJ</div>
+        <div class="job-body">
+          <p class="job-title">Gerente de Infraestrutura</p>
+          <ul>
+            <li>Gestão da equipe de infraestrutura: alocação, acompanhamento de desempenho e desenvolvimento técnico do time.</li>
+            <li>Planejamento estratégico de TI junto à diretoria, com definição de prioridades, roadmap de infraestrutura e acompanhamento da carteira de projetos.</li>
+            <li>Alta disponibilidade de ambientes Windows, Linux, Oracle Linux, VMware e SAP, com rotinas de backup, atualização e capacidade.</li>
+            <li>Interlocução com áreas de negócio e fornecedores para atender demandas e janelas de mudança sem impacto à operação.</li>
+          </ul>
+          <div class="scope"><span class="lead-chip">Gestão de área</span><span>~200 servidores</span><span>30 mil+ usuários</span></div>
+        </div>
+      </article>
+      <article class="job">
+        <div class="when"><b>Inove Solutions</b>11/2020 – 05/2022 · PJ</div>
+        <div class="job-body">
+          <p class="job-title">Consultor de Infraestrutura</p>
+          <ul>
+            <li>Projetos de implantação e sustentação de infraestrutura para clientes corporativos, em paralelo às demais consultorias.</li>
+            <li>Administração de servidores Windows e Linux, virtualização, Active Directory e serviços de rede.</li>
+            <li>Diagnóstico de ambiente e recomendações de melhoria para os gestores dos clientes.</li>
+          </ul>
+          <div class="scope"><span>Consultoria</span><span>Multicliente</span></div>
+        </div>
+      </article>
+      <article class="job">
+        <div class="when"><b>Now Technology</b>10/2012 – 02/2024</div>
+        <div class="job-body">
+          <p class="job-title">Sócio-fundador · Consultor de infraestrutura</p>
+          <ul>
+            <li>Empresa própria pela qual prestei consultorias PJ em infraestrutura, com clientes como Eterpel e Prática Certificação Digital.</li>
+            <li>Responsável pela relação comercial e técnica: levantamento de escopo, proposta, execução e sustentação.</li>
+            <li>Atendimento simultâneo a vários clientes, com gestão de agenda, prioridades e SLA de cada contrato.</li>
+          </ul>
+          <div class="scope"><span class="lead-chip">Gestão do negócio</span><span>Empreendedor</span><span>Multicliente</span></div>
+        </div>
+      </article>
+      <article class="job">
+        <div class="when"><b>Início de carreira</b>Até 2019</div>
+        <div class="job-body">
+          <p class="job-title">Base técnica em infraestrutura e suporte</p>
+          <ul>
+            <li>Eterpel: coordenação das atividades de infraestrutura e suporte.</li>
+            <li>Savar: gestão de incidentes e atendimento a usuários.</li>
+            <li>Diagrama: administração de ERP e da infraestrutura que o suporta.</li>
+            <li>Imperium, Service Premium e sest Work: Active Directory, redes, servidores, backup e suporte em ambientes corporativos.</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="label">Cases selecionados</p>
+      <h2>Contexto, atuação e resultado</h2>
+    </div>
+    <div class="cases">
+
+      <article class="case">
+        <div class="case-head"><h3>Governança de identidade em escala</h3><span class="label">Grupo DPSP · 2026</span></div>
+        <div class="pipe" aria-label="Fluxo de identidade">
+          <div class="node"><b>SuccessFactors</b><small>RH, fonte da verdade</small></div>
+          <div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><b>Provisionamento</b><small>regras e expressões</small></div>
+          <div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><b>Active Directory</b><small>atributos de ciclo de vida</small></div>
+          <div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><b>Connect Sync</b><small>sincronização</small></div>
+          <div class="arrow" aria-hidden="true">→</div>
+          <div class="node"><b>Entra ID Governance</b><small>workflows e acesso</small></div>
+        </div>
+        <div class="case-cols">
+          <div><span class="label">Contexto</span><p>Varejo com cerca de 70 mil colaboradores entre matriz, centros de distribuição e lojas. Admissões, afastamentos e desligamentos dependiam de ação manual e de dados inconsistentes entre RH e TI.</p></div>
+          <div><span class="label">Atuação</span><ul><li>Desenho do fluxo RH → AD → Entra ID e das regras de bloqueio por situação funcional.</li><li>Portfólio de 12 frentes priorizado com gestão, RH e Cibersegurança.</li><li>Laboratório antes de produção, GMUD e KB por frente.</li></ul></div>
+          <div><span class="label">Resultado</span><ul><li>Base para Joiner, Mover e Leaver automáticos.</li><li>Causa raiz de falhas de sync em massa e de integração com o RH isoladas e documentadas.</li><li>Padrões de SSO, permissões e nomenclatura adotados.</li></ul></div>
+        </div>
+        <div class="ws-wrap">
+          <table class="ws-table">
+            <thead><tr><th>Frente</th><th>Entrega</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Datas de admissão e desligamento</td><td>Regras de sync corrigidas e GMUD para CAB</td><td><span class="chip c-hml">Homologado</span></td></tr>
+              <tr><td>Bloqueio por situação funcional</td><td>Afastamentos bloqueiam a conta, com exceção para gerência e diretoria</td><td><span class="chip c-hml">Validação</span></td></tr>
+              <tr><td>Offboarding auditável</td><td>Desligados fora do organograma e da lista global, sem excluir contas</td><td><span class="chip c-poc">Em curso</span></td></tr>
+              <tr><td>Windows Hello for Business</td><td>Login sem senha via Intune, acesso condicional ajustado</td><td><span class="chip c-poc">Piloto</span></td></tr>
+              <tr><td>Reset de senha self-service</td><td>Liberação por localidade e cargo</td><td><span class="chip c-poc">Desenho</span></td></tr>
+              <tr><td>RBAC por posição</td><td>Pacotes de acesso por localidade, diretoria, área e cargo</td><td><span class="chip c-poc">POC</span></td></tr>
+              <tr><td>Padrão de integração de apps</td><td>SSO SAML/OIDC com aprovação de Cibersegurança</td><td><span class="chip c-prd">Publicado</span></td></tr>
+              <tr><td>Dashboards de segurança</td><td>Entra, Defender, Purview e Governance no Power BI</td><td><span class="chip c-poc">Em curso</span></td></tr>
+              <tr><td>Carga de ~21 mil contas</td><td>Criação idempotente no AD com log de auditoria</td><td><span class="chip c-hml">HML</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="case">
+        <div class="case-head"><h3>Modernização de virtualização em banco</h3><span class="label">Logicalis · Bradesco · 2026</span></div>
+        <div class="case-cols">
+          <div><span class="label">Contexto</span><p>Ambiente bancário de missão crítica com cerca de 50 mil servidores e plano de saída de VMware para OpenShift Virtualization.</p></div>
+          <div><span class="label">Atuação</span><ul><li>Referência técnica da migração.</li><li>Arquitetura híbrida e estratégia de DR com RPO e RTO.</li><li>Automação com Ansible para escala e repetibilidade.</li></ul></div>
+          <div><span class="label">Resultado</span><ul><li>Cerca de 10 mil servidores migrados no período.</li><li>Padrões de operação de OpenShift e Kubernetes estabelecidos.</li></ul></div>
+        </div>
+      </article>
+
+      <article class="case">
+        <div class="case-head"><h3>Gestão de infraestrutura multicliente</h3><span class="label">Brave · MDS Group · 2019–2025</span></div>
+        <div class="case-cols">
+          <div><span class="label">Contexto</span><p>Ambientes com cerca de 200 servidores e mais de 30 mil usuários, mistura de on-premises, multicloud e SAP.</p></div>
+          <div><span class="label">Atuação</span><ul><li>Gestão de equipe de 21 pessoas em média, incluindo field services.</li><li>Contratos e fornecedores, planejamento com a diretoria.</li><li>Rede Cisco Meraki com mais de 200 switches gerida de forma centralizada.</li><li>Observabilidade com Zabbix, Grafana, Elastic/Kibana e Uptime Kuma.</li></ul></div>
+          <div><span class="label">Resultado</span><ul><li>Alta disponibilidade de Windows, Linux, VMware e SAP.</li><li>Falhas detectadas por alerta antes de virarem chamado de usuário.</li><li>Mais de quatro anos na gestão da área.</li></ul></div>
+        </div>
+      </article>
+    </div>
+
+    <div class="method" style="margin-top:44px">
+      <div><b>Laboratório antes de produção</b><p>Toda mudança é validada em ambiente de homologação.</p></div>
+      <div><b>Mudança governada</b><p>GMUD, análise de impacto, rollback e aprovação em CAB.</p></div>
+      <div><b>Conhecimento transferido</b><p>Cada entrega termina em KB que outro analista executa.</p></div>
+      <div><b>Risco controlado</b><p>Prefiro desabilitar e isolar a excluir; a trilha de auditoria fica.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="competencias">
+  <div class="wrap">
+    <div class="sec-head"><p class="label">Competências</p><h2>Gestão e técnica no mesmo perfil</h2></div>
+    <div class="skills">
+      <div><h3>Gestão</h3><ul><li>Gestão de equipes</li><li>Planejamento estratégico de TI</li><li>Contratos e fornecedores</li><li>Gestão de projetos</li><li>OKR</li><li>Gestão por processos</li><li>Apresentações executivas</li></ul></div>
+      <div><h3>Governança e segurança</h3><ul><li>ITIL 4</li><li>GMUD / CAB</li><li>ISO/IEC 27001</li><li>IAM e IGA</li><li>Entra ID Governance</li><li>Defender XDR</li><li>SailPoint IdentityIQ</li></ul></div>
+      <div><h3>Infraestrutura e cloud</h3><ul><li>VMware vSphere/vSAN/NSX</li><li>Red Hat OpenShift</li><li>Kubernetes</li><li>Windows Server e AD</li><li>Linux</li><li>Cisco Meraki</li><li>Oracle Cloud (OCI)</li><li>AWS</li><li>Disaster Recovery</li></ul></div>
+      <div><h3>Automação</h3><ul><li>Ansible</li><li>PowerShell</li><li>Infraestrutura como código</li><li>Python e Shell</li><li>Graph API</li><li>Power BI</li></ul></div>
+      <div><h3>Observabilidade</h3><ul><li>Zabbix</li><li>Grafana</li><li>Elastic Stack</li><li>Kibana</li><li>Uptime Kuma</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="formacao">
+  <div class="wrap">
+    <div class="sec-head"><p class="label">Formação e certificações</p><h2>Estudo direcionado à gestão</h2></div>
+    <div class="edu">
+      <div>
+        <h3>Formação acadêmica</h3>
+        <ul class="list">
+          <li><span>MBA em Gestão de Projetos em TI</span><span>Faculdade Iguaçu · 2026–2027</span></li>
+          <li><span>Bacharelado em Ciência da Computação</span><span>UNINOVE · 2018–2022</span></li>
+          <li><span>Tecnólogo em Gestão da Tecnologia da Informação</span><span>UNINOVE · 2011–2013</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Gestão e estratégia</h3>
+        <ul class="list">
+          <li><span>Gestão Estratégica de TI</span><span>USP</span></li>
+          <li><span>Gestão de Infraestrutura de TI e Cybersecurity</span><span>FIAP</span></li>
+          <li><span>Estratégia Empresarial</span><span>Mackenzie</span></li>
+          <li><span>Gestão por Processos</span><span>FGV</span></li>
+          <li><span>OKR: Gestão Ágil da Cultura à Operação</span><span>CoBlue</span></li>
+          <li><span>PMP: Processo e Pré-Requisitos · Gestão de Projetos</span><span>Ietec · EVgo</span></li>
+        </ul>
+        <h3 style="margin-top:24px">Técnicas</h3>
+        <ul class="list">
+          <li><span>OCI Certified Architect Associate · AI Foundations</span><span>Oracle</span></li>
+          <li><span>ITIL 4 Foundation</span><span>IT Training Zone</span></li>
+          <li><span>EXIN ISO/IEC 27001 Foundation</span><span>CentralDesk</span></li>
+          <li><span>Threat Protection with Defender XDR</span><span>Microsoft</span></li>
+          <li><span>Cloud Practitioner Essentials</span><span>AWS</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contato">
+  <div class="wrap">
+    <div class="sec-head"><p class="label">Contato</p><h2>Vamos conversar</h2><p>Publico no LinkedIn sobre infraestrutura, governança e segurança da identidade.</p></div>
+    <div class="contact">
+      <div class="item"><span class="label">LinkedIn</span><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">linkedin.com/in/andreferreira-infrati</a></div>
+      <div class="item"><span class="label">E-mail</span><span><span id="mail">andre.asf@hotmail.com</span><button class="copy" type="button" id="copy-mail">Copiar</button></span></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">Detalhes internos de clientes (nomes, ambientes, usuários) foram omitidos por confidencialidade.</div></footer>
+
+<script>
+(function(){
+  var cb=document.getElementById('copy-mail');
+  cb.addEventListener('click',function(){
+    var el=document.getElementById('mail');
+    var fallback=function(){var r=document.createRange();r.selectNodeContents(el);var s=getSelection();s.removeAllRanges();s.addRange(r);cb.textContent='Selecionado'};
+    try{navigator.clipboard.writeText(el.textContent).then(function(){cb.textContent='Copiado'},fallback)}catch(e){fallback()}
+  });
+})();
+</script>
+</body>
+</html>
