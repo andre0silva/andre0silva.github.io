@@ -16,6 +16,7 @@ var form = $('aa'), html = '', dom = null;
 Q.forEach(function(q, i){
   if (q.d !== dom){ dom = q.d; html += '<h2 id="d' + DOMS.indexOf(dom) + '"><span class="dnum">' + (DOMS.indexOf(dom) + 1) + '</span> ' + esc(dom) + '</h2>'; }
   html += '<fieldset class="q"><legend class="vh">Pergunta ' + (i + 1) + '</legend>' +
+    '<p class="qt">' + esc(q.t) + '</p>' +
     '<p><b>' + (i + 1) + '.</b> ' + esc(q.q) + '</p>' +
     '<p class="ref"><span class="chip' + (q.s === 'M' ? ' sig' : '') + '">' + ST[q.s] + '</span> ' + esc(q.r) + '</p><div class="opts">';
   OPTS.forEach(function(o){ html += '<label><input type="radio" name="q' + i + '" value="' + o[0] + '"><span>' + o[1] + '</span></label>'; });
@@ -196,8 +197,13 @@ function update(){
     h = '<h2 id="gaps">Gaps em ordem de prioridade</h2>';
     if (!gaps.length) h += '<p>Nenhum gap nas perguntas respondidas.</p>';
     gaps.forEach(function(g){
-      h += '<div class="gap' + (g.v === '1' ? ' part' : '') + '"><b>' + (g.i + 1) + '. ' + ST[g.q.s] + ' · ' + (g.v === '1' ? 'Parcial' : 'Não') + '</b><br>' + esc(g.q.q) +
-        '<br><span class="muted">Próximo passo: ' + esc(g.q.rec) + '</span></div>';
+      h += '<div class="gap' + (g.v === '1' ? ' part' : '') + '">' +
+        '<p class="gap-head"><b>' + esc(g.q.t) + '</b><span class="gap-tags"><span class="chip' + (g.q.s === 'M' ? ' sig' : '') + '">' + ST[g.q.s] + '</span><span class="gap-st">' + (g.v === '1' ? 'Parcial' : 'Não') + '</span></span></p>' +
+        '<p class="gap-meta">' + esc(g.q.d) + ' · Pergunta ' + (g.i + 1) + ' · Ref.: ' + esc(g.q.r) + '</p>' +
+        '<p>' + esc(g.q.q) + '</p>' +
+        '<p><b>Próximo passo:</b> ' + esc(g.q.rec) + '</p>' +
+        (g.q.l ? '<p class="gap-link"><a href="' + esc(g.q.l) + '">Ver no guia →</a></p>' : '') +
+        '</div>';
     });
   }
   $('gaps-box').innerHTML = h;
@@ -273,8 +279,8 @@ $('png').addEventListener('click', function(){
 });
 $('csv').addEventListener('click', function(){
   var a = answers(), r = compute(a);
-  var rows = [['#','Domínio','Estágio','Pergunta','Referência','Resposta','Próximo passo']];
-  Q.forEach(function(q, i){ var v = a[i]; rows.push([i + 1, q.d, ST[q.s], q.q, q.r, v === undefined ? '' : LAB[v], (v === '0' || v === '1') ? q.rec : '']); });
+  var rows = [['#','Domínio','Tema','Estágio','Pergunta','Referência','Resposta','Próximo passo']];
+  Q.forEach(function(q, i){ var v = a[i]; rows.push([i + 1, q.d, q.t, ST[q.s], q.q, q.r, v === undefined ? '' : LAB[v], (v === '0' || v === '1') ? q.rec : '']); });
   rows.push([]); rows.push(['Domínio', 'Pontuação']);
   r.doms.forEach(function(D){ rows.push([D.d, D.pct === null ? '' : D.pct + '%']); });
   rows.push([]); rows.push(['Pontuação geral', r.pct + '%']); rows.push(['Nível', r.level]); rows.push(['Data', today()]);

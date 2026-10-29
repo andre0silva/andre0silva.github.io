@@ -150,3 +150,14 @@ fieldset.q{margin-inline:0;min-width:0}
   .gap{break-inside:avoid}
 }
 [hidden]{display:none!important}
+/* Títulos de tema e cartões de gap */
+.q .qt{font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:0}
+.gap{padding:12px 16px;display:grid;gap:4px}
+.gap p{margin:0}
+.gap-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;align-items:baseline}
+.gap-head b{font-size:1.05rem}
+.gap-tags{display:flex;gap:6px;align-items:center}
+.gap-st{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--bad)}
+.gap.part .gap-st{color:var(--signal)}
+.gap-meta{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+.gap-link{font-size:.9rem}
