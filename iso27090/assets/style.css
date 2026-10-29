@@ -161,3 +161,48 @@ fieldset.q{margin-inline:0;min-width:0}
 .gap.part .gap-st{color:var(--signal)}
 .gap-meta{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
 .gap-link{font-size:.9rem}
+
+/* Painel de resultado estilo apuração */
+.board{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.board-progress{background:var(--ink);color:var(--on-ink);padding:16px 22px 18px;display:grid;gap:10px}
+.bp-text{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.bp-text .label{color:var(--on-ink);opacity:.7}
+.bp-text b{font-family:var(--display);font-stretch:112%;font-size:1.05rem;font-variant-numeric:tabular-nums}
+.bp-track{height:10px;border-radius:5px;background:rgba(255,255,255,.14);overflow:hidden}
+.bp-track i{display:block;height:100%;width:0;background:#5fbccd;border-radius:5px;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.board-head{display:flex;flex-wrap:wrap;gap:14px 40px;align-items:flex-end;padding:22px 22px 10px;border-bottom:1px solid var(--line)}
+.bh-score,.bh-level{display:grid;gap:2px}
+.bh-score b{font-family:var(--display);font-stretch:112%;font-weight:800;font-size:clamp(3.2rem,9vw,5rem);line-height:.95;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.bh-level b{font-family:var(--display);font-stretch:112%;font-weight:700;font-size:clamp(1.3rem,3vw,1.8rem);line-height:1.1}
+.b-ok{color:var(--accent)} .b-mid{color:var(--signal)} .b-low{color:var(--bad)} .b-none{color:var(--muted)}
+.bh-legend{list-style:none;margin:0 0 4px auto;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.85rem;color:var(--muted)}
+.bh-legend li{display:flex;align-items:center;gap:6px;margin:0}
+.bh-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.lg-ok{background:var(--accent)} .lg-mid{background:var(--signal)} .lg-low{background:var(--bad)}
+.board-sub{padding:18px 22px 4px;margin:0}
+.rank{list-style:none;margin:0;padding:4px 22px 0;display:grid;gap:4px}
+.rrow{--c:var(--line);display:grid;grid-template-columns:58px minmax(0,1fr) 96px;grid-template-areas:"pos name val" "pos track val";column-gap:14px;row-gap:6px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);margin:0;background:var(--surface);position:relative}
+.rrow:last-child{border-bottom:0}
+.rrow[data-band="ok"]{--c:var(--accent)} .rrow[data-band="mid"]{--c:var(--signal)} .rrow[data-band="low"]{--c:var(--bad)} .rrow[data-band="none"]{--c:var(--line)}
+.rpos{grid-area:pos;font-family:var(--display);font-stretch:112%;font-weight:800;font-size:1.7rem;color:var(--fg);font-variant-numeric:tabular-nums}
+.rname{grid-area:name;font-weight:600;font-size:1rem;line-height:1.25}
+.rval{grid-area:val;text-align:right;font-family:var(--display);font-stretch:112%;font-weight:800;font-size:2rem;color:var(--c);font-variant-numeric:tabular-nums;line-height:1}
+.rrow[data-band="none"] .rval{color:var(--muted)}
+.rtrack{grid-area:track;position:relative;height:22px;border-radius:4px;background:var(--bg);overflow:visible}
+.rfill{display:block;height:100%;width:0;border-radius:4px;background:linear-gradient(180deg,color-mix(in srgb,var(--c) 78%,#fff),var(--c));transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.rtick{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;background:var(--fg);opacity:.28}
+.rank-scale{position:relative;height:30px;margin:2px calc(22px + 96px + 14px) 14px calc(22px + 58px + 14px);font-family:var(--mono);font-size:.7rem;color:var(--muted)}
+.rank-scale span{position:absolute;top:6px;transform:translateX(-50%)}
+@media (max-width:560px){
+  .board-progress,.board-head{padding-inline:14px}
+  .board-sub{padding-inline:14px}
+  .rank{padding-inline:14px}
+  .rrow{grid-template-columns:40px minmax(0,1fr) 64px;column-gap:10px}
+  .rpos{font-size:1.3rem}
+  .rval{font-size:1.45rem}
+  .rname{font-size:.92rem}
+  .rank-scale{margin:2px calc(14px + 64px + 10px) 12px calc(14px + 40px + 10px)}
+  .bh-legend{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){.rfill,.bp-track i{transition:none}}
+@media print{.board{border:1px solid #ccc}.board-progress{-webkit-print-color-adjust:exact;print-color-adjust:exact}.rfill,.bh-legend i{-webkit-print-color-adjust:exact;print-color-adjust:exact}.rrow{break-inside:avoid}}

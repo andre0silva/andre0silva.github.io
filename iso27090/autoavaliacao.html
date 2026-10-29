@@ -7,9 +7,9 @@
 <meta property="og:url" content="https://andre0silva.github.io/iso27090/autoavaliacao.html">
 <link rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br">
 <title>Autoavaliação · ISO/IEC 27090</title>
-<meta name="description" content="Autoavaliação de maturidade em segurança de IA baseada na ISO/IEC 27090: 40 perguntas, gráfico por domínio, nível atual e gaps priorizados.">
+<meta name="description" content="Autoavaliação de maturidade em segurança de IA baseada na ISO/IEC 27090: 40 perguntas, ranking por domínio, nível atual e gaps priorizados.">
 <meta property="og:title" content="Autoavaliação · ISO/IEC 27090">
-<meta property="og:description" content="Autoavaliação de maturidade em segurança de IA baseada na ISO/IEC 27090: 40 perguntas, gráfico por domínio, nível atual e gaps priorizados.">
+<meta property="og:description" content="Autoavaliação de maturidade em segurança de IA baseada na ISO/IEC 27090: 40 perguntas, ranking por domínio, nível atual e gaps priorizados.">
 <meta property="og:type" content="article">
 <meta property="og:locale" content="pt_BR">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d5e6e'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='13' font-weight='700' fill='white' text-anchor='middle'%3E27090%3C/text%3E%3C/svg%3E">
@@ -33,7 +33,7 @@
 <article class="content">
 <p class="crumb label"><a href="index.html">Início</a> / Autoavaliação</p>
 <h1>Autoavaliação de maturidade</h1>
-<p class="intro">40 perguntas em oito domínios. Responda pensando nos sistemas de IA de maior criticidade. O resultado mostra o nível atual, um gráfico por domínio e os gaps em ordem de prioridade.</p>
+<p class="intro">40 perguntas em oito domínios. Responda pensando nos sistemas de IA de maior criticidade. O resultado mostra a pontuação geral, o ranking dos domínios e os gaps em ordem de prioridade.</p>
 <div class="callout"><b>Privacidade</b><p>As respostas ficam só no seu navegador. Nada é enviado para servidor. Para guardar, use as opções de exportação no fim da página.</p></div>
 <p class="muted">Pontuação: Sim = 2, Parcial = 1, Não = 0. "Não se aplica" sai do cálculo. Estágios: <span class="chip sig">Mínimo</span> <span class="chip">Estabelecido</span> <span class="chip">Avançado</span></p>
 <form id="aa" onsubmit="return false"></form>
@@ -47,13 +47,24 @@
 
 <section class="result-wrap" id="resultado-sec">
 <h2 id="resultado">Resultado</h2>
-<p class="muted" id="empty-msg">Responda as perguntas acima para ver o gráfico.</p>
-<div class="viz" id="viz" hidden>
-<div class="viz-chart">
-<canvas id="chart3d" role="img" aria-label="Gráfico 3D da pontuação por domínio"></canvas>
-<p class="viz-hint">Arraste para girar</p>
+<p class="muted" id="empty-msg">Responda as perguntas acima para ver o resultado.</p>
+<div class="board" id="viz" hidden>
+<div class="board-progress">
+<div class="bp-text"><span class="label">Perguntas respondidas</span><b id="bp-val">0 de 40 · 0%</b></div>
+<div class="bp-track" aria-hidden="true"><i id="bp-fill"></i></div>
 </div>
-<ol class="viz-legend" id="legend"></ol>
+<div class="board-head">
+<div class="bh-score"><span class="label">Pontuação geral</span><b id="bh-pct">0%</b></div>
+<div class="bh-level"><span class="label">Nível de maturidade</span><b id="bh-lvl">—</b></div>
+<ul class="bh-legend" aria-label="Legenda de cores">
+<li><i class="lg-ok"></i>75% ou mais</li>
+<li><i class="lg-mid"></i>40% a 74%</li>
+<li><i class="lg-low"></i>abaixo de 40%</li>
+</ul>
+</div>
+<p class="label board-sub">Ranking por domínio</p>
+<ol class="rank" id="rank" aria-label="Pontuação por domínio, da maior para a menor"></ol>
+<div class="rank-scale" aria-hidden="true"><span style="left:0">0</span><span style="left:40%">40</span><span style="left:75%">75</span><span style="left:100%">100</span></div>
 </div>
 <div class="export" id="export" hidden>
 <button class="dl-btn" type="button" id="png">Salvar imagem (PNG)</button>
