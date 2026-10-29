@@ -7,9 +7,9 @@
 <meta property="og:url" content="https://andre0silva.github.io/iso27090/autoavaliacao.html">
 <link rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br">
 <title>Autoavaliação · ISO/IEC 27090</title>
-<meta name="description" content="Autoavaliação de maturidade em segurança de IA baseada na ISO/IEC 27090: 24 perguntas, nível atual e gaps priorizados.">
+<meta name="description" content="Autoavaliação de maturidade em segurança de IA baseada na ISO/IEC 27090: 40 perguntas, gráfico por domínio, nível atual e gaps priorizados.">
 <meta property="og:title" content="Autoavaliação · ISO/IEC 27090">
-<meta property="og:description" content="Autoavaliação de maturidade em segurança de IA baseada na ISO/IEC 27090: 24 perguntas, nível atual e gaps priorizados.">
+<meta property="og:description" content="Autoavaliação de maturidade em segurança de IA baseada na ISO/IEC 27090: 40 perguntas, gráfico por domínio, nível atual e gaps priorizados.">
 <meta property="og:type" content="article">
 <meta property="og:locale" content="pt_BR">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d5e6e'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='13' font-weight='700' fill='white' text-anchor='middle'%3E27090%3C/text%3E%3C/svg%3E">
@@ -33,22 +33,36 @@
 <article class="content">
 <p class="crumb label"><a href="index.html">Início</a> / Autoavaliação</p>
 <h1>Autoavaliação de maturidade</h1>
-<p class="intro">24 perguntas em seis domínios. Responda pensando nos sistemas de IA de maior criticidade. O resultado mostra o nível atual e os gaps em ordem de prioridade.</p>
-<div class="callout"><b>Privacidade</b><p>As respostas ficam só no seu navegador. Nada é enviado para servidor. Use "Exportar CSV" para guardar o resultado.</p></div>
+<p class="intro">40 perguntas em oito domínios. Responda pensando nos sistemas de IA de maior criticidade. O resultado mostra o nível atual, um gráfico por domínio e os gaps em ordem de prioridade.</p>
+<div class="callout"><b>Privacidade</b><p>As respostas ficam só no seu navegador. Nada é enviado para servidor. Para guardar, use as opções de exportação no fim da página.</p></div>
 <p class="muted">Pontuação: Sim = 2, Parcial = 1, Não = 0. "Não se aplica" sai do cálculo. Estágios: <span class="chip sig">Mínimo</span> <span class="chip">Estabelecido</span> <span class="chip">Avançado</span></p>
 <form id="aa" onsubmit="return false"></form>
 <div class="score" aria-live="polite">
 <div><span class="label" style="color:var(--on-ink);opacity:.7">Pontuação</span><br><b id="pct">0%</b></div>
 <div class="bar" aria-hidden="true"><i id="barfill"></i></div>
 <div><span class="label" style="color:var(--on-ink);opacity:.7">Nível</span><br><b id="lvl" style="font-size:1.1rem">—</b></div>
-<div><span id="cnt">0</span>/24 respondidas</div>
+<div><span id="cnt">0</span>/<span id="tot">40</span> respondidas</div>
+<a href="#resultado" class="score-link">Ver resultado ↓</a>
 </div>
-<div class="result" id="result"></div>
-<p style="margin-top:20px;display:flex;flex-wrap:wrap;gap:10px">
-<button class="dl-btn" type="button" id="csv">Exportar CSV</button>
+
+<section class="result-wrap" id="resultado-sec">
+<h2 id="resultado">Resultado</h2>
+<p class="muted" id="empty-msg">Responda as perguntas acima para ver o gráfico.</p>
+<div class="viz" id="viz" hidden>
+<div class="viz-chart">
+<canvas id="chart3d" role="img" aria-label="Gráfico 3D da pontuação por domínio"></canvas>
+<p class="viz-hint">Arraste para girar</p>
+</div>
+<ol class="viz-legend" id="legend"></ol>
+</div>
+<div class="export" id="export" hidden>
+<button class="dl-btn" type="button" id="png">Salvar imagem (PNG)</button>
 <button class="dl-btn ghost" type="button" id="print">Imprimir / salvar PDF</button>
-<button class="dl-btn ghost" type="button" id="reset">Limpar respostas</button>
-</p>
+<button class="dl-btn ghost" type="button" id="csv">Exportar CSV</button>
+<button class="dl-btn ghost danger" type="button" id="reset">Limpar respostas</button>
+</div>
+<div id="gaps-box"></div>
+</section>
 </article>
 
 </main>
@@ -58,85 +72,7 @@
 <p>O material é fornecido no estado em que se encontra, sem garantia de qualquer tipo. A aplicação em cada organização é de responsabilidade de quem aplica.</p>
 <p>© 2026 <a href="../">André Ferreira</a> · Licenciado sob <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" rel="license">CC BY-NC 4.0</a>: pode copiar, adaptar e compartilhar com crédito ao autor, sem uso comercial. Para uso comercial, <a href="../#contato">entre em contato</a>. Ver <a href="LICENSE.md">licença</a> · Atualizado em 29/10/2026</p>
 </div></footer>
-<script>
-(function(){
-var Q = [{"d": "Governança e inventário", "s": "M", "q": "Existe inventário de sistemas de IA com dono de negócio e dono técnico para cada item?", "r": "27090 cl. 5 · 27002 5.9", "rec": "Monte o inventário com o modelo deste guia e nomeie um dono para cada sistema."}, {"d": "Governança e inventário", "s": "M", "q": "O inventário inclui IA embutida em SaaS, extensões de navegador e ferramentas adotadas pelos usuários (shadow AI)?", "r": "27090 cl. 5", "rec": "Use logs de proxy/CASB, consentimentos OAuth e pesquisa com as áreas para encontrar shadow AI."}, {"d": "Governança e inventário", "s": "M", "q": "Há política de uso aceitável de IA publicada e comunicada?", "r": "27002 5.10", "rec": "Publique uma política curta: ferramentas aprovadas, dados proibidos e como pedir uma nova ferramenta."}, {"d": "Governança e inventário", "s": "E", "q": "Os sistemas de IA estão classificados por criticidade (dados, ação, exposição, decisão)?", "r": "27090 cl. 5", "rec": "Aplique os quatro critérios do passo 3 do guia de implementação."}, {"d": "Dados e proveniência", "s": "E", "q": "A origem de cada dataset de treino, ajuste fino e RAG está registrada?", "r": "27090 cl. 6 (proveniência)", "rec": "Registre fonte, data, responsável e hash de cada dataset e de cada execução de treino."}, {"d": "Dados e proveniência", "s": "E", "q": "Dados vindos da operação são revisados antes de voltarem para o retreino?", "r": "27090 6.2", "rec": "Inclua uma etapa de validação antes que dados de produção entrem no pipeline de treino."}, {"d": "Dados e proveniência", "s": "M", "q": "Está definido quais dados pessoais e confidenciais podem ou não ser enviados a cada sistema de IA?", "r": "27002 5.12, 5.34 · LGPD", "rec": "Cruze a classificação da informação com o inventário e documente o que cada sistema pode receber."}, {"d": "Dados e proveniência", "s": "A", "q": "Há filtro de dados sensíveis (DLP) na entrada e na saída dos sistemas críticos?", "r": "27090 6.8 · 27002 8.12", "rec": "Aplique DLP nos dois sentidos para os sistemas que tratam dado pessoal ou confidencial."}, {"d": "Desenvolvimento e cadeia de suprimentos", "s": "E", "q": "Modelos pré-treinados só vêm de fontes aprovadas e têm hash ou assinatura verificados?", "r": "27090 6.7 · 27002 5.21", "rec": "Crie lista de fontes aprovadas e verifique integridade antes de carregar qualquer modelo."}, {"d": "Desenvolvimento e cadeia de suprimentos", "s": "E", "q": "Os formatos de modelo usados não executam código ao serem carregados (ex.: safetensors no lugar de pickle)?", "r": "27090 6.7", "rec": "Padronize formatos seguros e bloqueie carregamento de pickle de origem externa."}, {"d": "Desenvolvimento e cadeia de suprimentos", "s": "E", "q": "Fornecedores de IA passam por questionário de segurança que cobre injeção, extração de modelo, uso dos dados e canal de vulnerabilidades?", "r": "27002 5.19-5.23", "rec": "Inclua perguntas específicas de IA na due diligence e nos contratos."}, {"d": "Desenvolvimento e cadeia de suprimentos", "s": "A", "q": "O ambiente de treino e o registro de modelos são segregados e com acesso controlado?", "r": "27090 cl. 7 · 27002 8.31", "rec": "Separe ambientes, restrinja acesso ao registro de modelos e audite alterações."}, {"d": "Identidade e agentes", "s": "M", "q": "Cada agente ou integração de IA usa identidade própria, sem credencial de pessoa ou chave compartilhada?", "r": "27002 5.16, 8.2", "rec": "Crie identidades dedicadas e remova credenciais pessoais e chaves compartilhadas."}, {"d": "Identidade e agentes", "s": "M", "q": "As permissões de cada agente seguem mínimo privilégio, com ferramentas e dados documentados?", "r": "27090 cl. 5 (zero trust) · 27002 8.27", "rec": "Documente ferramentas e escopo de dados de cada agente e retire o que não for necessário."}, {"d": "Identidade e agentes", "s": "E", "q": "Ações irreversíveis de agentes exigem aprovação humana?", "r": "27090 6.9", "rec": "Defina limiares de aprovação: exclusão, pagamento, envio externo, alteração cadastral, concessão de acesso."}, {"d": "Identidade e agentes", "s": "E", "q": "Os acessos de agentes passam por revisão periódica como contas privilegiadas?", "r": "27002 5.18", "rec": "Inclua agentes no ciclo de revisão de acesso privilegiado com atestação do dono."}, {"d": "Entrada, saída e operação", "s": "M", "q": "Conteúdo externo (e-mail, upload, web) é tratado como não confiável pelos sistemas de IA?", "r": "27090 6.9", "rec": "Marque as fronteiras de confiança na modelagem e trate todo conteúdo externo como potencialmente malicioso."}, {"d": "Entrada, saída e operação", "s": "M", "q": "A saída do modelo é sanitizada antes de ser renderizada ou enviada a outro sistema?", "r": "27090 6.10", "rec": "Aplique escape, consultas parametrizadas e bloqueio de links e imagens externas na saída."}, {"d": "Entrada, saída e operação", "s": "M", "q": "Inferências e chamadas de ferramenta são registradas em log centralizado?", "r": "27090 cl. 7 · 27002 8.15", "rec": "Registre usuário, identidade do agente, ferramenta, parâmetros e resultado e envie ao SIEM."}, {"d": "Entrada, saída e operação", "s": "E", "q": "Há limite de taxa e cota por identidade nos endpoints de IA?", "r": "27090 6.5, cl. 7", "rec": "Configure throttling por conta e chave de API."}, {"d": "Entrada, saída e operação", "s": "A", "q": "Existe monitoramento de padrão de consulta capaz de detectar extração ou sondagem?", "r": "27090 6.4-6.6 · 27002 8.16", "rec": "Crie alertas para volume anormal, varredura sistemática e uso incomum de parâmetros."}, {"d": "Teste e resposta", "s": "M", "q": "Os sistemas críticos têm modelagem de ameaças baseada nas nove categorias da cláusula 6?", "r": "27090 cl. 5, cl. 6", "rec": "Use a matriz de modelagem deste guia para cada sistema crítico."}, {"d": "Teste e resposta", "s": "E", "q": "Há red team ou teste adversarial antes do go-live e após mudanças relevantes?", "r": "27090 cl. 5, cl. 7", "rec": "Agende testes com conteúdo injetado e tentativas de extração antes do go-live e após retreino."}, {"d": "Teste e resposta", "s": "E", "q": "O plano de resposta a incidentes cobre cenários de IA (injeção, vazamento, modelo comprometido) e inclui desligamento rápido do agente?", "r": "27002 5.24-5.27", "rec": "Escreva playbooks de IA e teste a revogação de credenciais de agentes."}];
-var ST = {M:'Mínimo',E:'Estabelecido',A:'Avançado'};
-var OPTS = [['2','Sim'],['1','Parcial'],['0','Não'],['na','Não se aplica']];
-var KEY = 'iso27090-autoavaliacao';
-var form = document.getElementById('aa');
-var esc = function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
-var html = '', dom = null;
-Q.forEach(function(q,i){
-  if (q.d !== dom){ dom = q.d; html += '<h2 id="d'+i+'">'+esc(dom)+'</h2>'; }
-  html += '<fieldset class="q" style="margin-inline:0"><legend class="sr" style="position:absolute;left:-9999px">Pergunta '+(i+1)+'</legend>'+
-    '<p><b>'+(i+1)+'.</b> '+esc(q.q)+'</p>'+
-    '<p class="ref"><span class="chip'+(q.s==='M'?' sig':'')+'">'+ST[q.s]+'</span> '+esc(q.r)+'</p><div class="opts">';
-  OPTS.forEach(function(o){
-    html += '<label><input type="radio" name="q'+i+'" value="'+o[0]+'"><span>'+o[1]+'</span></label>';
-  });
-  html += '</div></fieldset>';
-});
-form.innerHTML = html;
-
-function load(){ try { return JSON.parse(localStorage.getItem(KEY)||'{}'); } catch(e){ return {}; } }
-function save(a){ try { localStorage.setItem(KEY, JSON.stringify(a)); } catch(e){} }
-function answers(){ var a={}; Q.forEach(function(q,i){ var c=form.querySelector('input[name=q'+i+']:checked'); if(c) a[i]=c.value; }); return a; }
-var saved = load();
-Object.keys(saved).forEach(function(i){ var el=form.querySelector('input[name=q'+i+'][value="'+saved[i]+'"]'); if(el) el.checked=true; });
-
-function level(a){
-  // nível = maior estágio cujas perguntas aplicáveis estão todas em Sim ou Parcial, com média >= 1.5
-  var ok = function(s){ var items=Q.map(function(q,i){return [q,i];}).filter(function(x){return x[0].s===s && a[x[1]]!=='na';});
-    if(!items.length) return true;
-    var sum=0; for(var k=0;k<items.length;k++){ var v=a[items[k][1]]; if(v===undefined||v==='0') return false; sum+=+v; }
-    return sum/items.length>=1.5; };
-  if(!ok('M')) return 'Abaixo do mínimo';
-  if(!ok('E')) return 'Mínimo';
-  if(!ok('A')) return 'Estabelecido';
-  return 'Avançado';
-}
-function update(){
-  var a = answers(); save(a);
-  var n=0, got=0, max=0;
-  Q.forEach(function(q,i){ var v=a[i]; if(v===undefined) return; n++; if(v==='na') return; max+=2; got+=+v; });
-  var pct = max? Math.round(got/max*100) : 0;
-  document.getElementById('pct').textContent = pct+'%';
-  document.getElementById('barfill').style.width = pct+'%';
-  document.getElementById('cnt').textContent = n;
-  document.getElementById('lvl').textContent = n===Q.length ? level(a) : (n? 'parcial' : '—');
-  var order={M:0,E:1,A:2};
-  var gaps = Q.map(function(q,i){return {q:q,i:i,v:a[i]};}).filter(function(x){return x.v==='0'||x.v==='1';})
-    .sort(function(x,y){ return order[x.q.s]-order[y.q.s] || (+x.v)-(+y.v); });
-  var r = document.getElementById('result');
-  if(!n){ r.innerHTML=''; return; }
-  var doms = {}; Q.forEach(function(q,i){ var v=a[i]; if(v===undefined||v==='na') return; doms[q.d]=doms[q.d]||[0,0]; doms[q.d][0]+=+v; doms[q.d][1]+=2; });
-  var h = '<h2 id="resultado">Resultado por domínio</h2><div class="tbl"><table><thead><tr><th>Domínio</th><th>Pontuação</th></tr></thead><tbody>';
-  Object.keys(doms).forEach(function(d){ h+='<tr><td>'+esc(d)+'</td><td class="mono">'+Math.round(doms[d][0]/doms[d][1]*100)+'%</td></tr>'; });
-  h += '</tbody></table></div>';
-  h += '<h2 id="gaps">Gaps em ordem de prioridade</h2>';
-  if(!gaps.length) h += '<p>Nenhum gap nas perguntas respondidas.</p>';
-  gaps.forEach(function(g){ h += '<div class="gap'+(g.v==='1'?' part':'')+'"><b>'+(g.i+1)+'. '+ST[g.q.s]+' · '+(g.v==='1'?'Parcial':'Não')+'</b><br>'+esc(g.q.q)+'<br><span class="muted">Próximo passo: '+esc(g.q.rec)+'</span></div>'; });
-  r.innerHTML = h;
-}
-form.addEventListener('change', update);
-update();
-
-document.getElementById('csv').addEventListener('click', function(){
-  var a = answers(), lab = {'2':'Sim','1':'Parcial','0':'Não','na':'Não se aplica'};
-  var rows = [['#','Domínio','Estágio','Pergunta','Referência','Resposta','Próximo passo']];
-  Q.forEach(function(q,i){ var v=a[i]; rows.push([i+1,q.d,ST[q.s],q.q,q.r,v===undefined?'':lab[v],(v==='0'||v==='1')?q.rec:'']); });
-  rows.push([]); rows.push(['Pontuação',document.getElementById('pct').textContent]); rows.push(['Nível',document.getElementById('lvl').textContent]);
-  var csv = rows.map(function(r){ return r.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(';'); }).join('\r\n');
-  var blob = new Blob(['\ufeff'+csv], {type:'text/csv;charset=utf-8'});
-  var link = document.createElement('a'); link.href = URL.createObjectURL(blob);
-  link.download = 'autoavaliacao-iso27090.csv'; document.body.appendChild(link); link.click(); link.remove();
-});
-document.getElementById('print').addEventListener('click', function(){ window.print(); });
-document.getElementById('reset').addEventListener('click', function(){
-  form.querySelectorAll('input:checked').forEach(function(el){ el.checked=false; }); update();
-});
-})();
-</script>
+<script>window.AA_Q = [{"d": "Governança e inventário", "s": "M", "q": "Existe inventário de sistemas de IA com dono de negócio e dono técnico para cada item?", "r": "27090 cl. 5 · 27002 5.9", "rec": "Monte o inventário com o modelo deste guia e nomeie um dono para cada sistema."}, {"d": "Governança e inventário", "s": "M", "q": "O inventário inclui IA embutida em SaaS, extensões de navegador e ferramentas adotadas pelos usuários (shadow AI)?", "r": "27090 cl. 5", "rec": "Use logs de proxy/CASB, consentimentos OAuth e pesquisa com as áreas para encontrar shadow AI."}, {"d": "Governança e inventário", "s": "M", "q": "Há política de uso aceitável de IA publicada e comunicada?", "r": "27002 5.10", "rec": "Publique uma política curta: ferramentas aprovadas, dados proibidos e como pedir uma nova ferramenta."}, {"d": "Governança e inventário", "s": "E", "q": "Os sistemas de IA estão classificados por criticidade (dados, ação, exposição, decisão)?", "r": "27090 cl. 5", "rec": "Aplique os quatro critérios do passo 3 do guia de implementação."}, {"d": "Governança e inventário", "s": "E", "q": "Papéis e responsabilidades de segurança de IA estão definidos entre segurança, engenharia, IAM, dados, compras e governança?", "r": "27002 5.2", "rec": "Formalize uma matriz de responsabilidades usando a tabela do passo 1 do guia."}, {"d": "Riscos e conformidade", "s": "M", "q": "As ameaças específicas de IA estão no registro de riscos da ISMS?", "r": "27001 6.1 · 27090 cl. 6", "rec": "Leve cada ameaça aplicável da matriz de modelagem para o registro de riscos."}, {"d": "Riscos e conformidade", "s": "E", "q": "A Declaração de Aplicabilidade (SoA) justifica os controles aplicados aos sistemas de IA?", "r": "27001 6.1.3", "rec": "Inclua na SoA a justificativa dos controles escolhidos para as ameaças de IA."}, {"d": "Riscos e conformidade", "s": "E", "q": "O risco residual de cada sistema crítico foi aceito formalmente pelo dono, com data de revisão?", "r": "27001 6.1.3 · 8.3", "rec": "Registre quem aceitou o risco residual, quando e em que gatilho ele será revisto."}, {"d": "Riscos e conformidade", "s": "E", "q": "Os sistemas de IA que tratam dado pessoal estão cobertos pelo relatório de impacto (RIPD) e pelo processo de privacidade?", "r": "27002 5.34 · LGPD", "rec": "Inclua os sistemas de IA com dado pessoal no RIPD, com participação do encarregado (DPO)."}, {"d": "Riscos e conformidade", "s": "A", "q": "A análise de segurança da 27090 está ligada à governança de IA (ISO 42001 ou equivalente), com o mesmo inventário?", "r": "ISO 42001", "rec": "Use um único inventário e conecte a modelagem de ameaças à avaliação de impacto de IA."}, {"d": "Dados e proveniência", "s": "E", "q": "A origem de cada dataset de treino, ajuste fino e RAG está registrada?", "r": "27090 cl. 6 (proveniência)", "rec": "Registre fonte, data, responsável e hash de cada dataset e de cada execução de treino."}, {"d": "Dados e proveniência", "s": "E", "q": "Dados vindos da operação são revisados antes de voltarem para o retreino?", "r": "27090 6.2", "rec": "Inclua uma etapa de validação antes que dados de produção entrem no pipeline de treino."}, {"d": "Dados e proveniência", "s": "M", "q": "Está definido quais dados pessoais e confidenciais podem ou não ser enviados a cada sistema de IA?", "r": "27002 5.12, 5.34 · LGPD", "rec": "Cruze a classificação da informação com o inventário e documente o que cada sistema pode receber."}, {"d": "Dados e proveniência", "s": "A", "q": "Há filtro de dados sensíveis (DLP) na entrada e na saída dos sistemas críticos?", "r": "27090 6.8 · 27002 8.12", "rec": "Aplique DLP nos dois sentidos para os sistemas que tratam dado pessoal ou confidencial."}, {"d": "Dados e proveniência", "s": "A", "q": "Retenção e minimização estão definidas para dados de treino, contexto de RAG e logs de IA?", "r": "27090 6.4, 6.6 · 27002 8.10", "rec": "Defina prazos de retenção e elimine o que não for necessário para treino, contexto e log."}, {"d": "Desenvolvimento e cadeia de suprimentos", "s": "E", "q": "Modelos pré-treinados só vêm de fontes aprovadas e têm hash ou assinatura verificados?", "r": "27090 6.7 · 27002 5.21", "rec": "Crie lista de fontes aprovadas e verifique integridade antes de carregar qualquer modelo."}, {"d": "Desenvolvimento e cadeia de suprimentos", "s": "E", "q": "Os formatos de modelo usados não executam código ao serem carregados (ex.: safetensors no lugar de pickle)?", "r": "27090 6.7", "rec": "Padronize formatos seguros e bloqueie carregamento de pickle de origem externa."}, {"d": "Desenvolvimento e cadeia de suprimentos", "s": "E", "q": "Fornecedores de IA passam por questionário de segurança que cobre injeção, extração de modelo e canal de vulnerabilidades?", "r": "27002 5.19, 5.22", "rec": "Inclua perguntas específicas de IA na due diligence de fornecedores."}, {"d": "Desenvolvimento e cadeia de suprimentos", "s": "E", "q": "Os contratos com fornecedores de IA definem uso dos dados enviados (inclusive para treino), localização e notificação de incidentes?", "r": "27002 5.20, 5.23", "rec": "Revise os contratos e inclua cláusulas sobre uso de dados, localização e prazo de notificação."}, {"d": "Desenvolvimento e cadeia de suprimentos", "s": "A", "q": "O ambiente de treino e o registro de modelos são segregados e com acesso controlado?", "r": "27090 cl. 7 · 27002 8.31", "rec": "Separe ambientes, restrinja acesso ao registro de modelos e audite alterações."}, {"d": "Identidade e agentes", "s": "M", "q": "Cada agente ou integração de IA usa identidade própria, sem credencial de pessoa ou chave compartilhada?", "r": "27002 5.16, 8.2", "rec": "Crie identidades dedicadas e remova credenciais pessoais e chaves compartilhadas."}, {"d": "Identidade e agentes", "s": "M", "q": "As permissões de cada agente seguem mínimo privilégio, com ferramentas e dados documentados?", "r": "27090 cl. 5 (zero trust) · 27002 8.27", "rec": "Documente ferramentas e escopo de dados de cada agente e retire o que não for necessário."}, {"d": "Identidade e agentes", "s": "E", "q": "Ações irreversíveis de agentes exigem aprovação humana?", "r": "27090 6.9", "rec": "Defina limiares de aprovação: exclusão, pagamento, envio externo, alteração cadastral, concessão de acesso."}, {"d": "Identidade e agentes", "s": "E", "q": "Os acessos de agentes passam por revisão periódica como contas privilegiadas?", "r": "27002 5.18", "rec": "Inclua agentes no ciclo de revisão de acesso privilegiado com atestação do dono."}, {"d": "Identidade e agentes", "s": "A", "q": "As credenciais de agentes são de curta duração ou federadas, sem segredo estático em código, configuração ou prompt?", "r": "27002 5.17", "rec": "Migre para credenciais federadas ou de curta duração e guarde segredos remanescentes em cofre."}, {"d": "Entrada e saída", "s": "M", "q": "Conteúdo externo (e-mail, upload, web) é tratado como não confiável pelos sistemas de IA?", "r": "27090 6.9", "rec": "Marque as fronteiras de confiança na modelagem e trate todo conteúdo externo como potencialmente malicioso."}, {"d": "Entrada e saída", "s": "M", "q": "A saída do modelo é sanitizada antes de ser renderizada ou enviada a outro sistema?", "r": "27090 6.10", "rec": "Aplique escape, consultas parametrizadas e bloqueio de links e imagens externas na saída."}, {"d": "Entrada e saída", "s": "E", "q": "O RAG aplica as mesmas permissões que o usuário tem no documento de origem?", "r": "27090 6.8 · 27002 5.15", "rec": "Filtre a recuperação pelas permissões do usuário antes de montar o contexto."}, {"d": "Entrada e saída", "s": "E", "q": "Os prompts de sistema não contêm segredos e estão protegidos contra exposição?", "r": "27090 6.8", "rec": "Retire credenciais e dados sensíveis dos prompts de sistema e teste tentativas de exposição."}, {"d": "Entrada e saída", "s": "A", "q": "As respostas das APIs de IA expõem só o necessário (sem probabilidades ou detalhes internos quando não precisa)?", "r": "27090 6.4, 6.5, 6.6", "rec": "Revise o contrato da API e remova pontuações de confiança e parâmetros desnecessários."}, {"d": "Monitoramento e detecção", "s": "M", "q": "Inferências e chamadas de ferramenta são registradas em log centralizado?", "r": "27090 cl. 7 · 27002 8.15", "rec": "Registre usuário, identidade do agente, ferramenta, parâmetros e resultado e envie ao SIEM."}, {"d": "Monitoramento e detecção", "s": "E", "q": "Há limite de taxa e cota por identidade nos endpoints de IA?", "r": "27090 6.5, cl. 7", "rec": "Configure throttling por conta e chave de API."}, {"d": "Monitoramento e detecção", "s": "E", "q": "O SOC recebe alertas de comportamento anômalo de agentes (ferramenta incomum, volume, horário)?", "r": "27002 8.16", "rec": "Crie casos de uso no SIEM para desvios de comportamento de agentes."}, {"d": "Monitoramento e detecção", "s": "A", "q": "Existe monitoramento de padrão de consulta capaz de detectar extração ou sondagem?", "r": "27090 6.4-6.6 · 27002 8.16", "rec": "Crie alertas para volume anormal, varredura sistemática e uso incomum de parâmetros."}, {"d": "Monitoramento e detecção", "s": "A", "q": "Métricas de qualidade e comportamento do modelo são acompanhadas para detectar desvio após mudança ou envenenamento?", "r": "27090 6.2, cl. 7", "rec": "Defina métricas de referência por versão e alerte quando houver desvio relevante."}, {"d": "Teste e resposta", "s": "M", "q": "Os sistemas críticos têm modelagem de ameaças baseada nas nove categorias da cláusula 6?", "r": "27090 cl. 5, cl. 6", "rec": "Use a matriz de modelagem deste guia para cada sistema crítico."}, {"d": "Teste e resposta", "s": "E", "q": "Há red team ou teste adversarial antes do go-live e após mudanças relevantes?", "r": "27090 cl. 5, cl. 7", "rec": "Agende testes com conteúdo injetado e tentativas de extração antes do go-live e após retreino."}, {"d": "Teste e resposta", "s": "E", "q": "O plano de resposta a incidentes cobre cenários de IA e inclui desligamento rápido e testado de agentes?", "r": "27002 5.24-5.27", "rec": "Escreva playbooks de IA e teste a revogação de credenciais de agentes."}, {"d": "Teste e resposta", "s": "E", "q": "Troca de modelo, versão, fornecedor ou permissão passa por gestão de mudança e reabre a modelagem de ameaças?", "r": "27002 8.32", "rec": "Inclua mudanças de IA no processo de mudança com revisão da modelagem como pré-requisito."}, {"d": "Teste e resposta", "s": "A", "q": "A eficácia dos controles é retestada periodicamente, considerando que mitigações perdem efeito com o tempo?", "r": "27090 cl. 7", "rec": "Defina um calendário de reteste e registre resultados ao longo do tempo."}];</script>
+<script src="assets/autoavaliacao.js"></script>
 </body>
 </html>
