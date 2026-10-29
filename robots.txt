@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://andre0silva.github.io/sitemap.xml

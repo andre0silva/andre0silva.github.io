@@ -1,4 +1,10 @@
 /* Portal ISO/IEC 27090 — mesma identidade visual do portfólio (tokens, tipografia) */
+/* Fontes hospedadas localmente (SIL Open Font License 1.1, ver fonts/OFL.txt) */
+@font-face{font-family:"Archivo";font-style:normal;font-display:swap;font-weight:100 900;font-stretch:62% 125%;src:url(fonts/archivo-latin-wdth-normal.woff2) format("woff2-variations"),url(fonts/archivo-latin-wdth-normal.woff2) format("woff2")}
+@font-face{font-family:"Source Sans 3";font-style:normal;font-display:swap;font-weight:400;src:url(fonts/source-sans-3-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Source Sans 3";font-style:normal;font-display:swap;font-weight:600;src:url(fonts/source-sans-3-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"JetBrains Mono";font-style:normal;font-display:swap;font-weight:400;src:url(fonts/jetbrains-mono-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"JetBrains Mono";font-style:normal;font-display:swap;font-weight:500;src:url(fonts/jetbrains-mono-latin-500-normal.woff2) format("woff2")}
 :root{
   --bg:#f3f6f7; --surface:#ffffff; --fg:#14232b; --muted:#5a6b73; --line:#d5dee2;
   --accent:#0d5e6e; --accent-soft:#e1eff1; --signal:#b86a12; --signal-soft:#f7ecdd;
