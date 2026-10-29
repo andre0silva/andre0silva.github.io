@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Modelos para download · ISO/IEC 27090</title>
+<meta name="description" content="Planilhas de inventário de sistemas de IA e matriz de modelagem de ameaças baseadas na ISO/IEC 27090.">
+<meta property="og:title" content="Modelos para download · ISO/IEC 27090">
+<meta property="og:description" content="Planilhas de inventário de sistemas de IA e matriz de modelagem de ameaças baseadas na ISO/IEC 27090.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d5e6e'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='13' font-weight='700' fill='white' text-anchor='middle'%3E27090%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,600;112,800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/app.js"></script>
+</head>
+<body>
+<nav class="top" aria-label="Navegação do guia"><div class="wrap">
+<a class="brand" href="index.html">ISO/IEC <span>27090</span> · guia prático</a>
+<a href="index.html">Início</a>
+<a href="implementar.html">Implementar</a>
+<a href="ameacas.html">Ameaças</a>
+<a href="agentes.html">Agentes e IAM</a>
+<a href="autoavaliacao.html">Autoavaliação</a>
+<a href="modelos.html" aria-current="page">Modelos</a>
+<a href="fontes.html">Fontes</a>
+<button class="theme-btn" type="button">Tema escuro</button>
+</div></nav>
+<div class="wrap">
+<main class="page">
+<article class="content">
+<p class="crumb label"><a href="index.html">Início</a> / Modelos</p>
+<h1>Modelos para download</h1>
+<p class="intro">Planilhas prontas para preencher, com listas suspensas, linhas de exemplo e instruções na primeira aba. Funcionam no Excel, no Google Sheets e no LibreOffice.</p>
+
+<h2 id="inventario">Inventário de sistemas de IA</h2>
+<p>Ponto de partida de tudo. Registra cada sistema de IA com dono, finalidade, fornecedor, dados, ações que executa, identidade usada, existência de log e criticidade. Inclui colunas para IA embutida em SaaS e shadow AI.</p>
+<ul>
+<li>20 colunas, com listas suspensas para tipo, classificação, perguntas Sim/Não, criticidade e status</li>
+<li>Duas linhas de exemplo: um agente de atendimento e um recurso de IA embutido em SaaS</li>
+<li>Critério de criticidade explicado na aba de instruções</li>
+</ul>
+<p><a class="dl-btn" href="modelos/inventario-ia-iso27090.xlsx" download>Baixar inventário (.xlsx)</a></p>
+
+<h2 id="matriz">Matriz de modelagem de ameaças</h2>
+<p>Avalia as nove ameaças da cláusula 6 para cada sistema crítico e já sai no formato do registro de riscos: vetor, probabilidade, impacto, controles existentes e a implementar, controle da 27002 para a SoA, dono, prazo e aceite do risco residual.</p>
+<ul>
+<li>Nove ameaças pré-carregadas em blocos para até 10 sistemas</li>
+<li>Risco e nível calculados por fórmula, com cor por nível</li>
+<li>Exemplo preenchido de um agente de atendimento com acesso ao CRM</li>
+</ul>
+<p><a class="dl-btn" href="modelos/matriz-ameacas-iso27090.xlsx" download>Baixar matriz (.xlsx)</a></p>
+
+<h2 id="como-usar">Ordem de uso</h2>
+<ol class="steps">
+<li><b>Inventário</b>Liste todos os sistemas de IA e classifique a criticidade.</li>
+<li><b>Matriz</b>Para cada sistema de criticidade alta, percorra as nove ameaças.</li>
+<li><b>Registro de riscos</b>Leve os riscos médios e altos para o registro da ISMS e os controles escolhidos para a SoA.</li>
+<li><b>Autoavaliação</b>Use a <a href="autoavaliacao.html">autoavaliação</a> para medir a evolução a cada trimestre.</li>
+</ol>
+</article>
+<aside class="toc" aria-label="Nesta página"><span class="label">Nesta página</span><ol></ol></aside>
+</main>
+</div>
+<footer><div class="wrap">
+<p><b>Material de apoio independente.</b> Este guia explica a ISO/IEC 27090:2026 com palavras próprias e não reproduz o texto da norma, que é publicação paga da ISO/IEC. Não é consultoria, não substitui a leitura da norma oficial e não comprova conformidade com nenhuma lei ou certificação. Referências de cláusula seguem o sumário público da norma; confirme no texto oficial antes de usar em auditoria.</p>
+<p>Mantido por <a href="../">André Ferreira</a> · Versão de teste · Atualizado em 29/10/2026</p>
+</div></footer>
+
+</body>
+</html>

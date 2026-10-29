@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>As nove ameaças · ISO/IEC 27090</title>
+<meta name="description" content="As nove ameaças específicas de IA da cláusula 6 da ISO/IEC 27090, com sinais de detecção, mitigação e exemplos.">
+<meta property="og:title" content="As nove ameaças · ISO/IEC 27090">
+<meta property="og:description" content="As nove ameaças específicas de IA da cláusula 6 da ISO/IEC 27090, com sinais de detecção, mitigação e exemplos.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d5e6e'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='13' font-weight='700' fill='white' text-anchor='middle'%3E27090%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,600;112,800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/app.js"></script>
+</head>
+<body>
+<nav class="top" aria-label="Navegação do guia"><div class="wrap">
+<a class="brand" href="index.html">ISO/IEC <span>27090</span> · guia prático</a>
+<a href="index.html">Início</a>
+<a href="implementar.html">Implementar</a>
+<a href="ameacas.html" aria-current="page">Ameaças</a>
+<a href="agentes.html">Agentes e IAM</a>
+<a href="autoavaliacao.html">Autoavaliação</a>
+<a href="modelos.html">Modelos</a>
+<a href="fontes.html">Fontes</a>
+<button class="theme-btn" type="button">Tema escuro</button>
+</div></nav>
+<div class="wrap">
+<main class="page">
+<article class="content">
+<p class="crumb label"><a href="index.html">Início</a> / Ameaças</p>
+<h1>As nove ameaças da cláusula 6</h1>
+<p class="intro">Para cada tipo de comprometimento, a norma descreve o que é, as falhas que causa, como detectar e como mitigar. Abaixo, a explicação com palavras próprias, sinais práticos e controles. Os exemplos são do autor.</p>
+<div class="tbl"><table>
+<thead><tr><th>Cláusula</th><th>Ameaça</th><th>Fase principal</th></tr></thead><tbody>
+<tr><td class="mono">6.2</td><td><a href="#envenenamento-dados">Envenenamento de dados</a></td><td>Coleta e preparação de dados; retreino com dados de produção</td></tr><tr><td class="mono">6.3</td><td><a href="#evasao">Evasão</a></td><td>Operação</td></tr><tr><td class="mono">6.4</td><td><a href="#inferencia-pertencimento">Inferência de pertencimento</a></td><td>Operação</td></tr><tr><td class="mono">6.5</td><td><a href="#exfiltracao-modelo">Exfiltração de modelo</a></td><td>Operação</td></tr><tr><td class="mono">6.6</td><td><a href="#inversao-modelo">Inversão de modelo</a></td><td>Operação</td></tr><tr><td class="mono">6.7</td><td><a href="#envenenamento-modelo">Envenenamento direto do modelo</a></td><td>Desenvolvimento, cadeia de suprimentos e implantação</td></tr><tr><td class="mono">6.8</td><td><a href="#saida-sensivel">Saída sensível</a></td><td>Operação</td></tr><tr><td class="mono">6.9</td><td><a href="#prompt-injection">Prompt injection</a></td><td>Operação</td></tr><tr><td class="mono">6.10</td><td><a href="#saida-injecao">Saída com ataque de injeção</a></td><td>Implantação e integração</td></tr></tbody></table></div>
+<div class="callout"><b>Como usar esta página</b><p>Percorra as nove ameaças para cada sistema crítico do inventário e registre o resultado na <a href="modelos.html#matriz">matriz de modelagem</a>. Prompt injection (6.9) e saída com injeção (6.10) se aplicam a praticamente qualquer sistema com LLM.</p></div>
+
+<section class="threat">
+<h2 id="envenenamento-dados" data-toc="6.2 Envenenamento de dados"><span class="chip">6.2</span> Envenenamento de dados</h2>
+<p class="label">Data poisoning</p>
+<p>O atacante manipula dados de treino, ajuste fino ou retreino para alterar o comportamento do modelo, seja degradando a qualidade, seja plantando um gatilho (backdoor) que só ele conhece.</p>
+<dl>
+<dt>Onde aparece</dt><dd>Coleta e preparação de dados; retreino com dados de produção</dd>
+<dt>Sinais de detecção</dt><dd><ul><li>Queda de acurácia ou mudança de comportamento após retreino sem causa aparente</li><li>Amostras anômalas, duplicadas ou com rótulo inconsistente no dataset</li><li>Fontes de dados novas ou sem dono entrando no pipeline</li></ul></dd>
+<dt>Mitigação</dt><dd><ul><li>Registro de proveniência e linhagem de cada dataset e de cada execução de treino</li><li>Validação e revisão de dados antes de entrarem no treino, inclusive dados vindos da operação</li><li>Controle de acesso e integridade (hash) nos repositórios de dados</li><li>Comparação de comportamento entre versões do modelo antes de promover para produção</li></ul></dd>
+<dt>Exemplo</dt><dd>Amostras rotuladas de forma errada entram num dataset coletado da web e, meses depois, o filtro de fraude passa a liberar um padrão que deveria bloquear.</dd>
+<dt>OWASP LLM 2025</dt><dd class="mono">LLM04 Data and Model Poisoning</dd>
+</dl>
+</section>
+<section class="threat">
+<h2 id="evasao" data-toc="6.3 Evasão"><span class="chip">6.3</span> Evasão</h2>
+<p class="label">Evasion</p>
+<p>O atacante altera a entrada, muitas vezes de forma imperceptível para humanos, para induzir o modelo a errar na inferência.</p>
+<dl>
+<dt>Onde aparece</dt><dd>Operação</dd>
+<dt>Sinais de detecção</dt><dd><ul><li>Entradas próximas da fronteira de decisão em volume incomum</li><li>Divergência entre o resultado do modelo e validações independentes</li><li>Mesmo usuário testando pequenas variações da mesma entrada</li></ul></dd>
+<dt>Mitigação</dt><dd><ul><li>Teste adversarial antes do go-live e após mudanças</li><li>Validação e normalização de entrada</li><li>Segundo controle independente para decisões críticas (regra, outro modelo ou revisão humana)</li><li>Monitoramento de padrão de entrada por identidade</li></ul></dd>
+<dt>Exemplo</dt><dd>Pequenas alterações em pixels fazem um classificador de imagem ler errado uma placa ou um documento.</dd>
+<dt>OWASP LLM 2025</dt><dd class="mono">Sem item direto; ver MITRE ATLAS</dd>
+</dl>
+</section>
+<section class="threat">
+<h2 id="inferencia-pertencimento" data-toc="6.4 Inferência de pertencimento"><span class="chip">6.4</span> Inferência de pertencimento</h2>
+<p class="label">Membership inference</p>
+<p>O atacante descobre se um registro específico fez parte dos dados de treino, o que por si só pode revelar informação sensível sobre uma pessoa.</p>
+<dl>
+<dt>Onde aparece</dt><dd>Operação</dd>
+<dt>Sinais de detecção</dt><dd><ul><li>Consultas repetidas sobre registros específicos ou variações de um mesmo registro</li><li>Uso intenso de pontuações de confiança expostas pela API</li></ul></dd>
+<dt>Mitigação</dt><dd><ul><li>Minimizar dados pessoais no treino</li><li>Reduzir a informação exposta na saída (não retornar probabilidades quando não for necessário)</li><li>Técnicas de privacidade no treino, como privacidade diferencial, quando aplicável</li><li>Limite de consultas e monitoramento por identidade</li></ul></dd>
+<dt>Exemplo</dt><dd>Testar se o prontuário de um paciente identificado foi usado para treinar um modelo clínico.</dd>
+<dt>OWASP LLM 2025</dt><dd class="mono">LLM02 Sensitive Information Disclosure</dd>
+</dl>
+</section>
+<section class="threat">
+<h2 id="exfiltracao-modelo" data-toc="6.5 Exfiltração de modelo"><span class="chip">6.5</span> Exfiltração de modelo</h2>
+<p class="label">Model exfiltration</p>
+<p>O atacante reconstrói uma cópia funcional do modelo enviando entradas e analisando as saídas. O ataque usa a própria interface legítima, por isso controle de acesso sozinho não resolve.</p>
+<dl>
+<dt>Onde aparece</dt><dd>Operação</dd>
+<dt>Sinais de detecção</dt><dd><ul><li>Volume alto e sistemático de consultas por conta ou chave de API</li><li>Consultas que varrem o espaço de entrada de forma regular</li><li>Uso de parâmetros que expõem detalhes internos (probabilidades, logprobs)</li></ul></dd>
+<dt>Mitigação</dt><dd><ul><li>Throttling e cotas por identidade</li><li>Log de padrão de consulta com alerta para varredura</li><li>Expor apenas o necessário na resposta da API</li><li>Termos de uso e monitoramento de clientes de API</li></ul></dd>
+<dt>Exemplo</dt><dd>Um concorrente automatiza milhares de consultas a uma API pública de precificação e treina um clone.</dd>
+<dt>OWASP LLM 2025</dt><dd class="mono">LLM10 Unbounded Consumption</dd>
+</dl>
+</section>
+<section class="threat">
+<h2 id="inversao-modelo" data-toc="6.6 Inversão de modelo"><span class="chip">6.6</span> Inversão de modelo</h2>
+<p class="label">Model inversion</p>
+<p>O atacante reconstrói dados de treino, ou partes relevantes deles, a partir das entradas e saídas do modelo.</p>
+<dl>
+<dt>Onde aparece</dt><dd>Operação</dd>
+<dt>Sinais de detecção</dt><dd><ul><li>Sondagem repetida com otimização de entrada</li><li>Saídas que se aproximam de exemplos reais do dataset</li></ul></dd>
+<dt>Mitigação</dt><dd><ul><li>Minimização de dados no treino</li><li>Limitar detalhes expostos na saída</li><li>Limite de consultas e detecção de sondagem</li><li>Teste de extração de dados como parte do red team</li></ul></dd>
+<dt>Exemplo</dt><dd>Sondagem repetida de um modelo de reconhecimento facial para reconstruir a imagem de uma pessoa que estava no treino.</dd>
+<dt>OWASP LLM 2025</dt><dd class="mono">LLM02 Sensitive Information Disclosure</dd>
+</dl>
+</section>
+<section class="threat">
+<h2 id="envenenamento-modelo" data-toc="6.7 Envenenamento direto do modelo"><span class="chip">6.7</span> Envenenamento direto do modelo</h2>
+<p class="label">Direct model poisoning</p>
+<p>O atacante adultera o próprio modelo (pesos, arquivo, configuração) durante o desenvolvimento ou a operação. Inclui modelo pré-treinado malicioso vindo de repositório público.</p>
+<dl>
+<dt>Onde aparece</dt><dd>Desenvolvimento, cadeia de suprimentos e implantação</dd>
+<dt>Sinais de detecção</dt><dd><ul><li>Hash ou assinatura do artefato diferente do registrado</li><li>Modelo carregado de fonte não aprovada</li><li>Arquivo de modelo que executa código ao ser carregado</li></ul></dd>
+<dt>Mitigação</dt><dd><ul><li>Registro de modelos com controle de acesso e hash ou assinatura de cada artefato</li><li>Lista de fontes aprovadas para modelos pré-treinados</li><li>Preferir formatos que não executam código, como safetensors, em vez de pickle</li><li>Ambiente de desenvolvimento e treino segregado e protegido</li></ul></dd>
+<dt>Exemplo</dt><dd>Um arquivo de pesos alterado é baixado de um repositório compartilhado e vai para produção sem verificação. Em 2024, a JFrog relatou cerca de 100 modelos maliciosos no Hugging Face, um deles abrindo conexão remota ao ser carregado.</dd>
+<dt>OWASP LLM 2025</dt><dd class="mono">LLM03 Supply Chain · LLM04 Data and Model Poisoning</dd>
+</dl>
+</section>
+<section class="threat">
+<h2 id="saida-sensivel" data-toc="6.8 Saída sensível"><span class="chip">6.8</span> Saída sensível</h2>
+<p class="label">Sensitive model output</p>
+<p>A saída do modelo revela parte de uma entrada anterior: dados de treino, documento do contexto, prompt de sistema ou prompt de outro usuário.</p>
+<dl>
+<dt>Onde aparece</dt><dd>Operação</dd>
+<dt>Sinais de detecção</dt><dd><ul><li>Dados pessoais ou confidenciais detectados na saída por DLP</li><li>Respostas que citam informação de outro usuário ou de outro tenant</li><li>Exposição do prompt de sistema</li></ul></dd>
+<dt>Mitigação</dt><dd><ul><li>Filtro de dados sensíveis (DLP) na saída</li><li>Segregação de contexto por usuário e por tenant no RAG</li><li>Aplicar no RAG as mesmas permissões que o usuário tem no documento de origem</li><li>Não colocar segredos em prompt de sistema</li></ul></dd>
+<dt>Exemplo</dt><dd>Um assistente devolve trechos do registro de um cliente que estava no treino, ou um RAG mostra um documento que o usuário não tinha permissão para abrir.</dd>
+<dt>OWASP LLM 2025</dt><dd class="mono">LLM02 Sensitive Information Disclosure · LLM07 System Prompt Leakage</dd>
+</dl>
+</section>
+<section class="threat">
+<h2 id="prompt-injection" data-toc="6.9 Prompt injection"><span class="chip">6.9</span> Prompt injection</h2>
+<p class="label">Prompt injection</p>
+<p>Conteúdo elaborado pelo atacante acaba incorporado à instrução do sistema e provoca comportamento não previsto. Inclui a forma indireta: instrução escondida em e-mail, PDF, página web ou ticket que o sistema lê.</p>
+<dl>
+<dt>Onde aparece</dt><dd>Operação</dd>
+<dt>Sinais de detecção</dt><dd><ul><li>Instruções em texto oculto, metadados ou formatação em documentos recebidos</li><li>Agente executando ação fora do padrão logo após ler conteúdo externo</li><li>Tentativas de alterar o papel do modelo ou de revelar instruções</li></ul></dd>
+<dt>Mitigação</dt><dd><ul><li>Tratar todo conteúdo externo como não confiável</li><li>Mínimo privilégio para o modelo e para o agente: o estrago fica limitado ao acesso</li><li>Aprovação humana para ações irreversíveis</li><li>Classificador de injeção como camada adicional, não como controle único</li><li>Red team com conteúdo injetado em cada canal de entrada</li></ul></dd>
+<dt>Exemplo</dt><dd>Uma instrução escondida dentro de um PDF faz a ferramenta de resumo enviar dados para fora. A CVE-2025-32711 descreveu um e-mail que levava um assistente corporativo a vazar dados do contexto sem clique do usuário.</dd>
+<dt>OWASP LLM 2025</dt><dd class="mono">LLM01 Prompt Injection · LLM06 Excessive Agency</dd>
+</dl>
+</section>
+<section class="threat">
+<h2 id="saida-injecao" data-toc="6.10 Saída com ataque de injeção"><span class="chip">6.10</span> Saída com ataque de injeção</h2>
+<p class="label">Output containing injection attacks</p>
+<p>A saída do modelo carrega um payload que o componente seguinte executa: script renderizado em página, comando SQL, chamada de API ou link que dispara requisição com dados.</p>
+<dl>
+<dt>Onde aparece</dt><dd>Implantação e integração</dd>
+<dt>Sinais de detecção</dt><dd><ul><li>Saída contendo marcação, script, comandos ou URLs inesperadas</li><li>Requisições de rede disparadas pela renderização da resposta</li></ul></dd>
+<dt>Mitigação</dt><dd><ul><li>Tratar a saída do modelo como entrada não confiável para o próximo sistema</li><li>Escape e sanitização antes de renderizar</li><li>Consultas parametrizadas, nunca SQL montado com texto do modelo</li><li>Bloquear carregamento automático de imagens e links externos na resposta</li></ul></dd>
+<dt>Exemplo</dt><dd>Texto gerado com script é exibido numa página sem escape e envia o cookie do usuário para o endereço do atacante.</dd>
+<dt>OWASP LLM 2025</dt><dd class="mono">LLM05 Improper Output Handling</dd>
+</dl>
+</section>
+<h2 id="lacunas">O que não tem cláusula própria</h2>
+<p>Agentes autônomos com uso de ferramentas e jailbreak não aparecem como itens separados. Prompt injection (6.9) e saída com injeção (6.10) são os mais próximos, e as orientações de governança, zero trust e mínimo privilégio continuam valendo. Para esses temas, complemente com o OWASP Top 10 para LLM (especialmente Excessive Agency) e o MITRE ATLAS. Veja <a href="agentes.html">Agentes e IAM</a>.</p>
+<p class="muted">Correspondência com o OWASP LLM Top 10 é leitura do autor, não consta da norma.</p>
+</article>
+<aside class="toc" aria-label="Nesta página"><span class="label">Nesta página</span><ol></ol></aside>
+</main>
+</div>
+<footer><div class="wrap">
+<p><b>Material de apoio independente.</b> Este guia explica a ISO/IEC 27090:2026 com palavras próprias e não reproduz o texto da norma, que é publicação paga da ISO/IEC. Não é consultoria, não substitui a leitura da norma oficial e não comprova conformidade com nenhuma lei ou certificação. Referências de cláusula seguem o sumário público da norma; confirme no texto oficial antes de usar em auditoria.</p>
+<p>Mantido por <a href="../">André Ferreira</a> · Versão de teste · Atualizado em 29/10/2026</p>
+</div></footer>
+
+</body>
+</html>

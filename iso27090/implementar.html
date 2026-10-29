@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Guia de implementação · ISO/IEC 27090</title>
+<meta name="description" content="Sete passos para implementar a ISO/IEC 27090 dentro de uma ISMS ISO 27001 ou de um sistema de gestão ISO 42001.">
+<meta property="og:title" content="Guia de implementação · ISO/IEC 27090">
+<meta property="og:description" content="Sete passos para implementar a ISO/IEC 27090 dentro de uma ISMS ISO 27001 ou de um sistema de gestão ISO 42001.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d5e6e'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='13' font-weight='700' fill='white' text-anchor='middle'%3E27090%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,600;112,800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/app.js"></script>
+</head>
+<body>
+<nav class="top" aria-label="Navegação do guia"><div class="wrap">
+<a class="brand" href="index.html">ISO/IEC <span>27090</span> · guia prático</a>
+<a href="index.html">Início</a>
+<a href="implementar.html" aria-current="page">Implementar</a>
+<a href="ameacas.html">Ameaças</a>
+<a href="agentes.html">Agentes e IAM</a>
+<a href="autoavaliacao.html">Autoavaliação</a>
+<a href="modelos.html">Modelos</a>
+<a href="fontes.html">Fontes</a>
+<button class="theme-btn" type="button">Tema escuro</button>
+</div></nav>
+<div class="wrap">
+<main class="page">
+<article class="content">
+<p class="crumb label"><a href="index.html">Início</a> / Implementar</p>
+<h1>Guia de implementação em sete passos</h1>
+<p class="intro">A 27090 não pede um sistema de gestão novo. Ela entra no ciclo de riscos que você já roda. Este roteiro parte de uma ISMS 27001 existente; se você só tem a 42001, os passos são os mesmos e mudam apenas os documentos de destino.</p>
+
+<div class="callout">
+<b>Pré-requisito</b>
+<p>Ter um processo de avaliação de riscos funcionando (27001 cláusula 6.1 ou equivalente). A cláusula 5 da 27090 parte do princípio de que os controles da 27002 já são selecionados com base em risco, e acrescenta que os comprometimentos específicos de IA devem ser considerados em todo o ciclo de vida.</p>
+</div>
+
+<h2 id="passo-1" data-toc="1. Escopo e donos">1. Defina escopo e donos</h2>
+<p>Antes do inventário, decida quem responde por quê. Sem dono, sistema de IA vira "do fornecedor" e ninguém aceita o risco residual.</p>
+<div class="tbl"><table>
+<thead><tr><th>Papel</th><th>Responde por</th><th>Pergunta que precisa responder</th></tr></thead>
+<tbody>
+<tr><td>CISO / segurança</td><td>Modelagem de ameaças, monitoramento, resposta a incidentes, red teaming</td><td>Como um ataque a este sistema apareceria na nossa telemetria?</td></tr>
+<tr><td>Engenharia / produto</td><td>Desenvolvimento seguro, integridade do modelo, tratamento de entrada e saída</td><td>Quais defesas estão embutidas e elas se mantêm após retreino?</td></tr>
+<tr><td>IAM</td><td>Identidade dos agentes e contas de serviço, escopo, revisão de acesso</td><td>Com qual identidade o modelo age e o que ela alcança?</td></tr>
+<tr><td>Dono dos dados / privacidade</td><td>Proveniência, classificação, retenção, base legal (LGPD)</td><td>De onde veio esse dado e podemos usá-lo para treinar ou alimentar a IA?</td></tr>
+<tr><td>Compras / fornecedores</td><td>Due diligence de modelos, dados e serviços de IA de terceiros</td><td>O que sabemos sobre quem está por trás deste componente?</td></tr>
+<tr><td>Governança de IA</td><td>Inventário, avaliação de impacto, ligação com a 42001</td><td>Quais sistemas existem, quem é dono e quais riscos foram aceitos?</td></tr>
+<tr><td>Auditoria interna</td><td>Evidência de que os controles operam</td><td>Conseguimos mostrar que o controle rodou, e não só que foi escrito?</td></tr>
+</tbody></table></div>
+
+<h2 id="passo-2" data-toc="2. Inventário de IA">2. Faça o inventário de IA</h2>
+<p>Não dá para modelar ameaça de sistema que ninguém listou. O inventário precisa ir além dos modelos que a empresa implantou de propósito.</p>
+<ul>
+<li><b>IA própria:</b> modelos treinados ou ajustados internamente, pipelines de ML, RAG.</li>
+<li><b>IA via API:</b> integrações com provedores de modelo.</li>
+<li><b>IA embutida em SaaS:</b> copilotos, resumos automáticos, classificação de tickets, triagem de e-mail.</li>
+<li><b>Agentes:</b> qualquer IA que chama ferramenta, grava dado ou envia mensagem.</li>
+<li><b>Shadow AI:</b> ferramentas e extensões que os próprios usuários adotaram. Fontes: logs de proxy e CASB, consentimentos OAuth concedidos a aplicativos, inventário de extensões de navegador, pesquisa com as áreas.</li>
+</ul>
+<p>Campos mínimos: dono de negócio, dono técnico, finalidade, fornecedor e modelo, fontes de dados, se há dado pessoal, ferramentas que aciona, identidade usada e se há log.</p>
+<p><a class="dl-btn ghost" href="modelos.html#inventario">Baixar modelo de inventário</a></p>
+
+<h2 id="passo-3" data-toc="3. Criticidade">3. Classifique a criticidade</h2>
+<p>Modelagem de ameaças completa em todos os sistemas não escala. Priorize com quatro perguntas:</p>
+<div class="tbl"><table>
+<thead><tr><th>Critério</th><th>Eleva a criticidade quando</th></tr></thead>
+<tbody>
+<tr><td>Dados</td><td>Processa dado pessoal, sensível, financeiro ou confidencial, ou usa esses dados para treino.</td></tr>
+<tr><td>Ação</td><td>Pode chamar ferramenta, gravar em sistema, enviar mensagem ou aprovar algo.</td></tr>
+<tr><td>Exposição</td><td>Recebe conteúdo externo (e-mail, upload, web, cliente) ou é acessível pela internet.</td></tr>
+<tr><td>Decisão</td><td>Seu resultado afeta pessoas (crédito, contratação, atendimento) ou operação crítica.</td></tr>
+</tbody></table></div>
+<p>Dois ou mais critérios: modelagem completa no passo 4. Um critério: checklist simplificado. Nenhum: só inventário e revisão anual.</p>
+
+<h2 id="passo-4" data-toc="4. Modelagem de ameaças">4. Modele as ameaças dos sistemas críticos</h2>
+<p>Use as nove categorias da cláusula 6 como lista de verificação. Para cada sistema crítico, responda para cada ameaça: ela se aplica? Por qual vetor? Qual a probabilidade e o impacto? Que controle já existe?</p>
+<ol>
+<li>Desenhe o fluxo: de onde vem o dado, onde o modelo roda, para onde vai a saída, quais ferramentas ele chama.</li>
+<li>Marque as fronteiras de confiança: todo ponto onde entra conteúdo que você não controla e todo ponto onde a saída do modelo é consumida por outro sistema.</li>
+<li>Percorra as nove ameaças em cada fronteira. Prompt injection e saída com injeção quase sempre se aplicam a qualquer sistema com LLM.</li>
+<li>Complemente com OWASP Top 10 para LLM e MITRE ATLAS, principalmente para agentes.</li>
+</ol>
+<p><a class="dl-btn ghost" href="modelos.html#matriz">Baixar matriz de modelagem de ameaças</a> <a class="dl-btn ghost" href="ameacas.html">Ver as nove ameaças</a></p>
+
+<h2 id="passo-5" data-toc="5. Registro de riscos e SoA">5. Leve para o registro de riscos e a SoA</h2>
+<p>É aqui que a 27090 vira auditável. Cada ameaça aplicável entra como risco, com justificativa de tratamento e controle da 27002 selecionado na Declaração de Aplicabilidade.</p>
+<h3>Exemplo de entrada</h3>
+<div class="tbl"><table>
+<tbody>
+<tr><th>Risco</th><td>Prompt injection indireta no assistente de atendimento via e-mail de cliente (27090 6.9)</td></tr>
+<tr><th>Consequência</th><td>Assistente grava nota falsa no CRM ou expõe dados de outro cliente na resposta</td></tr>
+<tr><th>Prob. × impacto</th><td>4 × 4 = 16 (alto)</td></tr>
+<tr><th>Tratamento</th><td>Mitigar</td></tr>
+<tr><th>Controles</th><td>Identidade própria do agente com escopo mínimo; aprovação humana para alterar registros; saída tratada como entrada não confiável; log de toda chamada de ferramenta; red team trimestral com e-mails injetados</td></tr>
+<tr><th>Risco residual</th><td>Nota incorreta em rascunho, sem gravação automática. Aceito pelo dono de Operações, revisão na próxima troca de modelo.</td></tr>
+</tbody></table></div>
+
+<h3>Controles da 27002:2022 que mais aparecem</h3>
+<p class="muted">Sugestão de mapeamento do autor. A 27090 cita explicitamente 8.15, 8.16 e 8.27; os demais são leitura própria.</p>
+<div class="tbl"><table>
+<thead><tr><th>Controle 27002</th><th>Uso em IA</th></tr></thead>
+<tbody>
+<tr><td>5.9 Inventário de ativos</td><td>Modelos, datasets, prompts de sistema e agentes como ativos</td></tr>
+<tr><td>5.12 Classificação</td><td>Classificar dados de treino, contexto de RAG e saídas</td></tr>
+<tr><td>5.15, 5.18, 8.2 Acesso e acesso privilegiado</td><td>Identidade e escopo de agentes e contas de serviço do modelo</td></tr>
+<tr><td>5.19 a 5.23 Fornecedores e nuvem</td><td>Provedores de modelo, modelos pré-treinados, APIs de IA</td></tr>
+<tr><td>5.24 a 5.27 Incidentes</td><td>Playbook de incidente de IA: injeção, vazamento, modelo comprometido</td></tr>
+<tr><td>5.34 Privacidade</td><td>Inferência de pertencimento, inversão, saída sensível</td></tr>
+<tr><td>8.11, 8.12 Mascaramento e DLP</td><td>Filtro de dados sensíveis na entrada e na saída</td></tr>
+<tr><td>8.15, 8.16 Logging e monitoramento</td><td>Log de inferência e de chamadas de ferramenta, detecção de padrão de extração</td></tr>
+<tr><td>8.25, 8.28, 8.29 Desenvolvimento e teste</td><td>Desenvolvimento seguro de pipelines de ML e teste adversarial</td></tr>
+<tr><td>8.27 Arquitetura segura</td><td>Zero trust, mínimo privilégio do modelo, saída como entrada não confiável</td></tr>
+<tr><td>8.31, 8.32 Ambientes e mudança</td><td>Proteção do ambiente de treino, revisão de mudança de modelo</td></tr>
+</tbody></table></div>
+
+<h2 id="passo-6" data-toc="6. Controles por estágio">6. Implante os controles por estágio</h2>
+<p>Não tente implementar o catálogo inteiro de uma vez. Cada estágio precisa deixar evidência que um auditor consiga amostrar.</p>
+<div class="tbl"><table>
+<thead><tr><th>Estágio</th><th>Controles</th><th>Evidência</th><th>Prazo sugerido</th></tr></thead>
+<tbody>
+<tr><td><span class="chip sig">Mínimo</span></td><td>Inventário com donos; modelagem de ameaças dos críticos; log de inferência e de chamada de ferramenta; política de uso de IA</td><td>Inventário com histórico; documentos de modelagem; amostra de logs</td><td>30 dias</td></tr>
+<tr><td><span class="chip">Estabelecido</span></td><td>Proveniência de dados e modelos; red team; requisitos de segurança para fornecedores; playbook de incidente de IA; revisão de acesso de agentes</td><td>Registros de proveniência; relatório de red team com correções; questionário de fornecedor; simulação de incidente</td><td>90 dias</td></tr>
+<tr><td><span class="chip">Avançado</span></td><td>Monitoramento contínuo de padrão de consulta; revisão de mudança de modelo; teste de eficácia dos controles após cada retreino</td><td>Registros de mudança; resultados de teste ao longo do tempo; alertas com tratativa</td><td>Contínuo</td></tr>
+</tbody></table></div>
+
+<h2 id="passo-7" data-toc="7. Evidência e revisão">7. Mantenha a evidência e revise por gatilho</h2>
+<p>Evidência montada na véspera da auditoria mostra preparo, não maturidade. Inventário, modelagem, proveniência, testes e logs precisam ser atualizados como parte da operação.</p>
+<p>Revise a modelagem de ameaças sempre que ocorrer um destes gatilhos:</p>
+<ul>
+<li>troca de modelo, de versão ou de fornecedor;</li>
+<li>retreino ou nova fonte de dados;</li>
+<li>nova ferramenta ou permissão concedida a um agente;</li>
+<li>exposição a um novo público (interno para cliente, por exemplo);</li>
+<li>incidente ou quase incidente envolvendo IA.</li>
+</ul>
+
+<h2 id="42001" data-toc="Encaixe com a 42001">Encaixe com a ISO 42001</h2>
+<p>Se a organização tem ou planeja um sistema de gestão de IA, use as duas em camadas: a 42001 define a governança (política, papéis, avaliação de impacto, controles do Anexo A) e a 27090 alimenta a parte de segurança da análise de riscos. O inventário de IA é o mesmo nas duas; não mantenha dois.</p>
+<p>O auditor da 42001 procura rastreabilidade: de uma versão de modelo até a avaliação de impacto, as decisões sobre dados, os testes, a aprovação e o monitoramento. A modelagem de ameaças da 27090 é uma das peças dessa trilha.</p>
+
+<h2 id="lgpd" data-toc="LGPD">E a LGPD?</h2>
+<p>Três ameaças da cláusula 6 são, na prática, incidentes de confidencialidade com dado pessoal: inferência de pertencimento (6.4), inversão de modelo (6.6) e saída sensível (6.8). Quando o sistema de IA trata dado pessoal, elas entram no relatório de impacto à proteção de dados (RIPD) e no plano de resposta a incidentes de segurança com dados pessoais. Confirme as obrigações aplicáveis com o encarregado (DPO) e o jurídico.</p>
+</article>
+<aside class="toc" aria-label="Nesta página"><span class="label">Nesta página</span><ol></ol></aside>
+</main>
+</div>
+<footer><div class="wrap">
+<p><b>Material de apoio independente.</b> Este guia explica a ISO/IEC 27090:2026 com palavras próprias e não reproduz o texto da norma, que é publicação paga da ISO/IEC. Não é consultoria, não substitui a leitura da norma oficial e não comprova conformidade com nenhuma lei ou certificação. Referências de cláusula seguem o sumário público da norma; confirme no texto oficial antes de usar em auditoria.</p>
+<p>Mantido por <a href="../">André Ferreira</a> · Versão de teste · Atualizado em 29/10/2026</p>
+</div></footer>
+
+</body>
+</html>

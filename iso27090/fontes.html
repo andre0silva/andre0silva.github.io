@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Fontes e mapeamentos · ISO/IEC 27090</title>
+<meta name="description" content="Fontes oficiais, frameworks complementares e pesquisas usadas no guia prático da ISO/IEC 27090.">
+<meta property="og:title" content="Fontes e mapeamentos · ISO/IEC 27090">
+<meta property="og:description" content="Fontes oficiais, frameworks complementares e pesquisas usadas no guia prático da ISO/IEC 27090.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d5e6e'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='13' font-weight='700' fill='white' text-anchor='middle'%3E27090%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,600;112,800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/app.js"></script>
+</head>
+<body>
+<nav class="top" aria-label="Navegação do guia"><div class="wrap">
+<a class="brand" href="index.html">ISO/IEC <span>27090</span> · guia prático</a>
+<a href="index.html">Início</a>
+<a href="implementar.html">Implementar</a>
+<a href="ameacas.html">Ameaças</a>
+<a href="agentes.html">Agentes e IAM</a>
+<a href="autoavaliacao.html">Autoavaliação</a>
+<a href="modelos.html">Modelos</a>
+<a href="fontes.html" aria-current="page">Fontes</a>
+<button class="theme-btn" type="button">Tema escuro</button>
+</div></nav>
+<div class="wrap">
+<main class="page">
+<article class="content">
+<p class="crumb label"><a href="index.html">Início</a> / Fontes</p>
+<h1>Fontes e mapeamentos</h1>
+<p class="intro">Onde conferir cada informação deste guia e como a 27090 se conecta com as demais referências de segurança de IA.</p>
+
+<h2 id="oficiais">Fontes oficiais</h2>
+<ul>
+<li><a href="https://www.iso.org/standard/27090">ISO/IEC 27090:2026, catálogo da ISO</a>: status, escopo, data de publicação e compra do texto oficial.</li>
+<li><a href="https://www.iso.org/insights/ISO-27090-explained">ISO/IEC 27090 explained, ISO</a>: público-alvo, áreas de ameaça e relação com a 42001.</li>
+<li><a href="https://www.iso.org/standard/56582.html">ISO/IEC 27091, catálogo da ISO</a>: norma irmã sobre riscos de privacidade em IA, ainda em fase final de aprovação em outubro de 2026.</li>
+</ul>
+
+<h2 id="secundarias">Análises usadas como apoio</h2>
+<ul>
+<li><a href="https://orbit.reconn.io/iso-iec-27090-2026-ai-security-guide/">ISO/IEC 27090 Explained, Orbit by Reconn (20/10/2026)</a></li>
+<li><a href="https://www.abileneacademy.ch/en/blog/iso-iec-27090-2026-ai-security-guide">ISO/IEC 27090:2026 for AI Security, Abilene Academy (20/10/2026)</a></li>
+</ul>
+<p class="muted">Ambas são publicações de empresas de treinamento. Os detalhes de cláusula vêm do sumário público da norma; confirme no texto oficial.</p>
+
+<h2 id="frameworks">Frameworks complementares</h2>
+<div class="tbl"><table>
+<thead><tr><th>Referência</th><th>Use para</th></tr></thead>
+<tbody>
+<tr><td><a href="https://genai.owasp.org/llm-top-10/">OWASP Top 10 for LLM Applications 2025</a></td><td>Riscos de aplicações com LLM, incluindo Excessive Agency, que a 27090 cobre pouco</td></tr>
+<tr><td><a href="https://atlas.mitre.org/">MITRE ATLAS</a></td><td>Táticas e técnicas de ataque a sistemas de IA para modelagem de ameaças e red team</td></tr>
+<tr><td><a href="https://csrc.nist.gov/pubs/ai/100/2/e2025/final">NIST AI 100-2 E2025</a></td><td>Taxonomia e vocabulário de ataques de machine learning adversarial</td></tr>
+<tr><td>ISO/IEC 42001</td><td>Sistema de gestão de IA certificável; governança onde a 27090 se encaixa</td></tr>
+<tr><td>ISO/IEC 23894</td><td>Processo de gestão de riscos de IA que recebe as ameaças da 27090</td></tr>
+<tr><td>ISO/IEC 22989 e 23053</td><td>Referências normativas da 27090: conceitos de IA e framework de sistemas de ML</td></tr>
+</tbody></table></div>
+
+<h2 id="pesquisa">Pesquisas citadas nos exemplos</h2>
+<ul>
+<li>Carlini et al., <a href="https://arxiv.org/abs/2302.10149">Poisoning Web-Scale Training Datasets is Practical</a> (2023): envenenamento de datasets coletados da web a baixo custo.</li>
+<li>Souly et al., <a href="https://arxiv.org/abs/2510.07192">arXiv 2510.07192</a> (2025): cerca de 250 documentos maliciosos bastaram para plantar backdoor nos tamanhos de modelo testados.</li>
+<li>Tramèr et al., <a href="https://arxiv.org/abs/1609.02943">Stealing Machine Learning Models via Prediction APIs</a> (2016): cópia de modelo apenas com acesso de consulta.</li>
+<li>Carlini et al., <a href="https://arxiv.org/abs/2403.06634">Stealing Part of a Production Language Model</a> (2024): extração de parte de modelos de produção pela API.</li>
+<li>Nasr et al., <a href="https://arxiv.org/abs/2311.17035">Scalable Extraction of Training Data from (Production) Language Models</a> (2023): extração de dados de treino por consulta.</li>
+<li>Greshake et al., <a href="https://arxiv.org/abs/2302.12173">Indirect Prompt Injection</a> (2023): instruções em conteúdo recuperado controlando a aplicação.</li>
+<li><a href="https://arxiv.org/abs/2509.10540">arXiv 2509.10540</a>: análise da CVE-2025-32711, injeção sem clique em assistente corporativo.</li>
+<li>JFrog, <a href="https://jfrog.com/blog/data-scientists-targeted-by-malicious-hugging-face-ml-models-with-silent-backdoor/">modelos maliciosos no Hugging Face</a> (fev/2024).</li>
+</ul>
+
+<h2 id="aviso">Aviso</h2>
+<p>Guia independente, sem vínculo com a ISO, a IEC ou a ABNT. Não reproduz o texto da norma. Não é consultoria jurídica nem garantia de conformidade. Os mapeamentos para 27002, OWASP e LGPD são interpretação do autor.</p>
+</article>
+<aside class="toc" aria-label="Nesta página"><span class="label">Nesta página</span><ol></ol></aside>
+</main>
+</div>
+<footer><div class="wrap">
+<p><b>Material de apoio independente.</b> Este guia explica a ISO/IEC 27090:2026 com palavras próprias e não reproduz o texto da norma, que é publicação paga da ISO/IEC. Não é consultoria, não substitui a leitura da norma oficial e não comprova conformidade com nenhuma lei ou certificação. Referências de cláusula seguem o sumário público da norma; confirme no texto oficial antes de usar em auditoria.</p>
+<p>Mantido por <a href="../">André Ferreira</a> · Versão de teste · Atualizado em 29/10/2026</p>
+</div></footer>
+
+</body>
+</html>

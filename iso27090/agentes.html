@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Agentes e IAM · ISO/IEC 27090</title>
+<meta name="description" content="Como tratar agentes de IA como identidades privilegiadas: escopo mínimo, aprovação humana, log de ferramentas e revogação.">
+<meta property="og:title" content="Agentes e IAM · ISO/IEC 27090">
+<meta property="og:description" content="Como tratar agentes de IA como identidades privilegiadas: escopo mínimo, aprovação humana, log de ferramentas e revogação.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d5e6e'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='13' font-weight='700' fill='white' text-anchor='middle'%3E27090%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,600;112,800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/app.js"></script>
+</head>
+<body>
+<nav class="top" aria-label="Navegação do guia"><div class="wrap">
+<a class="brand" href="index.html">ISO/IEC <span>27090</span> · guia prático</a>
+<a href="index.html">Início</a>
+<a href="implementar.html">Implementar</a>
+<a href="ameacas.html">Ameaças</a>
+<a href="agentes.html" aria-current="page">Agentes e IAM</a>
+<a href="autoavaliacao.html">Autoavaliação</a>
+<a href="modelos.html">Modelos</a>
+<a href="fontes.html">Fontes</a>
+<button class="theme-btn" type="button">Tema escuro</button>
+</div></nav>
+<div class="wrap">
+<main class="page">
+<article class="content">
+<p class="crumb label"><a href="index.html">Início</a> / Agentes e IAM</p>
+<h1>Agentes de IA são identidades privilegiadas</h1>
+<p class="intro">A 27090 aplica zero trust e mínimo privilégio ao modelo, mas não tem cláusula própria para agentes nem catálogo de abuso de ferramentas. Esta página cobre essa lacuna pelo lado de identidade e acesso.</p>
+
+<h2 id="premissa">A premissa: projete para o dia em que o modelo for enganado</h2>
+<p>Classificador de prompt injection ajuda, mas não é modelo de autorização. Em algum momento o agente vai ler um conteúdo malicioso e seguir uma instrução que não devia. A pergunta de segurança não é "como evitar que ele seja enganado", e sim <b>"o que ele consegue fazer quando for enganado"</b>.</p>
+<p>A resposta é sempre a mesma: exatamente o que a identidade dele permite. Por isso o controle principal de um agente é IAM.</p>
+
+<h2 id="principios">Seis princípios</h2>
+<ol class="steps">
+<li><b>Identidade própria</b>Cada agente tem sua conta de serviço, service principal ou identidade de carga de trabalho. Nada de agente usando credencial de pessoa ou chave compartilhada.</li>
+<li><b>Permissões separadas das do usuário</b>O agente não herda por padrão tudo que o usuário que o aciona pode fazer. Quando agir em nome do usuário, a permissão efetiva deve ser a interseção, não a soma.</li>
+<li><b>Escopo mínimo de ferramentas e dados</b>Liste as ferramentas que ele pode chamar e os dados que pode ler. Leitura e escrita separadas. Sem permissão "por precaução".</li>
+<li><b>Aprovação humana para o que não se desfaz</b>Excluir, pagar, enviar para fora, alterar cadastro, conceder acesso: tudo isso passa por aprovação explícita.</li>
+<li><b>Toda chamada de ferramenta registrada</b>Quem acionou, qual identidade o agente usou, qual ferramenta, com quais parâmetros, qual resultado e se houve aprovação.</li>
+<li><b>Desligamento rápido</b>Um procedimento testado para revogar credenciais e tokens do agente em minutos, sem depender do fornecedor.</li>
+</ol>
+
+<h2 id="ciclo" data-toc="Ciclo de vida da identidade">Ciclo de vida da identidade do agente</h2>
+<p>Trate o agente como qualquer identidade no processo de joiner, mover e leaver.</p>
+<div class="tbl"><table>
+<thead><tr><th>Fase</th><th>O que fazer</th></tr></thead>
+<tbody>
+<tr><td><b>Criação</b></td><td>Registro no inventário de IA com dono nomeado; identidade dedicada; escopo aprovado pelo dono do sistema que será acessado; credencial com validade curta ou federada, sem segredo estático quando possível.</td></tr>
+<tr><td><b>Mudança</b></td><td>Nova ferramenta ou nova permissão passa por mudança aprovada e reabre a modelagem de ameaças.</td></tr>
+<tr><td><b>Revisão</b></td><td>Revisão de acesso periódica como conta privilegiada, com o dono atestando cada permissão.</td></tr>
+<tr><td><b>Desativação</b></td><td>Sistema aposentado ou dono desligado: revogar credenciais, consentimentos OAuth e tokens; remover do inventário com registro.</td></tr>
+</tbody></table></div>
+
+<h2 id="checklist" data-toc="Checklist de pré-implantação">Checklist antes de colocar um agente em produção</h2>
+<ul>
+<li>O agente está no inventário, com dono de negócio e dono técnico?</li>
+<li>Tem identidade própria, sem credencial de pessoa?</li>
+<li>A lista de ferramentas e o escopo de dados estão documentados e aprovados?</li>
+<li>As permissões foram revisadas pelo dono de cada sistema alvo?</li>
+<li>As ações irreversíveis exigem aprovação humana?</li>
+<li>Conteúdo externo (e-mail, upload, web) é tratado como não confiável?</li>
+<li>A saída é sanitizada antes de chegar a outro sistema?</li>
+<li>Toda chamada de ferramenta é registrada e o log vai para o SIEM?</li>
+<li>Existe alerta para comportamento fora do padrão (volume, ferramenta incomum, horário)?</li>
+<li>O procedimento de desligamento foi testado?</li>
+<li>Foi feito red team com conteúdo injetado em cada canal de entrada?</li>
+<li>O risco residual foi aceito formalmente pelo dono?</li>
+</ul>
+
+<h2 id="log" data-toc="O que registrar">O que registrar em cada chamada de ferramenta</h2>
+<div class="tbl"><table>
+<thead><tr><th>Campo</th><th>Por quê</th></tr></thead>
+<tbody>
+<tr><td>Data e hora, ID da sessão</td><td>Reconstruir a sequência do incidente</td></tr>
+<tr><td>Usuário que acionou</td><td>Responsabilização e correlação com o comportamento do usuário</td></tr>
+<tr><td>Identidade do agente</td><td>Separar ação do agente de ação humana</td></tr>
+<tr><td>Ferramenta e parâmetros</td><td>Saber o que foi pedido</td></tr>
+<tr><td>Origem do conteúdo que motivou a ação</td><td>Rastrear prompt injection indireta até o documento ou e-mail</td></tr>
+<tr><td>Resultado e aprovação</td><td>Mostrar ao auditor ações aprovadas e recusadas</td></tr>
+</tbody></table></div>
+<p class="muted">Cuidado com dado pessoal no log: aplique a mesma classificação e retenção do sistema de origem.</p>
+
+<h2 id="exemplo" data-toc="Exemplo prático">Exemplo: agente de atendimento com acesso ao CRM</h2>
+<p><b>Cenário.</b> Um assistente responde tickets de clientes e pode criar notas e mudar status no CRM.</p>
+<p><b>Ameaças principais.</b> Prompt injection indireta via e-mail do cliente (6.9); permissões excessivas no CRM; saída sensível expondo dados de outro cliente (6.8); saída com payload renderizada na tela do CRM (6.10); chamadas de ferramenta sem log.</p>
+<p><b>Controles.</b></p>
+<ul>
+<li>Identidade própria com escopo mínimo: lê apenas o cliente do ticket e cria notas.</li>
+<li>Alteração de cadastro só com aprovação do atendente.</li>
+<li>Saída sanitizada antes de entrar no CRM.</li>
+<li>Toda chamada de ferramenta registrada com usuário, entrada e resultado.</li>
+<li>Limite de taxa no endpoint.</li>
+<li>Red team trimestral com e-mails contendo instruções escondidas.</li>
+</ul>
+<p><b>Risco residual.</b> A injeção ainda pode levar o agente a redigir uma nota errada, mas ele não altera cadastro sem aprovação e não lê dados de outros clientes. O dono aceita esse risco, registra a decisão e define revisão na próxima troca de modelo ou de permissão.</p>
+<p><b>Evidência para auditoria.</b> Escopo da credencial no registro de acessos; três logs amostrados mostrando uma ação aprovada e uma recusada; último relatório de red team com casos de injeção e tickets de correção; registro da última revisão de permissões.</p>
+</article>
+<aside class="toc" aria-label="Nesta página"><span class="label">Nesta página</span><ol></ol></aside>
+</main>
+</div>
+<footer><div class="wrap">
+<p><b>Material de apoio independente.</b> Este guia explica a ISO/IEC 27090:2026 com palavras próprias e não reproduz o texto da norma, que é publicação paga da ISO/IEC. Não é consultoria, não substitui a leitura da norma oficial e não comprova conformidade com nenhuma lei ou certificação. Referências de cláusula seguem o sumário público da norma; confirme no texto oficial antes de usar em auditoria.</p>
+<p>Mantido por <a href="../">André Ferreira</a> · Versão de teste · Atualizado em 29/10/2026</p>
+</div></footer>
+
+</body>
+</html>
