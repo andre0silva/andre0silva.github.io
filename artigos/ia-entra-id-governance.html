@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IA e Entra ID Governance: o que muda de verdade na operação de identidade · André Ferreira</title>
+<meta name="description" content="Access reviews raramente falham por falta de ferramenta. Falham por escala humana. Onde a IA no Entra ID Governance resolve um problema operacional real, e por que agentes de IA agora também precisam ser governados.">
+<meta property="og:title" content="IA e Entra ID Governance: o que muda de verdade na operação de identidade · André Ferreira">
+<meta property="og:description" content="Access reviews raramente falham por falta de ferramenta. Falham por escala humana. Onde a IA no Entra ID Governance resolve um problema operacional real, e por que agentes de IA agora também precisam ser governados.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/artigos/ia-entra-id-governance.html">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/artigos/ia-entra-id-governance.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2314232b'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/site.css?v=20261030">
+<script>try{var t=localStorage.getItem('af-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="alternate" href="https://www.linkedin.com/pulse/ia-e-entra-id-governance-o-que-muda-de-verdade-na-andr%C3%A9-ferreira-lkj5f/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "IA e Entra ID Governance: o que muda de verdade na operação de identidade", "datePublished": "2026-08-29", "author": {"@type": "Person", "name": "André Ferreira", "url": "https://andre0silva.github.io/"}, "inLanguage": "pt-BR", "description": "Access reviews raramente falham por falta de ferramenta. Falham por escala humana. Onde a IA no Entra ID Governance resolve um problema operacional real, e por que agentes de IA agora também precisam ser governados."}</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+<symbol id="i-in" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <button class="theme" type="button" id="theme" aria-label="Alternar tema claro e escuro"><svg class="i"><use href="#i-sun"/></svg></button>
+  <nav aria-label="Seções"><a href="../#projetos">Projetos</a><a href="./" aria-current="page">Artigos</a><a href="../#contato">Contato</a><a href="../iso27090/">Guia ISO 27090</a></nav>
+</header>
+<main class="in">
+<article class="article">
+<div class="ah">
+<p class="crumb"><a href="../">Início</a> / <a href="./">Artigos</a></p>
+<span class="chip">Identidade</span>
+<h1 style="margin-top:14px">IA e Entra ID Governance: o que muda de verdade na operação de identidade</h1>
+<div class="ameta"><span>André Ferreira</span><span>29 de agosto de 2026</span><span>6 min de leitura</span></div>
+<p class="lead">Access reviews raramente falham por falta de ferramenta. Falham por escala humana. Onde a IA no Entra ID Governance resolve um problema operacional real, e por que agentes de IA agora também precisam ser governados.</p>
+</div>
+<div class="prose">
+<p>Meu primeiro access review "de verdade" foi uma planilha com mais de três mil linhas, enviada por e-mail para dezenas de gestores, com prazo de cinco dias úteis. Sabe qual foi o resultado? Aprovação em massa. Quase ninguém negou nada. E o pior: tecnicamente, a campanha foi um sucesso — 100% de conclusão, evidência gerada, auditoria satisfeita.</p>
+<p>Só que não governamos nada. Apenas documentamos que não governamos.</p>
+<p>Depois de mais de uma década trabalhando com infraestrutura e identidade, essa é a conclusão mais incômoda que carrego: governança de acesso raramente falha por falta de ferramenta. Ela falha por escala humana. O processo existe, a plataforma existe, a política está escrita — mas quem decide é um gestor que recebeu 180 nomes numa lista, sem contexto nenhum sobre o que cada acesso significa.</p>
+<p>É exatamente aí que a combinação de IA com o Microsoft Entra ID Governance deixa de ser marketing e passa a resolver um problema operacional real.</p>
+<h2>O contexto que ninguém pode ignorar</h2>
+<p>Os números do Microsoft Digital Defense Report 2025 são diretos: mais de 97% dos ataques de identidade são ataques de senha, e os ataques baseados em identidade cresceram 32% só no primeiro semestre de 2025. MFA continua bloqueando mais de 99% desses ataques.</p>
+<p>Mas repare no detalhe: MFA protege a autenticação. Ela não diz absolutamente nada sobre o que aquela conta legítima pode acessar. Uma conta com MFA impecável e permissões acumuladas de três cargos anteriores continua sendo um problema de segurança — só que um problema que nenhum log de sign-in vai te apontar.</p>
+<p>Esse é o território da governança. E é o território onde a maioria das empresas ainda opera no braço.</p>
+<h2>Onde a IA realmente entra</h2>
+<h3>Access reviews que finalmente têm contexto</h3>
+<p>O Access Review Agent no Microsoft Entra — hoje em preview público — é o exemplo mais claro do que eu queria ter tido naquela planilha de três mil linhas.</p>
+<p>Ele analisa sinais como atividade do usuário, composição de grupos e situação funcional, e entrega ao revisor uma justificativa em linguagem natural, gerada por LLM, dentro do Microsoft Teams. O gestor não recebe mais "Fulano — Grupo SSO_APP_FINANCE_RW — Aprovar/Negar". Ele recebe algo próximo de: "este usuário não acessa este recurso há 90 dias e mudou de área em março".</p>
+<p>A diferença entre esses dois cenários não é de interface. É de qualidade da decisão. Um revisor com contexto nega acessos. Um revisor sem contexto aprova tudo.</p>
+<p>Vale registrar os pré-requisitos, porque eles pesam no planejamento: licença Microsoft Entra ID Governance ou Entra Suite, além de onboarding no Security Copilot com pelo menos uma SCU provisionada. E, uma limitação importante em preview: uma vez ativado, o agente não pode ser pausado no meio da campanha.</p>
+<h3>Security Copilot dentro do Governance</h3>
+<p>Aqui está a parte que mais mudou meu dia a dia de operação. O Security Copilot já cobre cinco cenários dentro do Entra ID Governance:</p>
+<ul>
+<li><strong>Access Reviews</strong> — descobrir quem aprovou o quê, quais revisores não tomaram nenhuma decisão e onde recomendações da IA foram sobrescritas;</li>
+<li><strong>Entitlement Management</strong> — consultar access packages, políticas, catálogos e organizações conectadas em linguagem natural;</li>
+<li><strong>PIM (leitura)</strong> — analisar atribuições just-in-time, elegíveis e ativas, e rastrear mudanças;</li>
+<li><strong>PIM (escrita)</strong> — ativar o papel de menor privilégio para uma tarefa específica e desativar ao terminar, sem sair do chat;</li>
+<li><strong>Lifecycle Workflows</strong> — criar, explorar, comparar versões e diagnosticar execuções de workflows JML.</li>
+</ul>
+<p>Quem já precisou responder "quem aprovou o acesso deste usuário a este sistema em fevereiro?" sabe o tamanho disso. Antes, era script custom, Graph API e uma tarde perdida. Hoje é uma pergunta.</p>
+<p>Eu não vejo isso como automação. Vejo como redução de atrito na investigação — e atrito é o que faz analista sênior deixar de checar coisas que deveria checar.</p>
+<h3>O ganho é mensurável</h3>
+<p>A Microsoft reportou que administradores usando o Conditional Access Optimization Agent concluíram tarefas de Conditional Access 43% mais rápido e com 48% mais acurácia nos cenários testados.</p>
+<p>Guarde o segundo número. Velocidade sozinha é fácil de vender e perigosa em segurança — automatizar uma decisão ruim só faz você errar mais rápido. O dado relevante ali é a acurácia. É ele que sustenta a tese.</p>
+<h2>A virada: agora a IA também é o objeto governado</h2>
+<p>Esse é o ponto que separa quem está lendo release notes de quem está pensando arquitetura.</p>
+<p>Toda organização que está colocando agentes de IA em produção está criando um novo tipo de identidade não humana — que consome API, acessa dados, executa ações e, com frequência, nasce fora de qualquer processo de IAM. É o shadow IT da nossa geração, só que com permissões de aplicação.</p>
+<p>O modelo do Entra para isso é bem pensado, e o conceito central é o sponsor: toda identidade de agente tem uma pessoa responsável, prestando contas pelas decisões de ciclo de vida e de acesso. Se esse sponsor sai da empresa, a responsabilidade transfere automaticamente para o gestor dele. Nunca fica órfã.</p>
+<p>Na prática, isso significa que agentes podem:</p>
+<ul>
+<li>receber acesso via access packages, com grupos de segurança, permissões OAuth de API e roles do Entra;</li>
+<li>ter data de expiração na atribuição, com notificação ao sponsor e remoção automática do acesso;</li>
+<li>herdar políticas de Conditional Access aplicadas no nível do blueprint, de modo que toda identidade criada a partir dele já nasce coberta;</li>
+<li>ser avaliados por risco via integração com o Entra ID Protection.</li>
+</ul>
+<p>Ou seja: o mesmo arcabouço de JML que aplicamos a colaboradores passa a valer para agentes. Joiner, mover, leaver — para software.</p>
+<p>Se você ainda não sabe quantos agentes existem no seu tenant nem quem responde por cada um, esse é o trabalho mais urgente da sua fila. Não a IA que otimiza o access review. A IA que precisa de access review.</p>
+<h2>O que a IA não vai resolver por você</h2>
+<p>Sendo honesto — e essa parte costuma ser omitida:</p>
+<p><strong>Dado de RH ruim continua ruim.</strong> Lifecycle workflow é tão bom quanto a qualidade do seu SuccessFactors, Workday ou seja lá qual for a fonte autoritativa. Se o desligamento chega ao RH com três dias de atraso, nenhum agente de IA vai adivinhar isso.</p>
+<p><strong>Taxonomia bagunçada não vira contexto.</strong> Se seus grupos se chamam GRP_TESTE_2, acesso_financeiro_novo e GG_APP1, a IA vai gerar uma justificativa educada sobre um nome que não significa nada. Padrão de nomenclatura não é preciosismo — é o que torna a decisão automatizável.</p>
+<p><strong>Ownership indefinido não se resolve com licença.</strong> Se ninguém é dono do recurso, não existe sponsor, não existe aprovador e não existe governança. Existe fila.</p>
+<p>A IA amplifica a maturidade que já existe. Ela não cria maturidade do zero.</p>
+<h2>Por onde eu começaria hoje</h2>
+<p>Se eu tivesse que montar um plano de 90 dias, seria mais ou menos assim:</p>
+<ol>
+<li><strong>Inventário e higiene</strong> — contas órfãs, grupos sem dono, permissões de aplicação nunca revisadas. Nada de IA aqui, só o básico bem feito.</li>
+<li><strong>Taxonomia e ownership</strong> — padronizar nomenclatura de grupos e atribuir responsável para cada recurso crítico. Este é o investimento com maior retorno.</li>
+<li><strong>Lifecycle workflows no JML</strong> — automatizar o essencial de entrada, movimentação e saída a partir da fonte de RH.</li>
+<li><strong>Access reviews assistidos por IA</strong> — começar por um escopo pequeno e sensível (acesso privilegiado, por exemplo) e medir a taxa de negação antes e depois. Se ela subir, funcionou.</li>
+<li><strong>Governança de identidades de agentes</strong> — inventariar, atribuir sponsors e trazer para access packages com expiração.</li>
+</ol>
+<p>Repare que os três primeiros são pré-requisito, não fase opcional. Comprar licença e pular direto para os access reviews assistidos é o caminho mais rápido para concluir que "IA em governança não entrega valor".</p>
+<h2>O ponto final</h2>
+<p>A IA aplicada ao IGA não substitui o profissional de identidade. Ela remove a parte do trabalho que nunca deveria ter sido humana — correlacionar sinais, redigir justificativa, montar evidência — e devolve tempo para a parte que só é humana mesmo: decidir o que é aceitável em termos de risco.</p>
+<p>Governança sempre foi um problema de contexto em escala. Pela primeira vez, temos uma ferramenta que trata contexto em escala.</p>
+<p>E aí, na sua empresa: os access reviews estão gerando decisões ou só gerando evidência?</p>
+</div>
+<div class="endbox">
+<p>Publicado originalmente no LinkedIn. Comentários e discussão acontecem por lá.</p>
+<div class="btns"><a class="btn" href="https://www.linkedin.com/pulse/ia-e-entra-id-governance-o-que-muda-de-verdade-na-andr%C3%A9-ferreira-lkj5f/" target="_blank" rel="noopener"><svg class="i"><use href="#i-in"/></svg>Comentar no LinkedIn</a><a class="btn" href="./">Todos os artigos</a></div>
+</div>
+<h2 style="margin-top:44px;font-size:1.3rem">Leia também</h2>
+<div class="next"><a class="card" href="iso-iec-27090-norma-que-faltava.html" data-tag="Segurança de IA"><div class="meta"><span class="chip">Segurança de IA</span><span>29 de outubro de 2026 · 5 min</span></div><h2>ISO/IEC 27090: a norma que faltava para segurança de IA</h2><p>A 42001 diz como governar IA, a 27001 diz como gerir segurança, e a 27090 finalmente diz contra o que estamos nos defendendo. As nove ameaças, onde a norma é fraca (agentes) e como começar sem criar um projeto paralelo.</p><span class="go">Ler artigo <svg class="i"><use href="#i-arrow"/></svg></span></a><a class="card" href="ninguem-invade-alguem-tem-a-chave.html" data-tag="Identidade"><div class="meta"><span class="chip">Identidade</span><span>28 de agosto de 2026 · 5 min</span></div><h2>Ninguém invade sua empresa. Ninguém precisa: alguém já tem a chave</h2><p>Por que governança de identidade deixou de ser projeto de auditoria e virou controle de segurança de primeira linha, com os números que sustentam o investimento e as cinco decisões que separam IGA de teatro de compliance.</p><span class="go">Ler artigo <svg class="i"><use href="#i-arrow"/></svg></span></a></div>
+</article>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../">Início</a><a href="./">Artigos</a><a href="../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Artigos publicados originalmente no LinkedIn</small>
+</footer>
+</div>
+<script>
+document.getElementById('theme').addEventListener('click',function(){var r=document.documentElement,d=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches),n=d?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('af-theme',n)}catch(e){}});
+</script>
+</body>
+</html>

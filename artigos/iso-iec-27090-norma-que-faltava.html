@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ISO/IEC 27090: a norma que faltava para segurança de IA · André Ferreira</title>
+<meta name="description" content="A 42001 diz como governar IA, a 27001 diz como gerir segurança, e a 27090 finalmente diz contra o que estamos nos defendendo. As nove ameaças, onde a norma é fraca (agentes) e como começar sem criar um projeto paralelo.">
+<meta property="og:title" content="ISO/IEC 27090: a norma que faltava para segurança de IA · André Ferreira">
+<meta property="og:description" content="A 42001 diz como governar IA, a 27001 diz como gerir segurança, e a 27090 finalmente diz contra o que estamos nos defendendo. As nove ameaças, onde a norma é fraca (agentes) e como começar sem criar um projeto paralelo.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/artigos/iso-iec-27090-norma-que-faltava.html">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/artigos/iso-iec-27090-norma-que-faltava.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2314232b'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/site.css?v=20261030">
+<script>try{var t=localStorage.getItem('af-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="alternate" href="https://www.linkedin.com/pulse/isoiec-27090-norma-que-faltava-para-seguran%C3%A7a-de-ia-andr%C3%A9-ferreira-q73vf/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "ISO/IEC 27090: a norma que faltava para segurança de IA", "datePublished": "2026-10-29", "author": {"@type": "Person", "name": "André Ferreira", "url": "https://andre0silva.github.io/"}, "inLanguage": "pt-BR", "description": "A 42001 diz como governar IA, a 27001 diz como gerir segurança, e a 27090 finalmente diz contra o que estamos nos defendendo. As nove ameaças, onde a norma é fraca (agentes) e como começar sem criar um projeto paralelo."}</script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+<symbol id="i-in" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <button class="theme" type="button" id="theme" aria-label="Alternar tema claro e escuro"><svg class="i"><use href="#i-sun"/></svg></button>
+  <nav aria-label="Seções"><a href="../#projetos">Projetos</a><a href="./" aria-current="page">Artigos</a><a href="../#contato">Contato</a><a href="../iso27090/">Guia ISO 27090</a></nav>
+</header>
+<main class="in">
+<article class="article">
+<div class="ah">
+<p class="crumb"><a href="../">Início</a> / <a href="./">Artigos</a></p>
+<span class="chip">Segurança de IA</span>
+<h1 style="margin-top:14px">ISO/IEC 27090: a norma que faltava para segurança de IA</h1>
+<div class="ameta"><span>André Ferreira</span><span>29 de outubro de 2026</span><span>5 min de leitura</span></div>
+<p class="lead">A 42001 diz como governar IA, a 27001 diz como gerir segurança, e a 27090 finalmente diz contra o que estamos nos defendendo. As nove ameaças, onde a norma é fraca (agentes) e como começar sem criar um projeto paralelo.</p>
+</div>
+<div class="prose">
+<h2>O que é a ISO/IEC 27090:2026</h2>
+<p>É a primeira edição de uma norma de orientação, com 56 páginas, elaborada pelo comitê ISO/IEC JTC 1/SC 27, o mesmo da família 27000. Ela trata das ameaças e dos comprometimentos específicos de sistemas de IA em todo o ciclo de vida, da coleta de dados ao retreino. Vale para qualquer organização que desenvolva ou use IA, não só para quem tem chatbot ou IA generativa.</p>
+<p>Antes de qualquer coisa, um esclarecimento: <strong>ela não é certificável.</strong> Quem precisa de certificado continua auditando contra a 27001 ou a 42001. A 27090 alimenta a análise de riscos dentro desses escopos.</p>
+<h2>A estrutura em três blocos</h2>
+<ul>
+<li><strong>Cláusula 5:</strong> como aplicar segurança da informação à IA. Cobre governança, zero trust, engenharia de software segura, cadeia de suprimentos, modelagem de ameaças e red teaming.</li>
+<li><strong>Cláusula 6:</strong> os tipos de comprometimento. Para cada um, a norma traz descrição, consequências, formas de detecção e mitigação.</li>
+<li><strong>Cláusula 7:</strong> como as mitigações interagem. Elas podem conflitar entre si e perdem eficácia com o tempo. A cláusula também trata de logging, throttling e proteção dos ambientes de desenvolvimento.</li>
+</ul>
+<h2>As nove ameaças da cláusula 6</h2>
+<ol>
+<li><strong>Envenenamento de dados (6.2):</strong> dados de treino manipulados para mudar o comportamento do modelo.</li>
+<li><strong>Evasão (6.3):</strong> entradas alteradas, às vezes de forma imperceptível, para induzir erro.</li>
+<li><strong>Inferência de pertencimento (6.4):</strong> descobrir se um registro específico estava no treino.</li>
+<li><strong>Exfiltração de modelo (6.5):</strong> recriar o modelo a partir de consultas à API.</li>
+<li><strong>Inversão de modelo (6.6):</strong> reconstruir dados de treino a partir das saídas.</li>
+<li><strong>Envenenamento direto do modelo (6.7):</strong> adulteração dos pesos ou do artefato.</li>
+<li><strong>Saída sensível (6.8):</strong> o modelo revela dados de treino ou prompts de outros usuários.</li>
+<li><strong>Prompt injection (6.9):</strong> conteúdo que vira instrução. Inclui a forma indireta, por meio de e-mails, PDFs e páginas web.</li>
+<li><strong>Saída com payload de injeção (6.10):</strong> a resposta do modelo ataca o sistema que a consome.</li>
+</ol>
+<h2>Três ideias da norma que mudam a forma de trabalhar</h2>
+<p><strong>1. Envenenamento não é só problema de desenvolvimento.</strong> Dados coletados em produção viram dados de retreino. Uma entrada maliciosa hoje pode virar comportamento do modelo daqui a três meses.</p>
+<p><strong>2. Controle de acesso não basta.</strong> A exfiltração de modelo acontece por consultas que parecem legítimas. Sem detecção projetada (logs de padrão de consulta, throttling, alertas), o ataque passa.</p>
+<p><strong>3. Defesa não é entrega única.</strong> Uma mitigação que funciona no go-live pode enfraquecer depois do retreino. Isso exige red teaming recorrente, não um aceite único.</p>
+<h2>Onde a norma é fraca: agentes</h2>
+<p>A 27090 não tem cláusula própria para agentes autônomos, uso de ferramentas ou jailbreak. Ela aplica zero trust e mínimo privilégio ao modelo, o que está correto, mas não chega a um catálogo de abuso de ferramentas.</p>
+<p>É aqui que identidade vira o controle principal. Um agente que lê e-mail, consulta o CRM e abre chamado é uma identidade não humana com permissões reais. Se ele for enganado por um prompt injection, o estrago é exatamente do tamanho do acesso que ele tem. Na prática:</p>
+<ul>
+<li><strong>Identidade própria:</strong> o agente não deve herdar os privilégios do usuário que o aciona.</li>
+<li><strong>Escopo mínimo</strong> de permissões e de dados.</li>
+<li><strong>Aprovação humana</strong> para ações irreversíveis.</li>
+<li><strong>Log de toda chamada de ferramenta,</strong> com entrada, saída e identidade.</li>
+<li><strong>Revisão periódica de acesso,</strong> como em qualquer conta de serviço.</li>
+<li><strong>Mecanismo de corte (kill switch)</strong> testado.</li>
+</ul>
+<p>Para cobrir o que a norma deixa aberto, use junto o OWASP Top 10 para aplicações LLM, em que "excessive agency" aparece como risco central, e o MITRE ATLAS.</p>
+<h2>Não é teoria</h2>
+<ul>
+<li>Pesquisadores mostraram que cerca de 250 documentos maliciosos foram suficientes para plantar um backdoor em modelos de diferentes tamanhos.</li>
+<li>A JFrog encontrou por volta de 100 modelos maliciosos no Hugging Face. Um deles abria conexão remota ao ser carregado, via pickle. <strong>Arquivo de modelo é código.</strong></li>
+<li>A CVE-2025-32711 mostrou um e-mail criado para fazer um assistente corporativo vazar dados do contexto sem nenhum clique do usuário.</li>
+</ul>
+<h2>Como começar sem criar um projeto paralelo</h2>
+<p>A 27090 não pede um novo sistema de gestão. Ela entra no que você já tem:</p>
+<ol>
+<li><strong>Inventário de IA</strong> com dono, finalidade, fontes de dados e fornecedor. Inclua a shadow AI e as funcionalidades de IA embutidas em SaaS.</li>
+<li><strong>Modelagem de ameaças</strong> dos sistemas de maior impacto, usando as nove categorias da cláusula 6.</li>
+<li><strong>Registro de riscos e Declaração de Aplicabilidade (SoA) da 27001:</strong> as ameaças de IA entram como riscos, com justificativa de controle.</li>
+<li><strong>Proveniência</strong> de dados e modelos, com hash ou assinatura dos artefatos e formatos seguros como safetensors.</li>
+<li><strong>Evidência contínua:</strong> logs de inferência e de chamadas de ferramenta, relatórios de red team e registros de mudança.</li>
+</ol>
+<p>Para quem está no Brasil: inferência de pertencimento, inversão de modelo e saída sensível são, na prática, incidentes de confidencialidade com dados pessoais. Isso puxa a LGPD para a mesma conversa e coloca essas ameaças dentro do relatório de impacto (RIPD).</p>
+<h2>O que a norma não resolve</h2>
+<p>Ela não certifica ninguém, não comprova conformidade legal, não substitui a 27001, a 27002 ou a 42001 e não elimina o risco residual, que continua precisando de dono e de aceite formal. A norma irmã sobre privacidade em IA, a ISO/IEC 27091, ainda está em fase final de aprovação.</p>
+<p><strong>Resumo:</strong> a 42001 diz como governar IA. A 27001 diz como gerir segurança. A 27090 finalmente diz contra o que estamos nos defendendo. Para quem trabalha com identidade, o recado é direto: o próximo usuário privilegiado do seu ambiente talvez não seja uma pessoa.</p>
+<p><em>Fontes: catálogo ISO/IEC 27090:2026 (iso.org); Orbit by Reconn, "ISO/IEC 27090 Explained" (20/10/2026); Abilene Academy, "ISO/IEC 27090:2026 for AI Security" (20/10/2026); OWASP Top 10 for LLM Applications 2025; MITRE ATLAS.</em></p>
+</div>
+<div class="endbox">
+<p>Publicado originalmente no LinkedIn. Comentários e discussão acontecem por lá.</p>
+<div class="btns"><a class="btn primary" href="../iso27090/">Acessar o guia prático da ISO/IEC 27090</a><a class="btn" href="https://www.linkedin.com/pulse/isoiec-27090-norma-que-faltava-para-seguran%C3%A7a-de-ia-andr%C3%A9-ferreira-q73vf/" target="_blank" rel="noopener"><svg class="i"><use href="#i-in"/></svg>Comentar no LinkedIn</a><a class="btn" href="./">Todos os artigos</a></div>
+</div>
+<h2 style="margin-top:44px;font-size:1.3rem">Leia também</h2>
+<div class="next"><a class="card" href="ia-entra-id-governance.html" data-tag="Identidade"><div class="meta"><span class="chip">Identidade</span><span>29 de agosto de 2026 · 6 min</span></div><h2>IA e Entra ID Governance: o que muda de verdade na operação de identidade</h2><p>Access reviews raramente falham por falta de ferramenta. Falham por escala humana. Onde a IA no Entra ID Governance resolve um problema operacional real, e por que agentes de IA agora também precisam ser governados.</p><span class="go">Ler artigo <svg class="i"><use href="#i-arrow"/></svg></span></a><a class="card" href="ninguem-invade-alguem-tem-a-chave.html" data-tag="Identidade"><div class="meta"><span class="chip">Identidade</span><span>28 de agosto de 2026 · 5 min</span></div><h2>Ninguém invade sua empresa. Ninguém precisa: alguém já tem a chave</h2><p>Por que governança de identidade deixou de ser projeto de auditoria e virou controle de segurança de primeira linha, com os números que sustentam o investimento e as cinco decisões que separam IGA de teatro de compliance.</p><span class="go">Ler artigo <svg class="i"><use href="#i-arrow"/></svg></span></a></div>
+</article>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../">Início</a><a href="./">Artigos</a><a href="../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Artigos publicados originalmente no LinkedIn</small>
+</footer>
+</div>
+<script>
+document.getElementById('theme').addEventListener('click',function(){var r=document.documentElement,d=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches),n=d?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem('af-theme',n)}catch(e){}});
+</script>
+</body>
+</html>

@@ -166,6 +166,16 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .proj.wide .talk::before{background:rgba(217,87,63,.35)}
 @media (max-width:820px){.grid{grid-template-columns:minmax(0,1fr)}.proj.wide{grid-template-columns:minmax(0,1fr)}}
 
+/* Artigos */
+.arts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.art{background:var(--panel);border-radius:12px;padding:22px;display:grid;gap:10px;align-content:start;text-decoration:none;color:var(--fg);transition:transform .25s}
+.art:hover{transform:translateY(-3px)}
+.art .chip{justify-self:start}
+.art h3{font-size:1.08rem;font-weight:700;line-height:1.25}
+.art p{color:var(--muted);font-size:.93rem}
+.art .go{display:flex;align-items:center;gap:6px;font-size:.86rem;font-weight:600;color:var(--accent);margin-top:2px}
+@media (max-width:900px){.arts{grid-template-columns:minmax(0,1fr)}}
+
 /* Como trabalho */
 .method{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(16px,3vw,28px)}
 .step{background:var(--panel);border-radius:12px;padding:22px;display:grid;gap:8px;align-content:start}
@@ -228,6 +238,7 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
   <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
   <symbol id="i-cap" viewBox="0 0 24 24"><path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13 7 4 4"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
 </svg>
 
@@ -238,6 +249,7 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
   <button class="theme" type="button" id="theme" aria-label="Alternar tema claro e escuro"><svg class="i"><use href="#i-sun"/></svg></button>
   <nav aria-label="Seções">
     <a href="#projetos"><svg class="i"><use href="#i-grid"/></svg>Projetos</a>
+    <a href="artigos/"><svg class="i"><use href="#i-pen"/></svg>Artigos</a>
     <a href="#contato"><svg class="i"><use href="#i-chat"/></svg>Contato</a>
     <a href="iso27090/"><svg class="i"><use href="#i-book"/></svg>Guia ISO 27090</a>
   </nav>
@@ -371,6 +383,20 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
   </div>
 </section>
 
+<section class="in sec" id="artigos" style="padding-top:0">
+  <div class="head rv">
+    <h2 class="h2">Artigos</h2>
+    <p class="sub">O que escrevo sobre identidade, infraestrutura e segurança</p>
+    <span class="bar"></span>
+  </div>
+  <div class="arts">
+    <a class="art rv" href="artigos/iso-iec-27090-norma-que-faltava.html"><span class="chip">Segurança de IA</span><h3>ISO/IEC 27090: a norma que faltava para segurança de IA</h3><p>As nove ameaças, onde a norma é fraca e como começar sem criar um projeto paralelo.</p><span class="go">Ler artigo <svg class="i"><use href="#i-arrow"/></svg></span></a>
+    <a class="art rv" href="artigos/ia-entra-id-governance.html"><span class="chip">Identidade</span><h3>IA e Entra ID Governance: o que muda de verdade na operação de identidade</h3><p>Access reviews falham por escala humana. Onde a IA resolve, e por que agentes também precisam ser governados.</p><span class="go">Ler artigo <svg class="i"><use href="#i-arrow"/></svg></span></a>
+    <a class="art rv" href="artigos/ninguem-invade-alguem-tem-a-chave.html"><span class="chip">Identidade</span><h3>Ninguém invade sua empresa. Ninguém precisa: alguém já tem a chave</h3><p>Por que IGA virou controle de segurança de primeira linha e as cinco decisões que separam governança de teatro.</p><span class="go">Ler artigo <svg class="i"><use href="#i-arrow"/></svg></span></a>
+  </div>
+  <div class="more rv" style="display:flex;justify-content:center;margin-top:28px"><a class="talk" href="artigos/"><span>Todos os artigos</span></a></div>
+</section>
+
 <section class="in sec" id="metodo" style="padding-top:0">
   <div class="head rv">
     <h2 class="h2">Como trabalho</h2>
@@ -421,7 +447,7 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 
 <footer class="in foot">
   <a class="logo" href="#" aria-label="Voltar ao topo">A<span>/</span>F</a>
-  <nav aria-label="Rodapé"><a href="#projetos">Projetos</a><a href="#metodo">Como trabalho</a><a href="#contato">Contato</a><a href="iso27090/">Guia ISO 27090</a></nav>
+  <nav aria-label="Rodapé"><a href="#projetos">Projetos</a><a href="artigos/">Artigos</a><a href="#metodo">Como trabalho</a><a href="#contato">Contato</a><a href="iso27090/">Guia ISO 27090</a></nav>
   <small>© 2026 André Ferreira · Clientes e detalhes internos omitidos por confidencialidade</small>
 </footer>
 </div>
