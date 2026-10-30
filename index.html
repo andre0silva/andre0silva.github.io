@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://andre0silva.github.io/">
 <meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
 <link rel="canonical" href="https://andre0silva.github.io/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2314232b'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
 <style>
 /* Portfólio — layout em cartão (inspirado em portfólios pessoais), tom executivo. Fontes locais (OFL). */
 @font-face{font-family:"Archivo";font-style:normal;font-display:swap;font-weight:100 900;font-stretch:62% 125%;src:url(iso27090/assets/fonts/archivo-latin-wdth-normal.woff2) format("woff2-variations"),url(iso27090/assets/fonts/archivo-latin-wdth-normal.woff2) format("woff2")}
@@ -22,9 +22,11 @@
 @font-face{font-family:"JetBrains Mono";font-style:normal;font-display:swap;font-weight:500;src:url(iso27090/assets/fonts/jetbrains-mono-latin-500-normal.woff2) format("woff2")}
 :root{
   color-scheme:light;
-  --page:#ecedeb; --card:#ffffff; --panel:#f1f1ef; --fg:#1d2a31; --muted:#626f76; --line:#e2e4e2;
-  --accent:#0d5e6e; --accent-soft:#e1eff1; --mark:#d9573f; --mark-soft:#f6ded8; --ink:#14232b; --on-ink:#eef4f6;
-  --shadow:0 1px 2px rgba(20,35,43,.06),0 12px 40px rgba(20,35,43,.08);
+  /* Paleta quente: creme, laranja, terracota, marrom e sálvia */
+  --page:#e3dedb; --card:#fff5e3; --panel:#fbeeeb; --fg:#2d2a27; --muted:#504e4b; --line:#e3dedb;
+  --accent:#aa4b17; --accent-soft:#cfe8d4; --chip-fg:#3f4a43; --mark:#fe5000; --mark-soft:#ffe2d3; --ink:#2d2a27; --on-ink:#fff5e3;
+  --hi:#ff8848; --sage:#5f6e64; --brown:#71584c; --terra:#bd673d;
+  --shadow:0 1px 2px rgba(45,42,39,.06),0 12px 40px rgba(45,42,39,.10);
   --display:"Archivo","Arial Narrow",system-ui,sans-serif;
   --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
@@ -67,7 +69,7 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .js .name .ch{opacity:0;transform:translateY(.4em)}
 .js .name.on .ch{animation:ch .55s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--d) * 45ms + 200ms)}
 @keyframes ch{to{opacity:1;transform:none}}
-.role{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mark);margin-top:16px}
+.role{font-family:var(--mono);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-top:16px}
 .intro{color:var(--muted);font-size:1.1rem;max-width:46ch;margin-top:16px}
 .talk{display:inline-flex;align-items:center;position:relative;margin-top:28px;padding:12px 4px 12px 22px;font-family:var(--display);font-stretch:112%;font-weight:800;font-size:1rem;letter-spacing:.04em;text-transform:uppercase;color:var(--fg);text-decoration:none}
 .talk::before{content:"";position:absolute;left:0;top:50%;width:48px;height:48px;margin-top:-24px;border-radius:50%;background:var(--mark-soft);transition:width .35s cubic-bezier(.2,.8,.2,1),border-radius .35s;z-index:0}
@@ -76,7 +78,7 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .portrait{position:relative;justify-self:center;width:min(100%,380px);aspect-ratio:1}
 .portrait .ring{position:absolute;inset:0 0 -4% 12%;border-radius:50%;background:var(--mark-soft);z-index:0}
 .portrait .ph,.portrait .badge{z-index:1}
-.portrait .ph{position:absolute;inset:6% 6% 0 6%;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#121619;box-shadow:0 0 0 6px var(--card),0 0 0 7px var(--line)}
+.portrait .ph{position:absolute;inset:6% 6% 0 6%;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#1e1c1a;box-shadow:0 0 0 6px var(--card),0 0 0 7px var(--line)}
 .portrait .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%;display:block}
 .portrait .ph .mono{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:clamp(4rem,10vw,6.5rem);color:#fff;letter-spacing:.04em}
 .portrait .badge{position:absolute;right:2%;bottom:12%;background:var(--card);box-shadow:var(--shadow);border-radius:10px;padding:10px 14px;display:grid;gap:2px}
@@ -119,7 +121,7 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 /* Destaques + README */
 .highlight{max-width:820px;margin:0 auto;background:var(--panel);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
 .hl-top{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
-.hl-photo{min-height:260px;background:linear-gradient(160deg,var(--accent),#0a3d48);display:grid;place-items:center;position:relative}
+.hl-photo{min-height:260px;background:linear-gradient(160deg,var(--terra),var(--brown));display:grid;place-items:center;position:relative}
 .hl-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%}
 .hl-photo .mono{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:4rem;color:rgba(255,255,255,.9)}
 .hl-list{padding:clamp(20px,3vw,32px);display:grid;gap:12px;align-content:center}
@@ -137,8 +139,8 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .proj{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);display:grid;gap:14px;padding:26px;align-content:start;transition:transform .25s,box-shadow .25s}
 .proj:hover{transform:translateY(-3px)}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{font-family:var(--mono);font-size:.7rem;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
-.chip.m{background:var(--mark-soft);color:var(--mark)}
+.chip{font-family:var(--mono);font-size:.7rem;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--chip-fg)}
+.chip.m{background:var(--mark-soft);color:var(--accent)}
 .proj h3{font-size:1.3rem;font-weight:800}
 .metrics{display:flex;gap:26px;flex-wrap:wrap}
 .metrics div{display:grid}
@@ -150,12 +152,12 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .pipe span{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:3px 8px}
 .pipe i{font-style:normal;color:var(--mark)}
 .proj.wide{grid-column:1/-1;background:var(--ink);border-color:var(--ink);color:var(--on-ink);grid-template-columns:minmax(0,1fr) auto;align-items:center}
-.proj.wide .chip{background:rgba(95,188,205,.16);color:#5fbccd}
-.proj.wide p{color:rgba(238,244,246,.78)}
-.proj.wide .metrics b{color:#5fbccd}
-.proj.wide .metrics span{color:rgba(238,244,246,.6)}
+.proj.wide .chip{background:rgba(255,112,35,.18);color:var(--hi)}
+.proj.wide p{color:rgba(255,245,227,.8)}
+.proj.wide .metrics b{color:var(--hi)}
+.proj.wide .metrics span{color:rgba(255,245,227,.62)}
 .proj.wide .talk{color:var(--on-ink);margin-top:0}
-.proj.wide .talk::before{background:rgba(217,87,63,.35)}
+.proj.wide .talk::before{background:rgba(255,112,35,.35)}
 @media (max-width:820px){.grid{grid-template-columns:minmax(0,1fr)}.proj.wide{grid-template-columns:minmax(0,1fr)}}
 
 /* Artigos */

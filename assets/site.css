@@ -6,9 +6,11 @@
 @font-face{font-family:"JetBrains Mono";font-style:normal;font-display:swap;font-weight:500;src:url(../iso27090/assets/fonts/jetbrains-mono-latin-500-normal.woff2) format("woff2")}
 :root{
   color-scheme:light;
-  --page:#ecedeb; --card:#ffffff; --panel:#f1f1ef; --fg:#1d2a31; --muted:#626f76; --line:#e2e4e2;
-  --accent:#0d5e6e; --accent-soft:#e1eff1; --mark:#d9573f; --mark-soft:#f6ded8; --ink:#14232b; --on-ink:#eef4f6;
-  --shadow:0 1px 2px rgba(20,35,43,.06),0 12px 40px rgba(20,35,43,.08);
+  /* Paleta quente: creme, laranja, terracota, marrom e sálvia */
+  --page:#e3dedb; --card:#fff5e3; --panel:#fbeeeb; --fg:#2d2a27; --muted:#504e4b; --line:#e3dedb;
+  --accent:#aa4b17; --accent-soft:#cfe8d4; --chip-fg:#3f4a43; --mark:#fe5000; --mark-soft:#ffe2d3; --ink:#2d2a27; --on-ink:#fff5e3;
+  --hi:#ff8848; --sage:#5f6e64; --brown:#71584c; --terra:#bd673d;
+  --shadow:0 1px 2px rgba(45,42,39,.06),0 12px 40px rgba(45,42,39,.10);
   --display:"Archivo","Arial Narrow",system-ui,sans-serif;
   --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
@@ -54,8 +56,8 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .card .meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.82rem;color:var(--muted)}
 .card .go{font-size:.86rem;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:6px;margin-top:4px}
 .card.ext .go{color:var(--muted)}
-.chip{font-family:var(--mono);font-size:.7rem;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
-.chip.m{background:var(--mark-soft);color:var(--mark)}
+.chip{font-family:var(--mono);font-size:.7rem;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--chip-fg)}
+.chip.m{background:var(--mark-soft);color:var(--accent)}
 .card[hidden]{display:none}
 
 /* Artigo */
