@@ -21,6 +21,7 @@
 @font-face{font-family:"JetBrains Mono";font-style:normal;font-display:swap;font-weight:400;src:url(iso27090/assets/fonts/jetbrains-mono-latin-400-normal.woff2) format("woff2")}
 @font-face{font-family:"JetBrains Mono";font-style:normal;font-display:swap;font-weight:500;src:url(iso27090/assets/fonts/jetbrains-mono-latin-500-normal.woff2) format("woff2")}
 :root{
+  color-scheme:light;
   --page:#ecedeb; --card:#ffffff; --panel:#f1f1ef; --fg:#1d2a31; --muted:#626f76; --line:#e2e4e2;
   --accent:#0d5e6e; --accent-soft:#e1eff1; --mark:#d9573f; --mark-soft:#f6ded8; --ink:#14232b; --on-ink:#eef4f6;
   --shadow:0 1px 2px rgba(20,35,43,.06),0 12px 40px rgba(20,35,43,.08);
@@ -28,14 +29,6 @@
   --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --page:#0b1114; --card:#121b20; --panel:#18232a; --fg:#e4ecef; --muted:#97a9b1; --line:#24323a;
-  --accent:#5fbccd; --accent-soft:#183840; --mark:#ef8a72; --mark-soft:#3a221c; --ink:#0a1115; --on-ink:#e4ecef;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 40px rgba(0,0,0,.35); color-scheme:dark}}
-:root[data-theme="dark"]{
-  --page:#0b1114; --card:#121b20; --panel:#18232a; --fg:#e4ecef; --muted:#97a9b1; --line:#24323a;
-  --accent:#5fbccd; --accent-soft:#183840; --mark:#ef8a72; --mark-soft:#3a221c; --ink:#0a1115; --on-ink:#e4ecef;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 40px rgba(0,0,0,.35); color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-padding-top:24px}
 body{margin:0;background:var(--page);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6}
@@ -55,7 +48,6 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .logo{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:1.25rem;color:var(--fg);text-decoration:none;letter-spacing:.04em}
 .logo span{color:var(--mark)}
 .top .mail{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--fg);text-decoration:none;font-weight:600;margin-left:clamp(0px,4vw,60px)}
-.theme{background:none;border:0;color:var(--muted);cursor:pointer;padding:4px;display:grid;place-items:center}
 .top nav{margin-left:auto;display:flex;gap:22px;flex-wrap:wrap}
 .top nav a{display:flex;align-items:center;gap:6px;color:var(--fg);text-decoration:none;font-size:.92rem}
 .top nav a:hover{color:var(--mark)}
@@ -220,9 +212,9 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
   .js .rv,.js .name .ch{opacity:1!important;transform:none!important;animation:none!important;transition:none!important}
   .talk::before,.proj{transition:none}
 }
-@media print{.frame{box-shadow:none;margin:0}.top nav,.theme,.social{display:none}}
+@media print{.frame{box-shadow:none;margin:0}.top nav,.social{display:none}}
 </style>
-<script>document.documentElement.classList.add('js');try{var t=localStorage.getItem('af-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -246,7 +238,6 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 <header class="in top">
   <a class="logo" href="#" aria-label="André Ferreira, início">A<span>/</span>F</a>
   <a class="mail" href="mailto:andre.asf@hotmail.com"><svg class="i"><use href="#i-mail"/></svg>andre.asf@hotmail.com</a>
-  <button class="theme" type="button" id="theme" aria-label="Alternar tema claro e escuro"><svg class="i"><use href="#i-sun"/></svg></button>
   <nav aria-label="Seções">
     <a href="#projetos"><svg class="i"><use href="#i-grid"/></svg>Projetos</a>
     <a href="artigos/"><svg class="i"><use href="#i-pen"/></svg>Artigos</a>
@@ -476,13 +467,6 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
     }); }, {threshold: .15, rootMargin: '0px 0px -40px 0px'});
     items.forEach(function(el){ io.observe(el); });
   }
-  // Tema
-  var root = document.documentElement;
-  document.getElementById('theme').addEventListener('click', function(){
-    var dark = root.getAttribute('data-theme') === 'dark' || (!root.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
-    var next = dark ? 'light' : 'dark'; root.setAttribute('data-theme', next);
-    try { localStorage.setItem('af-theme', next); } catch(e){}
-  });
   // Copiar e-mail
   var cb = document.getElementById('copy-mail'), el = document.getElementById('mail');
   function fb(){ var r = document.createRange(); r.selectNodeContents(el); var s = getSelection(); s.removeAllRanges(); s.addRange(r); cb.textContent = 'Selecionado'; }

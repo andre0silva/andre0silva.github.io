@@ -5,6 +5,7 @@
 @font-face{font-family:"JetBrains Mono";font-style:normal;font-display:swap;font-weight:400;src:url(../iso27090/assets/fonts/jetbrains-mono-latin-400-normal.woff2) format("woff2")}
 @font-face{font-family:"JetBrains Mono";font-style:normal;font-display:swap;font-weight:500;src:url(../iso27090/assets/fonts/jetbrains-mono-latin-500-normal.woff2) format("woff2")}
 :root{
+  color-scheme:light;
   --page:#ecedeb; --card:#ffffff; --panel:#f1f1ef; --fg:#1d2a31; --muted:#626f76; --line:#e2e4e2;
   --accent:#0d5e6e; --accent-soft:#e1eff1; --mark:#d9573f; --mark-soft:#f6ded8; --ink:#14232b; --on-ink:#eef4f6;
   --shadow:0 1px 2px rgba(20,35,43,.06),0 12px 40px rgba(20,35,43,.08);
@@ -12,14 +13,6 @@
   --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --page:#0b1114; --card:#121b20; --panel:#18232a; --fg:#e4ecef; --muted:#97a9b1; --line:#24323a;
-  --accent:#5fbccd; --accent-soft:#183840; --mark:#ef8a72; --mark-soft:#3a221c; --ink:#0a1115; --on-ink:#e4ecef;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 40px rgba(0,0,0,.35); color-scheme:dark}}
-:root[data-theme="dark"]{
-  --page:#0b1114; --card:#121b20; --panel:#18232a; --fg:#e4ecef; --muted:#97a9b1; --line:#24323a;
-  --accent:#5fbccd; --accent-soft:#183840; --mark:#ef8a72; --mark-soft:#3a221c; --ink:#0a1115; --on-ink:#e4ecef;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 40px rgba(0,0,0,.35); color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--page);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.65}
 h1,h2,h3{font-family:var(--display);font-stretch:112%;margin:0;line-height:1.15;text-wrap:balance}
@@ -34,7 +27,6 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .top{display:flex;align-items:center;gap:20px;padding-block:26px;flex-wrap:wrap}
 .logo{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:1.25rem;color:var(--fg);text-decoration:none;letter-spacing:.04em}
 .logo span{color:var(--mark)}
-.theme{background:none;border:0;color:var(--muted);cursor:pointer;padding:4px;display:grid;place-items:center}
 .top nav{margin-left:auto;display:flex;gap:22px;flex-wrap:wrap}
 .top nav a{display:flex;align-items:center;gap:6px;color:var(--fg);text-decoration:none;font-size:.92rem}
 .top nav a:hover,.top nav a[aria-current="page"]{color:var(--mark)}
