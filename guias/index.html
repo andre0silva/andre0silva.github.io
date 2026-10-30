@@ -39,8 +39,9 @@
 .areas-nav a[aria-current="true"]{background:var(--ink);border-color:var(--ink);color:var(--on-ink);box-shadow:none}
 .areas-nav a[aria-current="true"] span{color:rgba(255,245,227,.7)}
 .area[hidden]{display:none}
-.filter-note{font-size:.9rem;color:var(--muted);margin:-28px 0 20px}
-.filter-note button{font:inherit;color:var(--accent);background:none;border:0;padding:0;text-decoration:underline;cursor:pointer}
+.pick{color:var(--muted);text-align:center;padding:28px 0 clamp(48px,7vw,80px);border-top:1px solid var(--line);margin:0}
+.pick[hidden]{display:none}
+.area{border-top:0!important}
 .area{display:grid;grid-template-columns:240px minmax(0,1fr);gap:clamp(18px,3vw,36px);padding-block:28px;border-top:1px solid var(--line)}
 .area:last-of-type{padding-bottom:clamp(48px,7vw,80px)}
 .area-h{display:grid;gap:6px;align-content:start}
@@ -69,9 +70,9 @@
 <p class="sub">Material prático para implementar, não só para ler: roteiros, checklists, autoavaliações e modelos prontos. Gratuito, em português, sob licença CC BY-NC 4.0. 2 guias publicados em 7 áreas.</p>
 <span class="bar"></span>
 </div>
-<nav class="areas-nav" aria-label="Filtrar guias por área"><a href="#todas" data-f="todas" class="all" aria-current="true"><b>Todas as áreas</b><span>2 guias</span></a><a href="#seguranca" data-f="seguranca" class="has"><b>Segurança</b><span>1 guia</span></a><a href="#rede-firewall" data-f="rede-firewall" class="has"><b>Rede e firewall</b><span>1 guia</span></a><a href="#infraestrutura" data-f="infraestrutura" class="soon"><b>Infraestrutura</b><span>0 guias · em preparação</span></a><a href="#cloud" data-f="cloud" class="soon"><b>Cloud</b><span>0 guias · em preparação</span></a><a href="#observabilidade" data-f="observabilidade" class="soon"><b>Observabilidade</b><span>0 guias · em preparação</span></a><a href="#storage-backup" data-f="storage-backup" class="soon"><b>Storage e backup</b><span>0 guias · em preparação</span></a><a href="#governanca-processos" data-f="governanca-processos" class="soon"><b>Governança e processos</b><span>0 guias · em preparação</span></a></nav>
-<p class="filter-note" id="fnote" hidden>Mostrando: <b id="fname"></b> · <button type="button" id="fall">ver todas as áreas</button></p>
-<div id="areas"><section class="area" id="seguranca">
+<nav class="areas-nav" aria-label="Filtrar guias por área"><a href="#seguranca" data-f="seguranca" class="has"><b>Segurança</b><span>1 guia</span></a><a href="#rede-firewall" data-f="rede-firewall" class="has"><b>Rede e firewall</b><span>1 guia</span></a><a href="#infraestrutura" data-f="infraestrutura" class="soon"><b>Infraestrutura</b><span>0 guias · em preparação</span></a><a href="#cloud" data-f="cloud" class="soon"><b>Cloud</b><span>0 guias · em preparação</span></a><a href="#observabilidade" data-f="observabilidade" class="soon"><b>Observabilidade</b><span>0 guias · em preparação</span></a><a href="#storage-backup" data-f="storage-backup" class="soon"><b>Storage e backup</b><span>0 guias · em preparação</span></a><a href="#governanca-processos" data-f="governanca-processos" class="soon"><b>Governança e processos</b><span>0 guias · em preparação</span></a></nav>
+<p class="pick" id="pick">Selecione uma área acima para ver os guias.</p>
+<div id="areas"><section class="area" id="seguranca" hidden>
 <header class="area-h"><h2>Segurança</h2><p>Normas, identidade e controles de segurança aplicados.</p><span class="cnt">1 guia</span></header>
 <div class="guides"><a class="guide" href="../iso27090/">
 <div class="g-top"><span class="chip">Segurança</span><span class="g-st">Disponível</span></div>
@@ -80,7 +81,7 @@
 <ul class="g-hl"><li>Roteiro em 7 passos</li><li>9 ameaças</li><li>Autoavaliação com 40 perguntas</li><li>Modelos .xlsx</li></ul>
 <span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
 </a></div>
-</section><section class="area" id="rede-firewall">
+</section><section class="area" id="rede-firewall" hidden>
 <header class="area-h"><h2>Rede e firewall</h2><p>Segmentação, perímetro e redes corporativas.</p><span class="cnt">1 guia</span></header>
 <div class="guides"><a class="guide" href="meraki-ms-mr36/">
 <div class="g-top"><span class="chip">Rede e firewall</span><span class="g-st">Disponível</span></div>
@@ -89,35 +90,39 @@
 <ul class="g-hl"><li>Planejamento de VLAN e PoE</li><li>Switches MS</li><li>AP MR36 Wi-Fi 6</li><li>Checklist interativo</li></ul>
 <span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
 </a></div>
-</section><section class="area" id="infraestrutura">
+</section><section class="area" id="infraestrutura" hidden>
 <header class="area-h"><h2>Infraestrutura</h2><p>Virtualização, servidores e datacenter.</p><span class="cnt">0 guias</span></header>
 <div class="empty"><span class="label">Em preparação</span><p>Guia desta área em produção. Enquanto isso, veja os <a href="../artigos/">artigos</a> relacionados.</p></div>
-</section><section class="area" id="cloud">
+</section><section class="area" id="cloud" hidden>
 <header class="area-h"><h2>Cloud</h2><p>Arquitetura híbrida e multicloud.</p><span class="cnt">0 guias</span></header>
 <div class="empty"><span class="label">Em preparação</span><p>Guia desta área em produção. Enquanto isso, veja os <a href="../artigos/">artigos</a> relacionados.</p></div>
-</section><section class="area" id="observabilidade">
+</section><section class="area" id="observabilidade" hidden>
 <header class="area-h"><h2>Observabilidade</h2><p>Monitoramento, alertas e logs.</p><span class="cnt">0 guias</span></header>
 <div class="empty"><span class="label">Em preparação</span><p>Guia desta área em produção. Enquanto isso, veja os <a href="../artigos/">artigos</a> relacionados.</p></div>
-</section><section class="area" id="storage-backup">
+</section><section class="area" id="storage-backup" hidden>
 <header class="area-h"><h2>Storage e backup</h2><p>Armazenamento, backup e recuperação de desastres.</p><span class="cnt">0 guias</span></header>
 <div class="empty"><span class="label">Em preparação</span><p>Guia desta área em produção. Enquanto isso, veja os <a href="../artigos/">artigos</a> relacionados.</p></div>
-</section><section class="area" id="governanca-processos">
+</section><section class="area" id="governanca-processos" hidden>
 <header class="area-h"><h2>Governança e processos</h2><p>Mudança, ITIL e gestão de TI.</p><span class="cnt">0 guias</span></header>
 <div class="empty"><span class="label">Em preparação</span><p>Guia desta área em produção. Enquanto isso, veja os <a href="../artigos/">artigos</a> relacionados.</p></div>
 </section></div>
 <script>
 (function(){
   var links=[].slice.call(document.querySelectorAll('.areas-nav a')), secs=[].slice.call(document.querySelectorAll('#areas .area'));
-  var note=document.getElementById('fnote'), name=document.getElementById('fname');
+  var pick=document.getElementById('pick');
   function apply(f, push){
-    if(!f || (f!=='todas' && !document.getElementById(f))) f='todas';
-    secs.forEach(function(s){ s.hidden = !(f==='todas' || s.id===f); });
+    if(f && !document.getElementById(f)) f='';
+    secs.forEach(function(s){ s.hidden = s.id!==f; });
     links.forEach(function(a){ a.setAttribute('aria-current', a.dataset.f===f ? 'true' : 'false'); });
-    if(f==='todas'){ note.hidden=true; } else { note.hidden=false; name.textContent=document.querySelector('#'+f+' h2').textContent; }
-    if(push) history.replaceState(null,'', f==='todas' ? location.pathname : '#'+f);
+    pick.hidden = !!f;
+    if(push) history.replaceState(null,'', f ? '#'+f : location.pathname);
   }
-  links.forEach(function(a){ a.addEventListener('click', function(e){ e.preventDefault(); apply(a.dataset.f, true); document.querySelector('.areas-nav').scrollIntoView({block:'start'}); }); });
-  document.getElementById('fall').addEventListener('click', function(){ apply('todas', true); });
+  links.forEach(function(a){ a.addEventListener('click', function(e){
+    e.preventDefault();
+    var cur = a.getAttribute('aria-current')==='true';
+    apply(cur ? '' : a.dataset.f, true);
+    if(!cur) document.getElementById(a.dataset.f).scrollIntoView({behavior:'smooth', block:'nearest'});
+  }); });
   window.addEventListener('hashchange', function(){ apply(location.hash.slice(1)); });
   apply(location.hash.slice(1));
 })();
