@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meraki MS + MR36: instalação e configuração · Guias · André Ferreira</title>
+<meta name="description" content="Guia prático em português para instalar e configurar switches Meraki MS e access points MR36: planejamento de VLAN e PoE, Dashboard, portas, SSIDs, RF, validação e checklist.">
+<meta property="og:title" content="Meraki MS + MR36: instalação e configuração · Guias · André Ferreira">
+<meta property="og:description" content="Guia prático em português para instalar e configurar switches Meraki MS e access points MR36: planejamento de VLAN e PoE, Dashboard, portas, SSIDs, RF, validação e checklist.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/meraki-ms-mr36/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/meraki-ms-mr36/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030c">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7"/></symbol>
+<symbol id="i-in" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+</style>
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / Meraki MS + MR36</p>
+<span class="chip">Rede e firewall</span>
+<h1 style="margin-top:12px">Meraki: instalação e configuração de switches MS e AP MR36</h1>
+<p class="sub">Roteiro prático para colocar uma rede cabeada e sem fio Meraki em produção: do plano de VLANs ao AP validado em campo, com as decisões que evitam retrabalho.</p>
+<div class="intro-meta"><span class="chip m">Switches MS</span><span class="chip m">Access point MR36</span><span class="chip m">Wi-Fi 6</span><span class="chip m">PoE 802.3af</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<h2 id="escopo"><span class="n">00</span>Antes de começar</h2>
+<p>Este guia cobre uma implantação típica de escritório: um switch core, switches de acesso com PoE e access points MR36, todos gerenciados pelo Meraki Dashboard. Serve tanto para uma rede nova quanto para a troca de equipamentos legados.</p>
+<div class="call warn"><b class="t">Material independente</b><p>Guia escrito a partir da experiência de campo e da documentação pública da Meraki, com palavras próprias. Não é material oficial da Cisco. Meraki e Cisco são marcas registradas da Cisco Systems. Menus do Dashboard e comportamentos mudam com versões de firmware: na dúvida, a <a href="https://documentation.meraki.com" target="_blank" rel="noopener">documentação oficial</a> é a referência final.</p></div>
+<h3>O que você precisa ter em mãos</h3>
+<ul>
+<li>Conta no Dashboard (<code>dashboard.meraki.com</code>) com permissão de administrador da organização.</li>
+<li>Número do pedido ou números de série dos equipamentos (formato <code>Qxxx-xxxx-xxxx</code>, na etiqueta do produto).</li>
+<li>Licenças compatíveis com a quantidade e o tipo de equipamento.</li>
+<li>Plano de VLANs e endereçamento aprovado (seção 01).</li>
+<li>Acesso ao firewall de borda para liberar a comunicação com a nuvem.</li>
+<li>Rack, energia, patch cords testados e uma janela de mudança, se for troca de rede existente.</li>
+</ul>
+
+<h2 id="planejamento"><span class="n">01</span>Planejamento</h2>
+<p>Quase todo problema de implantação Meraki nasce aqui: VLAN nativa diferente entre as pontas, orçamento de PoE estourado ou firewall bloqueando a nuvem. Feche estes cinco pontos antes de abrir a primeira caixa.</p>
+<div class="diagram"><svg viewBox="0 0 760 250" role="img" aria-label="Topologia: internet e firewall, switch core MS, switches de acesso MS e access points MR36 ligados por portas trunk">
+<defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8z" fill="#71584c"/></marker></defs>
+<g font-family="Source Sans 3, sans-serif" font-size="13" fill="#2d2a27">
+<rect x="20" y="95" width="120" height="60" rx="10" fill="#fff5e3" stroke="#71584c" stroke-width="1.5"/><text x="80" y="120" text-anchor="middle" font-weight="600">Internet</text><text x="80" y="138" text-anchor="middle" font-size="11" fill="#504e4b">firewall / gateway</text>
+<rect x="190" y="95" width="130" height="60" rx="10" fill="#ffe2d3" stroke="#aa4b17" stroke-width="1.5"/><text x="255" y="120" text-anchor="middle" font-weight="600">MS core</text><text x="255" y="138" text-anchor="middle" font-size="11" fill="#504e4b">STP root · prioridade 0</text>
+<rect x="380" y="30" width="130" height="56" rx="10" fill="#fff5e3" stroke="#aa4b17" stroke-width="1.5"/><text x="445" y="54" text-anchor="middle" font-weight="600">MS acesso 1</text><text x="445" y="71" text-anchor="middle" font-size="11" fill="#504e4b">PoE para APs</text>
+<rect x="380" y="164" width="130" height="56" rx="10" fill="#fff5e3" stroke="#aa4b17" stroke-width="1.5"/><text x="445" y="188" text-anchor="middle" font-weight="600">MS acesso 2</text><text x="445" y="205" text-anchor="middle" font-size="11" fill="#504e4b">PoE para APs</text>
+<g fill="#cfe8d4" stroke="#5f6e64" stroke-width="1.5"><rect x="580" y="14" width="150" height="34" rx="17"/><rect x="580" y="68" width="150" height="34" rx="17"/><rect x="580" y="148" width="150" height="34" rx="17"/><rect x="580" y="202" width="150" height="34" rx="17"/></g>
+<g text-anchor="middle" font-weight="600"><text x="655" y="36">MR36</text><text x="655" y="90">MR36</text><text x="655" y="170">MR36</text><text x="655" y="224">MR36</text></g>
+<g stroke="#71584c" stroke-width="1.6" fill="none" marker-end="url(#ar)"><path d="M140 125 H186"/><path d="M320 115 C350 100 350 60 376 58"/><path d="M320 135 C350 150 350 190 376 192"/><path d="M510 50 C545 40 550 32 576 31"/><path d="M510 66 C545 76 550 84 576 85"/><path d="M510 184 C545 174 550 166 576 165"/><path d="M510 200 C545 210 550 218 576 219"/></g>
+<g font-size="11" fill="#aa4b17" font-family="JetBrains Mono, monospace"><text x="330" y="80">trunk · LACP</text><text x="330" y="182">trunk · LACP</text><text x="520" y="122">trunk · native = mgmt</text></g>
+</g></svg></div>
+
+<h3>1. Plano de VLANs</h3>
+<p>Separe gerência, usuários e visitantes desde o início. Um exemplo que funciona bem para escritórios:</p>
+<div class="tbl"><table>
+<thead><tr><th>VLAN</th><th>Uso</th><th>Observação</th></tr></thead>
+<tbody>
+<tr><td><code>10</code></td><td>Gerência dos equipamentos</td><td>Switches e APs. Sem interface L3 de usuário nesta VLAN.</td></tr>
+<tr><td><code>20</code></td><td>Usuários corporativos</td><td>Rede cabeada e SSID corporativo.</td></tr>
+<tr><td><code>30</code></td><td>Visitantes</td><td>Só internet. Isolada da rede interna.</td></tr>
+<tr><td><code>40</code></td><td>Voz / IoT</td><td>Opcional. Telefones, câmeras, impressoras.</td></tr>
+</tbody></table></div>
+<p>Use sub-redes <code>/24</code> ou <code>/23</code> para usuários e evite sobreposição entre elas. Os números de VLAN acima são só exemplo: use o padrão da sua organização.</p>
+
+<h3>2. Orçamento de PoE</h3>
+<p>O MR36 é alimentado pela própria porta de rede no padrão <b>802.3af</b> e consome no máximo <b>15 W</b>. Some o consumo de todos os APs, câmeras e telefones ligados em cada switch e compare com o orçamento de PoE do modelo, deixando folga de pelo menos 20%.</p>
+<p>Exemplo: 12 APs MR36 × 15 W = 180 W só de APs. Um switch com orçamento de 370 W comporta isso com folga; um de 120 W, não.</p>
+<div class="call"><b class="t">Fonte redundante não soma PoE</b><p>Em switches com duas fontes, o modo redundante usa a segunda fonte apenas como reserva. O modo combinado aumenta o orçamento de PoE, mas reduz a capacidade se uma fonte falhar. Escolha conscientemente em <b>Switch settings</b>.</p></div>
+
+<h3>3. Cabeamento e posicionamento</h3>
+<ul>
+<li>Cabo de cobre até <b>100 metros</b> entre switch e AP, incluindo patch cords.</li>
+<li>APs no teto ou no alto da parede, com linha de visada para a maior parte da área atendida.</li>
+<li>Em escritório com divisórias de meia altura, teto é quase sempre a melhor opção.</li>
+<li>Para densidade e cobertura, faça ou contrate um site survey. Plantas baixas ajudam a posicionar os APs no Dashboard depois.</li>
+</ul>
+
+<h3>4. Liberação no firewall</h3>
+<p>Os equipamentos Meraki iniciam a conexão com a nuvem de dentro para fora. O firewall de borda precisa permitir, no mínimo:</p>
+<div class="tbl"><table>
+<thead><tr><th>Protocolo / porta</th><th>Para quê</th></tr></thead>
+<tbody>
+<tr><td><code>UDP 7351</code></td><td>Túnel principal com a nuvem Meraki</td></tr>
+<tr><td><code>TCP 443</code> e <code>TCP 80</code></td><td>Caminho de reserva se o UDP 7351 estiver bloqueado, firmware e serviços</td></tr>
+<tr><td><code>53</code> (DNS)</td><td>Resolução dos nomes da nuvem</td></tr>
+<tr><td><code>UDP 123</code> (NTP)</td><td>Sincronização de horário</td></tr>
+<tr><td>ICMP, HTTP, HTTPS e DNS para qualquer destino</td><td>Testes de conectividade do uplink (os APs fazem ping em <code>8.8.8.8</code>)</td></tr>
+</tbody></table></div>
+<p>A lista exata de IPs de destino varia por organização. Consulte em <span class="mpath"><b>Help</b><i>›</i><b>Firewall info</b></span> no Dashboard e exporte em CSV para o time de firewall.</p>
+<div class="call warn"><b class="t">Funciona, mas devagar</b><p>Sem o UDP 7351, o equipamento até aparece online pelo caminho de reserva, mas mudanças de configuração, ferramentas ao vivo e firmware ficam lentos, e a autenticação Meraki não funciona. Libere o 7351.</p></div>
+
+<h3>5. Endereçamento de gerência</h3>
+<ul>
+<li>Os equipamentos precisam de IP roteável com saída para a internet na VLAN de gerência.</li>
+<li>Prefira <b>DHCP com reserva por MAC</b> para cada switch e AP: mantém a implantação zero-touch e o IP previsível.</li>
+<li>IP estático também funciona, mas exige configuração equipamento a equipamento.</li>
+</ul>
+
+<h2 id="dashboard"><span class="n">02</span>Preparar o Dashboard</h2>
+<ol class="steps">
+<li><b>Crie ou escolha a rede</b>Acesse <code>dashboard.meraki.com</code> e crie uma rede para o site. Uma rede combinada reúne switches e APs do mesmo local no mesmo painel.</li>
+<li><b>Faça o claim dos equipamentos</b>Adicione os equipamentos pelo número do pedido ou pelos números de série, em <span class="mpath"><b>Organization</b><i>›</i><b>Inventory</b></span>. Também dá para usar o app Meraki no celular para escanear as etiquetas.</li>
+<li><b>Aplique as licenças</b>Confirme em <span class="mpath"><b>Organization</b><i>›</i><b>Licensing</b></span> que há licença suficiente para todos os equipamentos.</li>
+<li><b>Mova os equipamentos para a rede</b>No inventário, selecione os equipamentos e adicione à rede criada.</li>
+<li><b>Nomeie com padrão</b>Exemplo: <code>SP-ESC-SW-CORE-01</code>, <code>SP-ESC-SW-AC-01</code>, <code>SP-ESC-AP-2A-01</code> (site, prédio, tipo, andar ou função, sequência). Nome padronizado vira busca, alerta e relatório legíveis.</li>
+<li><b>Defina a janela de firmware</b>Em <span class="mpath"><b>Organization</b><i>›</i><b>Firmware upgrades</b></span>, agende as atualizações para a janela de manutenção e mantenha todos os switches na mesma versão.</li>
+</ol>
+
+<h2 id="ms-instalacao"><span class="n">03</span>Instalar os switches MS</h2>
+<ol class="steps">
+<li><b>Monte no rack ou na mesa</b>Use os suportes do kit, respeite a ventilação lateral e ligue o aterramento do rack.</li>
+<li><b>Conecte o uplink primeiro</b>Ligue qualquer porta de cobre ou fibra a um equipamento que entregue DHCP e saída para a internet. Na primeira inicialização, a porta de uplink precisa estar na VLAN nativa ou na VLAN de gerência sem tag.</li>
+<li><b>Ligue e espere o firmware</b>O switch procura a nuvem e baixa a versão de firmware definida. Durante a atualização, o LED de status pisca; quando fica fixo em verde ou branco, o switch está conectado. Laranja fixo indica que ele ainda não conseguiu falar com a nuvem.</li>
+<li><b>Confirme no Dashboard</b>O switch deve aparecer como online, com IP, uplink e versão de firmware. Só então siga para a configuração.</li>
+</ol>
+
+<h3>Empilhamento (stacking)</h3>
+<ol>
+<li>Adicione os switches à rede, mas ainda não crie a pilha.</li>
+<li>Ligue cada switch sozinho e deixe todos chegarem à mesma versão de firmware.</li>
+<li>Com tudo desligado, ligue os cabos de stacking em anel.</li>
+<li>Conecte um único uplink para a pilha, ligue e aguarde.</li>
+<li>Crie a pilha em <span class="mpath"><b>Switching</b><i>›</i><b>Monitor</b><i>›</i><b>Switch stacks</b></span>.</li>
+<li>Para redundância, use uplinks no primeiro e no último switch da pilha, agregados como link aggregation entre membros da pilha.</li>
+</ol>
+
+<h3>Agregação de links (LACP)</h3>
+<p>Configure o link aggregation no Dashboard <b>antes</b> de ligar o segundo cabo, e confirme que o equipamento do outro lado também está em LACP. Ligar dois cabos sem agregação configurada é o jeito mais rápido de criar um loop.</p>
+
+<h2 id="ms-config"><span class="n">04</span>Configurar os switches MS</h2>
+<h3>Configurações gerais</h3>
+<p>Em <span class="mpath"><b>Switching</b><i>›</i><b>Configure</b><i>›</i><b>Switch settings</b></span>:</p>
+<div class="tbl"><table>
+<thead><tr><th>Item</th><th>Recomendação</th></tr></thead>
+<tbody>
+<tr><td>VLAN de gerência</td><td>Defina a VLAN de gerência (ex.: <code>10</code>) quando o uplink for trunk. Se a mudança quebrar o acesso à nuvem, o switch volta sozinho para a configuração anterior.</td></tr>
+<tr><td>Spanning tree (RSTP)</td><td>Mantenha sempre habilitado. Defina prioridade <code>0</code> no switch core para ele ser a raiz.</td></tr>
+<tr><td>MTU</td><td>O padrão aceita jumbo frames. Só reduza para <code>1500</code> se houver motivo.</td></tr>
+<tr><td>Storm control</td><td>Nos modelos que suportam, limite broadcast, multicast e unicast desconhecido (ex.: 5% da banda da porta).</td></tr>
+<tr><td>Multicast</td><td>IGMP snooping vem habilitado. Mantenha.</td></tr>
+<tr><td>Servidores DHCP</td><td>Liste os servidores DHCP permitidos para bloquear DHCP pirata.</td></tr>
+</tbody></table></div>
+
+<h3>IP de gerência</h3>
+<p>Na página de cada switch, confirme o IP recebido por DHCP ou defina IP fixo, máscara, gateway, DNS e VLAN de gerência. A sub-rede de gerência não deve coincidir com nenhuma interface L3 de usuário.</p>
+
+<h3>Configuração das portas</h3>
+<p>Em <span class="mpath"><b>Switching</b><i>›</i><b>Monitor</b><i>›</i><b>Switch ports</b></span>, selecione as portas e use <b>Edit</b>. Configure por tipo de uso:</p>
+<div class="tbl"><table>
+<thead><tr><th>Tipo de porta</th><th>Modo</th><th>VLAN</th><th>Proteções</th><th>Tag sugerida</th></tr></thead>
+<tbody>
+<tr><td>Estação de trabalho</td><td>Access</td><td>VLAN de usuários (ex.: <code>20</code>); VLAN de voz se houver telefone</td><td>BPDU guard</td><td><code>usuario</code></td></tr>
+<tr><td>Access point MR36</td><td>Trunk</td><td>Nativa = gerência (<code>10</code>); permitidas = gerência + VLANs dos SSIDs (<code>10,20,30</code>)</td><td>PoE habilitado</td><td><code>wireless</code></td></tr>
+<tr><td>Switch ↔ switch</td><td>Trunk</td><td>Nativa e permitidas <b>idênticas nas duas pontas</b>; poda das VLANs não usadas</td><td>Loop guard; UDLD em modo alerta nas fibras</td><td><code>trunk</code></td></tr>
+<tr><td>Switch de terceiros / fora do seu controle</td><td>Trunk</td><td>Somente o necessário</td><td>Root guard</td><td><code>externo</code></td></tr>
+<tr><td>Porta sem uso</td><td>Access</td><td>VLAN sem roteamento</td><td>Desabilitada</td><td><code>livre</code></td></tr>
+</tbody></table></div>
+<div class="call ok"><b class="t">Tags de porta economizam horas</b><p>Com as tags, você filtra e altera em lote todas as portas de AP ou todos os trunks de uma vez. Use também a negociação automática de velocidade entre equipamentos Meraki.</p></div>
+
+<h2 id="mr-instalacao"><span class="n">05</span>Instalar o MR36</h2>
+<h3>Especificações que importam na instalação</h3>
+<div class="tbl"><table>
+<tbody>
+<tr><th>Padrão</th><td>Wi-Fi 6 (802.11ax), dual-band, 2x2 MU-MIMO e OFDMA</td></tr>
+<tr><th>Rádios</th><td>2,4 GHz e 5 GHz para clientes, um terceiro rádio dedicado a segurança e análise de RF, e Bluetooth Low Energy</td></tr>
+<tr><th>Porta</th><td>1 × Gigabit Ethernet (Eth0, PoE)</td></tr>
+<tr><th>Alimentação</th><td>PoE 802.3af, consumo máximo de 15 W, ou fonte 12 V DC (vendida à parte)</td></tr>
+<tr><th>Temperatura</th><td>0 a 40 °C em operação</td></tr>
+<tr><th>Fixação</th><td>Teto, forro removível, parede, caixa de passagem ou mesa; parafusos de segurança e trava Kensington</td></tr>
+</tbody></table></div>
+
+<ol class="steps">
+<li><b>Prepare antes de fixar</b>Ligue o AP na rede com internet ainda na bancada para ele atualizar o firmware. Leva alguns minutos. Não empilhe APs ligados: o calor danifica o equipamento.</li>
+<li><b>Fixe o suporte</b>Use o suporte com nível embutido. Para forro removível, use os clipes de trilho do kit (servem em trilhos de 9/16", 15/16" e 1,5").</li>
+<li><b>Conecte e encaixe</b>Passe o cabo pela canaleta do suporte, conecte na porta Eth0 e encaixe o AP. Use os parafusos de segurança em áreas públicas.</li>
+<li><b>Confirme o LED</b>Verde fixo: online, sem clientes. Azul fixo: online, com clientes. Laranja piscando: sem uplink.</li>
+</ol>
+
+<h3>LEDs do MR36</h3>
+<div class="tbl"><table>
+<thead><tr><th>LED</th><th>Significado</th></tr></thead>
+<tbody>
+<tr><td><span class="led" style="background:#f08a24"></span>Laranja fixo</td><td>Inicializando. Se persistir, pode ser falha de hardware.</td></tr>
+<tr><td><span class="led" style="background:conic-gradient(red,orange,yellow,green,blue,violet,red)"></span>Arco-íris</td><td>Inicializando ou procurando a nuvem.</td></tr>
+<tr><td><span class="led" style="background:#3b82f6;opacity:.6"></span>Azul piscando</td><td>Atualizando firmware. Não desligue.</td></tr>
+<tr><td><span class="led" style="background:#22a05a"></span>Verde fixo</td><td>Online, sem clientes conectados.</td></tr>
+<tr><td><span class="led" style="background:#2563eb"></span>Azul fixo</td><td>Online, com clientes conectados.</td></tr>
+<tr><td><span class="led" style="background:#f08a24;opacity:.6"></span>Laranja piscando</td><td>Não encontrou uplink.</td></tr>
+<tr><td><span class="led" style="background:#22a05a;opacity:.6"></span>Verde piscando</td><td>Modo de site survey.</td></tr>
+</tbody></table></div>
+<p>Para ambientes onde o LED incomoda (quartos, salas de reunião), o modo <b>Run dark</b> no Dashboard apaga o LED.</p>
+
+<h2 id="mr-config"><span class="n">06</span>Configurar o wireless</h2>
+<h3>1. IP e localização dos APs</h3>
+<ul>
+<li>Confirme o IP de gerência de cada AP. Para IP fixo, conecte-se ao AP e acesse a página local em <code>my.meraki.com</code> (ou <code>10.128.128.128</code>); o usuário é o número de série do AP, com hífens, sem senha.</li>
+<li>Posicione cada AP no mapa ou na planta baixa do Dashboard. Isso melhora o diagnóstico e a visualização de cobertura.</li>
+</ul>
+
+<h3>2. SSIDs</h3>
+<p>Em <span class="mpath"><b>Wireless</b><i>›</i><b>Configure</b><i>›</i><b>SSIDs</b></span>, habilite e nomeie os SSIDs. Para cada um, ajuste em <span class="mpath"><b>Wireless</b><i>›</i><b>Configure</b><i>›</i><b>Access control</b></span>:</p>
+<div class="tbl"><table>
+<thead><tr><th>SSID</th><th>Segurança</th><th>Endereçamento</th><th>Extras</th></tr></thead>
+<tbody>
+<tr><td>Corporativo</td><td>WPA2/WPA3-Enterprise com 802.1X (RADIUS ou Entra ID via servidor RADIUS)</td><td>Bridge mode, VLAN <code>20</code></td><td>Sem acesso para quem não autenticar</td></tr>
+<tr><td>Visitantes</td><td>WPA2/WPA3-Personal ou portal (splash page)</td><td>Bridge mode, VLAN <code>30</code>, ou NAT mode do próprio AP</td><td>Isolamento de clientes e limite de banda por usuário</td></tr>
+</tbody></table></div>
+<p>Para colocar o SSID em uma VLAN: em <b>Client IP and VLAN</b>, escolha bridge mode (servidor DHCP externo) e informe o VLAN ID. VLAN <code>0</code> significa sem tag, ou seja, o cliente cai na VLAN nativa da porta.</p>
+<div class="call warn"><b class="t">O erro mais comum</b><p>Não configure no AP uma VLAN de gerência igual à VLAN nativa do trunk. O AP passa a marcar o próprio tráfego com essa tag, o switch descarta e o AP fica offline. O tráfego de gerência do AP deve sair <b>sem tag</b>, na VLAN nativa, que por isso precisa ter DHCP e saída para a internet.</p></div>
+
+<h3>3. Rádio (RF profiles)</h3>
+<p>Em <span class="mpath"><b>Wireless</b><i>›</i><b>Configure</b><i>›</i><b>Radio settings</b></span>, use os perfis de RF para padronizar por tipo de ambiente:</p>
+<ul>
+<li><b>Largura de canal de 20 MHz</b> em 5 GHz para a maioria dos ambientes corporativos. Mais canais disponíveis, menos interferência.</li>
+<li><b>Dual-band com band steering</b> quando ainda houver clientes só de 2,4 GHz; caso contrário, considere somente 5 GHz.</li>
+<li><b>Taxa mínima por banda</b> (não por SSID): 12 Mbps para escritório aberto, 24 Mbps para ambientes densos como auditórios e salas de aula.</li>
+<li>Deixe o canal e a potência no automático no início; ajuste depois de observar o ambiente por alguns dias. Mudanças de canal e potência podem levar até uma hora para aplicar.</li>
+</ul>
+
+<h3>4. Regras para visitantes</h3>
+<p>Em <span class="mpath"><b>Wireless</b><i>›</i><b>Configure</b><i>›</i><b>Firewall &amp; traffic shaping</b></span>, bloqueie o acesso da rede de visitantes à rede local e aplique limite de banda por cliente.</p>
+
+<h2 id="validacao"><span class="n">07</span>Validação</h2>
+<ol class="steps">
+<li><b>Status no Dashboard</b>Todos os switches e APs online, sem alertas, na mesma versão de firmware.</li>
+<li><b>Conectividade com a nuvem</b>Na página do equipamento, confirme que a conexão não está usando o caminho de reserva (sinal de UDP 7351 bloqueado).</li>
+<li><b>PoE</b>Confira o consumo por porta e o total do switch em relação ao orçamento.</li>
+<li><b>VLANs</b>Conecte um notebook em cada SSID e em uma porta de usuário: o IP recebido deve ser da sub-rede esperada.</li>
+<li><b>Isolamento de visitantes</b>Do SSID de visitantes, tente acessar um IP interno: deve falhar.</li>
+<li><b>Roaming</b>Caminhe entre áreas de APs diferentes em uma chamada de vídeo: não deve cair.</li>
+<li><b>Spanning tree</b>Confirme que o switch core é a raiz e que não há portas bloqueadas inesperadas.</li>
+<li><b>Documentação</b>Exporte a lista de equipamentos, portas e IPs e guarde junto com o plano de VLANs.</li>
+</ol>
+
+<h2 id="troubleshooting"><span class="n">08</span>Solução de problemas</h2>
+<div class="tbl"><table>
+<thead><tr><th>Sintoma</th><th>Causa provável</th><th>O que fazer</th></tr></thead>
+<tbody>
+<tr><td>AP com LED laranja piscando</td><td>Sem uplink: cabo, porta desabilitada ou sem PoE</td><td>Teste o cabo e outra porta; confirme PoE habilitado e orçamento disponível.</td></tr>
+<tr><td>AP online e depois offline após configurar VLAN</td><td>VLAN de gerência do AP igual à VLAN nativa do trunk</td><td>Remova a VLAN de gerência do AP ou ajuste a nativa da porta.</td></tr>
+<tr><td>AP transmite SSID terminado em <code>-scanning</code></td><td>AP sem conexão com a nuvem</td><td>Conecte-se a esse SSID e abra <code>my.meraki.com</code> para ver o diagnóstico do uplink.</td></tr>
+<tr><td>Switch com laranja fixo</td><td>Ainda não falou com a nuvem</td><td>Verifique DHCP, VLAN do uplink, DNS e liberação no firewall.</td></tr>
+<tr><td>Equipamento online, mas mudanças demoram</td><td>Usando o caminho de reserva</td><td>Libere <code>UDP 7351</code> no firewall.</td></tr>
+<tr><td>Cliente conecta no SSID, mas não recebe IP</td><td>VLAN do SSID não permitida no trunk ou sem DHCP</td><td>Inclua a VLAN na lista de permitidas da porta do AP e confirme o escopo DHCP.</td></tr>
+<tr><td>Rede lenta e instável após ligar novo cabo</td><td>Loop: dois links sem agregação ou BPDU guard ausente</td><td>Desconecte o link novo, configure LACP e habilite BPDU guard nas portas de acesso.</td></tr>
+<tr><td>AP não volta após mudanças locais</td><td>Configuração local incorreta</td><td>Reset de fábrica: segure o botão por pelo menos 5 segundos. Apaga toda a configuração local.</td></tr>
+</tbody></table></div>
+<p>Para hardware com defeito, abra chamado pelo Dashboard. A troca em garantia exige a embalagem original com número de série.</p>
+
+<h2 id="checklist"><span class="n">09</span>Checklist de implantação</h2>
+<div class="ck-bar"><span id="ck-count">0 de 0 concluídos</span><button type="button" id="ck-reset">Limpar</button><button type="button" onclick="window.print()">Imprimir</button></div>
+<h3>Planejamento</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="p1"><span>Plano de VLANs e sub-redes aprovado</span></label></li>
+<li><label><input type="checkbox" data-k="p2"><span>Orçamento de PoE calculado por switch, com folga de 20%</span></label></li>
+<li><label><input type="checkbox" data-k="p3"><span>Posição dos APs definida (site survey ou planta)</span></label></li>
+<li><label><input type="checkbox" data-k="p4"><span>Firewall liberado: UDP 7351, TCP 443/80, DNS, NTP e ICMP</span></label></li>
+<li><label><input type="checkbox" data-k="p5"><span>Reservas de DHCP criadas na VLAN de gerência</span></label></li>
+</ul>
+<h3>Dashboard</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="d1"><span>Rede criada e equipamentos com claim feito</span></label></li>
+<li><label><input type="checkbox" data-k="d2"><span>Licenças aplicadas</span></label></li>
+<li><label><input type="checkbox" data-k="d3"><span>Padrão de nomes aplicado</span></label></li>
+<li><label><input type="checkbox" data-k="d4"><span>Janela de firmware agendada</span></label></li>
+</ul>
+<h3>Switches</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="s1"><span>Todos online e na mesma versão de firmware</span></label></li>
+<li><label><input type="checkbox" data-k="s2"><span>VLAN de gerência e IP definidos</span></label></li>
+<li><label><input type="checkbox" data-k="s3"><span>Core com prioridade STP 0</span></label></li>
+<li><label><input type="checkbox" data-k="s4"><span>Portas de usuário com BPDU guard</span></label></li>
+<li><label><input type="checkbox" data-k="s5"><span>Trunks com nativa e VLANs permitidas iguais nas duas pontas</span></label></li>
+<li><label><input type="checkbox" data-k="s6"><span>LACP configurado antes de conectar os links</span></label></li>
+<li><label><input type="checkbox" data-k="s7"><span>Servidores DHCP permitidos definidos</span></label></li>
+<li><label><input type="checkbox" data-k="s8"><span>Tags de porta aplicadas</span></label></li>
+</ul>
+<h3>Wireless</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="w1"><span>APs com firmware atualizado antes da fixação</span></label></li>
+<li><label><input type="checkbox" data-k="w2"><span>APs posicionados no mapa</span></label></li>
+<li><label><input type="checkbox" data-k="w3"><span>SSIDs com segurança e VLAN corretas</span></label></li>
+<li><label><input type="checkbox" data-k="w4"><span>VLAN de gerência do AP diferente da nativa</span></label></li>
+<li><label><input type="checkbox" data-k="w5"><span>Perfil de RF com 20 MHz e taxa mínima por banda</span></label></li>
+<li><label><input type="checkbox" data-k="w6"><span>Visitantes isolados da rede interna</span></label></li>
+</ul>
+<h3>Validação</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="v1"><span>IP correto em cada SSID e porta de usuário</span></label></li>
+<li><label><input type="checkbox" data-k="v2"><span>Roaming testado</span></label></li>
+<li><label><input type="checkbox" data-k="v3"><span>Documentação exportada e arquivada</span></label></li>
+</ul>
+
+<h2 id="fontes"><span class="n">10</span>Fontes</h2>
+<p>Documentação oficial usada como referência (consulte para detalhes de cada modelo e versão):</p>
+<ul>
+<li><a href="https://documentation.meraki.com/Wireless/Install_and_Get_Started/Installation_Guides/MR36_Installation_Guide" target="_blank" rel="noopener">MR36 Installation Guide</a></li>
+<li><a href="https://documentation.meraki.com/Wireless/Product_Information/Overviews_and_Datasheets/MR36_Datasheet" target="_blank" rel="noopener">MR36 Datasheet</a></li>
+<li><a href="https://documentation.meraki.com/Switching/MS_-_Switches/Install_and_Get_Started/Quick_Start_Guides/Cloud-managed_Switching_Quick_Start" target="_blank" rel="noopener">Cloud-managed Switching Quick Start</a></li>
+<li><a href="https://documentation.meraki.com/Switching/MS_-_Switches/Operate_and_Maintain/How-Tos/Switch_Settings" target="_blank" rel="noopener">Switch Settings</a></li>
+<li><a href="https://documentation.meraki.com/Platform_Management/Dashboard_Administration/Design_and_Configure/Architectures_and_Best_Practices/Cisco_Meraki_Best_Practice_Design/General_MS_Best_Practices" target="_blank" rel="noopener">General MS Best Practices</a></li>
+<li><a href="https://documentation.meraki.com/Wireless/Design_and_Configure/Configuration_Guides/Client_Addressing_and_Bridging/VLAN_Tagging_on_MR_Access_Points" target="_blank" rel="noopener">VLAN Tagging on MR Access Points</a></li>
+<li><a href="https://documentation.meraki.com/Wireless/Operate_and_Maintain/User_Guides/Radio_Settings/RF_Profiles" target="_blank" rel="noopener">RF Profiles</a></li>
+<li><a href="https://documentation.meraki.com/Platform_Management/Dashboard_Administration/Design_and_Configure/Configuration_Guides/Routing_and_Firewall/Upstream_Firewall_Rules_for_Cloud_Connectivity" target="_blank" rel="noopener">Upstream Firewall Rules for Cloud Connectivity</a></li>
+</ul>
+<div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em outubro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#escopo">00 · Antes de começar</a></li><li><a href="#planejamento">01 · Planejamento</a></li><li><a href="#dashboard">02 · Preparar o Dashboard</a></li><li><a href="#ms-instalacao">03 · Instalar os switches MS</a></li><li><a href="#ms-config">04 · Configurar os switches MS</a></li><li><a href="#mr-instalacao">05 · Instalar o MR36</a></li><li><a href="#mr-config">06 · Configurar o wireless</a></li><li><a href="#validacao">07 · Validação</a></li><li><a href="#troubleshooting">08 · Solução de problemas</a></li><li><a href="#checklist">09 · Checklist de implantação</a></li><li><a href="#fontes">10 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='meraki-ms-mr36-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});document.getElementById('ck-count').textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  document.getElementById('ck-reset').addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>
