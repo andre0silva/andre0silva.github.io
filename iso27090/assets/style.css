@@ -6,6 +6,7 @@
 @font-face{font-family:"JetBrains Mono";font-style:normal;font-display:swap;font-weight:400;src:url(fonts/jetbrains-mono-latin-400-normal.woff2) format("woff2")}
 @font-face{font-family:"JetBrains Mono";font-style:normal;font-display:swap;font-weight:500;src:url(fonts/jetbrains-mono-latin-500-normal.woff2) format("woff2")}
 :root{
+  color-scheme:light;
   --bg:#f3f6f7; --surface:#ffffff; --fg:#14232b; --muted:#5a6b73; --line:#d5dee2;
   --accent:#0d5e6e; --accent-soft:#e1eff1; --signal:#b86a12; --signal-soft:#f7ecdd;
   --ok:#2f7a4b; --ok-soft:#e3f1e8; --bad:#a63d32; --bad-soft:#f6e3e0; --ink:#14232b; --on-ink:#eef4f6;
@@ -13,14 +14,6 @@
   --body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0f171b; --surface:#16222a; --fg:#e4ecef; --muted:#97a9b1; --line:#2a3a42;
-  --accent:#5fbccd; --accent-soft:#183840; --signal:#e3a456; --signal-soft:#3a2b18;
-  --ok:#7cc896; --ok-soft:#1b3424; --bad:#ec8f84; --bad-soft:#3d1f1b; --ink:#0a1115; --on-ink:#e4ecef; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0f171b; --surface:#16222a; --fg:#e4ecef; --muted:#97a9b1; --line:#2a3a42;
-  --accent:#5fbccd; --accent-soft:#183840; --signal:#e3a456; --signal-soft:#3a2b18;
-  --ok:#7cc896; --ok-soft:#1b3424; --bad:#ec8f84; --bad-soft:#3d1f1b; --ink:#0a1115; --on-ink:#e4ecef; color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-padding-top:72px}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6}
