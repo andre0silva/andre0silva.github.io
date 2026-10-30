@@ -13,7 +13,7 @@
 <meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
 <link rel="canonical" href="https://andre0silva.github.io/guias/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="../assets/site.css?v=20261030c">
+<link rel="stylesheet" href="../assets/site.css?v=20261030d">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -36,6 +36,11 @@
 .areas-nav a span{font-size:.8rem;color:var(--muted)}
 .areas-nav a.has{border-color:var(--mark);box-shadow:inset 3px 0 0 var(--mark)}
 .areas-nav a:hover{border-color:var(--accent)}
+.areas-nav a[aria-current="true"]{background:var(--ink);border-color:var(--ink);color:var(--on-ink);box-shadow:none}
+.areas-nav a[aria-current="true"] span{color:rgba(255,245,227,.7)}
+.area[hidden]{display:none}
+.filter-note{font-size:.9rem;color:var(--muted);margin:-28px 0 20px}
+.filter-note button{font:inherit;color:var(--accent);background:none;border:0;padding:0;text-decoration:underline;cursor:pointer}
 .area{display:grid;grid-template-columns:240px minmax(0,1fr);gap:clamp(18px,3vw,36px);padding-block:28px;border-top:1px solid var(--line)}
 .area:last-of-type{padding-bottom:clamp(48px,7vw,80px)}
 .area-h{display:grid;gap:6px;align-content:start}
@@ -64,8 +69,9 @@
 <p class="sub">Material prático para implementar, não só para ler: roteiros, checklists, autoavaliações e modelos prontos. Gratuito, em português, sob licença CC BY-NC 4.0. 2 guias publicados em 7 áreas.</p>
 <span class="bar"></span>
 </div>
-<nav class="areas-nav" aria-label="Áreas do acervo"><a href="#seguranca" class="has"><b>Segurança</b><span>1 guia</span></a><a href="#rede-firewall" class="has"><b>Rede e firewall</b><span>1 guia</span></a><a href="#infraestrutura" class="soon"><b>Infraestrutura</b><span>0 guias · em preparação</span></a><a href="#cloud" class="soon"><b>Cloud</b><span>0 guias · em preparação</span></a><a href="#observabilidade" class="soon"><b>Observabilidade</b><span>0 guias · em preparação</span></a><a href="#storage-backup" class="soon"><b>Storage e backup</b><span>0 guias · em preparação</span></a><a href="#governanca-processos" class="soon"><b>Governança e processos</b><span>0 guias · em preparação</span></a></nav>
-<section class="area" id="seguranca">
+<nav class="areas-nav" aria-label="Filtrar guias por área"><a href="#todas" data-f="todas" class="all" aria-current="true"><b>Todas as áreas</b><span>2 guias</span></a><a href="#seguranca" data-f="seguranca" class="has"><b>Segurança</b><span>1 guia</span></a><a href="#rede-firewall" data-f="rede-firewall" class="has"><b>Rede e firewall</b><span>1 guia</span></a><a href="#infraestrutura" data-f="infraestrutura" class="soon"><b>Infraestrutura</b><span>0 guias · em preparação</span></a><a href="#cloud" data-f="cloud" class="soon"><b>Cloud</b><span>0 guias · em preparação</span></a><a href="#observabilidade" data-f="observabilidade" class="soon"><b>Observabilidade</b><span>0 guias · em preparação</span></a><a href="#storage-backup" data-f="storage-backup" class="soon"><b>Storage e backup</b><span>0 guias · em preparação</span></a><a href="#governanca-processos" data-f="governanca-processos" class="soon"><b>Governança e processos</b><span>0 guias · em preparação</span></a></nav>
+<p class="filter-note" id="fnote" hidden>Mostrando: <b id="fname"></b> · <button type="button" id="fall">ver todas as áreas</button></p>
+<div id="areas"><section class="area" id="seguranca">
 <header class="area-h"><h2>Segurança</h2><p>Normas, identidade e controles de segurança aplicados.</p><span class="cnt">1 guia</span></header>
 <div class="guides"><a class="guide" href="../iso27090/">
 <div class="g-top"><span class="chip">Segurança</span><span class="g-st">Disponível</span></div>
@@ -98,7 +104,24 @@
 </section><section class="area" id="governanca-processos">
 <header class="area-h"><h2>Governança e processos</h2><p>Mudança, ITIL e gestão de TI.</p><span class="cnt">0 guias</span></header>
 <div class="empty"><span class="label">Em preparação</span><p>Guia desta área em produção. Enquanto isso, veja os <a href="../artigos/">artigos</a> relacionados.</p></div>
-</section>
+</section></div>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.areas-nav a')), secs=[].slice.call(document.querySelectorAll('#areas .area'));
+  var note=document.getElementById('fnote'), name=document.getElementById('fname');
+  function apply(f, push){
+    if(!f || (f!=='todas' && !document.getElementById(f))) f='todas';
+    secs.forEach(function(s){ s.hidden = !(f==='todas' || s.id===f); });
+    links.forEach(function(a){ a.setAttribute('aria-current', a.dataset.f===f ? 'true' : 'false'); });
+    if(f==='todas'){ note.hidden=true; } else { note.hidden=false; name.textContent=document.querySelector('#'+f+' h2').textContent; }
+    if(push) history.replaceState(null,'', f==='todas' ? location.pathname : '#'+f);
+  }
+  links.forEach(function(a){ a.addEventListener('click', function(e){ e.preventDefault(); apply(a.dataset.f, true); document.querySelector('.areas-nav').scrollIntoView({block:'start'}); }); });
+  document.getElementById('fall').addEventListener('click', function(){ apply('todas', true); });
+  window.addEventListener('hashchange', function(){ apply(location.hash.slice(1)); });
+  apply(location.hash.slice(1));
+})();
+</script>
 </main>
 <footer class="in foot">
   <a class="logo" href="../" aria-label="Início">A<span>/</span>F</a>
