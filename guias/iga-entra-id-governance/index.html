@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IGA com Microsoft Entra ID Governance: implantação passo a passo · Guias · André Ferreira</title>
+<meta name="description" content="Guia prático em português para implantar IGA com Microsoft Entra ID Governance: provisionamento do RH, fluxos de ciclo de vida, integração de apps, pacotes de acesso, revisões de acesso, PIM e checklist.">
+<meta property="og:title" content="IGA com Microsoft Entra ID Governance: implantação passo a passo · Guias · André Ferreira">
+<meta property="og:description" content="Guia prático em português para implantar IGA com Microsoft Entra ID Governance: provisionamento do RH, fluxos de ciclo de vida, integração de apps, pacotes de acesso, revisões de acesso, PIM e checklist.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/iga-entra-id-governance/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/iga-entra-id-governance/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7"/></symbol>
+<symbol id="i-in" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+</style>
+<style>
+.fig{margin:16px 0 24px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px}
+.fig.sm img{max-width:620px;margin:0 auto}
+.fig figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.fig figcaption a{color:var(--muted)}
+</style>
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / Microsoft Entra ID Governance</p>
+<span class="chip">Segurança</span>
+<h1 style="margin-top:12px">IGA com Microsoft Entra ID Governance: implantação passo a passo</h1>
+<p class="sub">Roteiro objetivo para colocar governança de identidade em produção: ciclo de vida a partir do RH, aplicativos integrados, pacotes de acesso, revisões de acesso e acesso privilegiado com PIM.</p>
+<div class="intro-meta"><span class="chip m">IGA</span><span class="chip m">Joiner · Mover · Leaver</span><span class="chip m">Entitlement management</span><span class="chip m">Access reviews</span><span class="chip m">PIM</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<h2 id="escopo"><span class="n">00</span>Antes de começar</h2>
+<p>IGA (Identity Governance and Administration) é o conjunto de processos e controles que garante que cada identidade tenha o acesso certo, pelo tempo certo, com evidência para auditoria. No Microsoft Entra, isso responde a quatro perguntas:</p>
+<ol>
+<li>Quem deve ter acesso a quais recursos?</li>
+<li>O que essas identidades estão fazendo com esse acesso?</li>
+<li>Existem controles para gerenciar o acesso?</li>
+<li>O auditor consegue comprovar que os controles funcionam?</li>
+</ol>
+<p>A implantação cobre três ciclos de vida: <b>identidade</b> (entrada, mudança e saída da pessoa), <b>acesso</b> (o que ela recebe além do básico) e <b>acesso privilegiado</b> (administradores).</p>
+<div class="call warn"><b class="t">Material independente</b><p>Guia escrito com palavras próprias a partir da documentação pública do Microsoft Learn. Não é material oficial da Microsoft. Diagramas e capturas são da Microsoft (licença CC BY 4.0) e são carregados direto do Microsoft Learn. Menus do centro de administração mudam com frequência: na dúvida, a <a href="https://learn.microsoft.com/pt-br/entra/id-governance/identity-governance-overview" target="_blank" rel="noopener">documentação oficial</a> é a referência final.</p></div>
+
+<h3>Licenciamento</h3>
+<div class="tbl"><table>
+<thead><tr><th>Combinação</th><th>Observação</th></tr></thead>
+<tbody>
+<tr><td><b>Entra ID Governance</b> + Entra ID P1</td><td>Caminho mais comum. Libera fluxos de ciclo de vida, revisões com recomendações avançadas e governança de apps.</td></tr>
+<tr><td><b>Entra ID Governance Step Up</b> para P2 + Entra ID P2 ou EMS E5</td><td>Para quem já tem P2.</td></tr>
+<tr><td><b>Microsoft Entra Suite</b></td><td>Inclui o Governance.</td></tr>
+<tr><td>Somente Entra ID P2</td><td>Cobre PIM e parte das revisões de acesso e do entitlement management, sem os recursos exclusivos do Governance.</td></tr>
+</tbody></table></div>
+<ul>
+<li>Licencie pelo menos todos os usuários <b>membros</b> governados: quem tem, solicita, aprova ou revisa acesso.</li>
+<li>Convidados (B2B) são cobrados por usuário ativo mensal: vincule o locatário a uma assinatura Azure antes de governar acesso de externos.</li>
+</ul>
+
+<h3>Quem precisa estar envolvido</h3>
+<div class="tbl"><table>
+<thead><tr><th>Equipe</th><th>Papel no projeto</th></tr></thead>
+<tbody>
+<tr><td>TI / IAM</td><td>Integração com RH e apps, automação, revisões de funções privilegiadas.</td></tr>
+<tr><td>Segurança</td><td>Menor privilégio, Zero Trust, requisitos de MFA e Acesso Condicional.</td></tr>
+<tr><td>RH</td><td>Fonte autoritativa das datas de admissão, mudança e desligamento.</td></tr>
+<tr><td>Áreas de negócio</td><td>Donos de recursos: aprovam e revisam o acesso dos seus sistemas.</td></tr>
+<tr><td>Governança / auditoria</td><td>Define frequência das revisões, valida evidências e relatórios.</td></tr>
+</tbody></table></div>
+<p>Console de trabalho: <a href="https://entra.microsoft.com" target="_blank" rel="noopener"><code>entra.microsoft.com</code></a> › <b>ID Governance</b>.</p>
+
+<h2 id="preparar"><span class="n">01</span>Preparar o locatário</h2>
+<ol class="steps">
+<li><b>Arquitetura de locatário</b>Decida em qual locatário cada aplicativo e os parceiros externos serão governados, considerando requisitos de colaboração ou isolamento.</li>
+<li><b>Licenças atribuídas</b>Confirme a combinação de licenças acima e atribua por grupo.</li>
+<li><b>Logs no Azure Monitor</b>O Entra guarda auditoria por apenas 30 dias. Envie os logs de auditoria e entrada para um Log Analytics para ter histórico, pastas de trabalho e consultas.<br><span class="mpath"><b>Entra ID</b><i>›</i><b>Monitoring &amp; health</b><i>›</i><b>Diagnostic settings</b></span></li>
+<li><b>Retenção de objetos</b>Se for preciso provar quem teve acesso a um app há um ano, incluindo contas já excluídas, planeje exportar os dados para Azure Data Explorer.</li>
+<li><b>Revisar funções privilegiadas</b>Antes de tudo, confirme quem está em Global Administrator, Identity Governance Administrator, User Administrator, Application Administrator, Cloud Application Administrator e Privileged Role Administrator. Essas funções conseguem alterar atribuições de apps.</li>
+<li><b>Isolar a administração da nuvem</b>Contas administrativas da nuvem não devem ser contas sincronizadas do AD local. Isso protege o Microsoft 365 contra um comprometimento do ambiente local.</li>
+<li><b>Atributos de RH no Entra</b>Garanta que <code>employeeHireDate</code>, <code>employeeLeaveDateTime</code>, <code>department</code>, <code>jobTitle</code>, <code>employeeType</code> e <code>manager</code> estejam preenchidos e confiáveis. Todo o resto da automação depende deles.</li>
+</ol>
+
+<h2 id="identidade"><span class="n">02</span>Ciclo de vida da identidade</h2>
+<figure class="fig"><img src="https://learn.microsoft.com/pt-br/entra/id-governance/media/identity-governance-overview/identity-lifecycle.png" alt="Ciclo de vida da identidade" loading="lazy"><figcaption>Ciclo de vida da identidade. Imagem: <a href="https://learn.microsoft.com/pt-br/entra/id-governance/identity-governance-overview" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+<ol class="steps">
+<li><b>Provisionamento a partir do RH</b>Conecte o sistema de RH (SuccessFactors, Workday ou via API de provisionamento de entrada) para criar, atualizar e desativar contas no AD e no Entra ID automaticamente. O RH vira a fonte autoritativa.<br><span class="mpath"><b>Entra ID</b><i>›</i><b>Enterprise apps</b><i>›</i><b>New application</b></span> (ex.: <i>SAP SuccessFactors to Active Directory User Provisioning</i>)</li>
+<li><b>Fluxos de trabalho do ciclo de vida</b>Automatize tarefas nos eventos de entrada, mudança e saída: gerar Temporary Access Pass e enviar ao gestor antes do primeiro dia, e-mail de boas-vindas, adicionar a grupos e Teams, remover licenças e grupos no desligamento, excluir a conta depois de X dias.<br><span class="mpath"><b>ID Governance</b><i>›</i><b>Lifecycle workflows</b><i>›</i><b>Create workflow</b></span></li>
+<li><b>Atribuição automática por atributo</b>Use políticas de atribuição automática em pacotes de acesso para dar e retirar grupos, funções de app e sites SharePoint conforme departamento, cargo ou centro de custo. Mudou o atributo, mudou o acesso.</li>
+<li><b>Provisionamento para aplicativos</b>Crie, atualize e remova contas nos sistemas de destino via SCIM, LDAP, SQL ou conectores da galeria (seção 04).</li>
+</ol>
+<figure class="fig"><img src="https://learn.microsoft.com/pt-br/entra/id-governance/media/what-are-lifecycle-workflows/intro-2.png" alt="Diagrama de fluxos de trabalho do ciclo de vida" loading="lazy"><figcaption>Fluxos de trabalho do ciclo de vida. Imagem: <a href="https://learn.microsoft.com/pt-br/entra/id-governance/what-are-lifecycle-workflows" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+<div class="tbl"><table>
+<thead><tr><th>Evento</th><th>Gatilho típico</th><th>Tarefas sugeridas</th></tr></thead>
+<tbody>
+<tr><td><b>Joiner</b></td><td><code>employeeHireDate</code> − 7 dias / dia 0</td><td>TAP para o gestor, e-mail de boas-vindas, grupos e Teams básicos, licença.</td></tr>
+<tr><td><b>Mover</b></td><td>Mudança de <code>department</code> ou <code>jobTitle</code></td><td>Remover acessos da área antiga, notificar gestor, revisar pacotes de acesso.</td></tr>
+<tr><td><b>Leaver</b></td><td><code>employeeLeaveDateTime</code> dia 0 / +7 / +30</td><td>Bloquear entrada, remover grupos, Teams e licenças, notificar gestor, excluir conta.</td></tr>
+</tbody></table></div>
+<div class="call"><b class="t">Convidados também têm ciclo de vida</b><p>Para parceiros e fornecedores, use o entitlement management (seção 05): o convidado é criado quando o pedido é aprovado e removido quando o acesso expira. Revisões de acesso fazem a limpeza dos convidados antigos.</p></div>
+
+<h2 id="politicas"><span class="n">03</span>Definir as políticas de acesso</h2>
+<figure class="fig"><img src="https://learn.microsoft.com/pt-br/entra/id-governance/media/identity-governance-overview/access-lifecycle.png" alt="Ciclo de vida de acesso" loading="lazy"><figcaption>Ciclo de vida de acesso. Imagem: <a href="https://learn.microsoft.com/pt-br/entra/id-governance/identity-governance-overview" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+<p>Antes de configurar qualquer coisa, documente com os donos de negócio, compliance e risco quem deve ter acesso a cada aplicativo crítico.</p>
+<ol class="steps">
+<li><b>Levantar funções do aplicativo</b>Liste as funções e permissões que cada app expõe (ex.: Usuário, Administrador) e se ele usa funções de app, grupos ou declarações no token.</li>
+<li><b>Escolher o que será governado</b>Priorize funções e grupos com acesso privilegiado ou a dados sensíveis.</li>
+<li><b>Pré-requisitos e aprovadores</b>Quem pode pedir (funcionário, área, centro de custo, externo) e quem aprova (gestor, dono do recurso, segurança), com uma ou mais fases.</li>
+<li><b>Duração e expiração</b>Acesso permanente com revisão anual, ou acesso por projeto com data de término.</li>
+<li><b>Separação de funções (SoD)</b>Pares de funções incompatíveis que a mesma pessoa não pode ter.</li>
+<li><b>Acesso Condicional</b>MFA, dispositivo conforme, local e termos de uso exigidos para entrar no app.</li>
+<li><b>Exceções</b>Auditores, fornecedores, viagens: política separada, com aprovador e prazo próprios.</li>
+</ol>
+<p>Modelo de matriz para preencher por aplicativo:</p>
+<div class="tbl"><table>
+<thead><tr><th>Função do app</th><th>Quem pode pedir</th><th>Aprovador</th><th>Duração</th><th>SoD</th><th>Acesso Condicional</th></tr></thead>
+<tbody>
+<tr><td>Financeiro · Analista</td><td>Membro da área Financeira</td><td>Gestor</td><td>Revisão anual</td><td>Não pode ter Financeiro · Aprovador</td><td>MFA + dispositivo conforme</td></tr>
+<tr><td>Financeiro · Analista</td><td>Funcionário de outra área</td><td>Gestor + dono do sistema</td><td>90 dias</td><td>—</td><td>MFA + dispositivo conforme</td></tr>
+<tr><td>Financeiro · Analista</td><td>Consultor externo</td><td>Dono do sistema</td><td>30 dias</td><td>—</td><td>MFA</td></tr>
+</tbody></table></div>
+<p>Se a empresa já tem um modelo de funções organizacionais (RBAC por cargo/área), planeje migrá-lo para pacotes de acesso com atribuição automática.</p>
+
+<h2 id="aplicativos"><span class="n">04</span>Integrar os aplicativos</h2>
+<p>Um app só é governável de verdade quando depende do Entra ID para <b>SSO</b> (o Entra emite o token) ou para a <b>lista de usuários e grupos</b> (provisionamento, Graph ou grupos do AD via Kerberos).</p>
+<ol class="steps">
+<li><b>Verificar se o app já existe</b>Procure em <span class="mpath"><b>Entra ID</b><i>›</i><b>Enterprise apps</b></span> e em <b>App registrations</b>.</li>
+<li><b>Configurar o SSO</b>App da galeria: siga o tutorial do app. App próprio: OpenID Connect ou SAML. App local: SAML, IWA ou cabeçalho via <b>Application Proxy</b>. SAP BTP: via SAP Cloud Identity Services. SAP GUI: SAP Secure Login Service ou Entra Private Access.</li>
+<li><b>Definir funções de app</b>Crie as funções no manifesto do app e atribua cada usuário à sua função. Se a pessoa pode ter várias funções ao mesmo tempo, prefira grupos de segurança.</li>
+<li><b>Configurar o provisionamento</b>Escolha o conector conforme o app:</li>
+</ol>
+<div class="tbl"><table>
+<thead><tr><th>O app usa</th><th>Integração</th></tr></thead>
+<tbody>
+<tr><td>SCIM na nuvem</td><td>Provisionamento SCIM direto</td></tr>
+<tr><td>SCIM local</td><td>Agente de provisionamento local + SCIM</td></tr>
+<tr><td>Banco SQL próprio</td><td>Agente de provisionamento + conector SQL</td></tr>
+<tr><td>Diretório LDAP</td><td>Agente de provisionamento + conector LDAP</td></tr>
+<tr><td>API SOAP/REST</td><td>Conector de serviços web</td></tr>
+<tr><td>Grupos do AD (Kerberos)</td><td>Group writeback do Entra Cloud Sync para o AD</td></tr>
+<tr><td>SAP Cloud Identity Services</td><td>Provisionamento SCIM para o SAP CIS</td></tr>
+<tr><td>SAP ECC (NetWeaver AS ABAP 7.0+)</td><td>Conector de serviços web para SAP ECC</td></tr>
+</tbody></table></div>
+<ol class="steps" start="5" style="counter-reset:s 4">
+<li><b>Exigir atribuição</b>Defina <b>Assignment required? = Yes</b> no app. Sem isso, qualquer usuário do diretório entra e não há o que revisar.<br><span class="mpath"><b>Enterprise apps</b><i>›</i><b>&lt;app&gt;</b><i>›</i><b>Properties</b></span></li>
+</ol>
+<figure class="fig sm"><img src="https://learn.microsoft.com/pt-br/entra/id-governance/media/deploy-access-review/6-plan-applications-assignment-required.png" alt="Opção Atribuição de usuário necessária definida como Sim" loading="lazy"><figcaption>Atribuição obrigatória habilitada no aplicativo. Imagem: <a href="https://learn.microsoft.com/pt-br/entra/id-governance/deploy-access-reviews" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+<h3>Revisão inicial (linha de base)</h3>
+<p>Se o app já estava em uso, há acessos concedidos de forma manual ao longo dos anos. Antes de abrir pedidos de acesso, faça uma revisão de todos os usuários atuais:</p>
+<ul>
+<li>App com banco ou LDAP próprio: importe os usuários existentes e crie as atribuições de função no Entra.</li>
+<li>App sem provisionamento: obtenha a lista de usuários do app e crie as atribuições para cada um.</li>
+<li>App com grupos do AD: revise esses grupos; ao final, remova os negados manualmente ou migre para grupo do Entra com writeback.</li>
+<li>Resultado: todos os acessos revisados pelo menos uma vez. Só então siga para a seção 05.</li>
+</ul>
+
+<h2 id="pacotes"><span class="n">05</span>Gerenciamento de direitos</h2>
+<figure class="fig"><img src="https://learn.microsoft.com/pt-br/entra/id-governance/media/entitlement-management-overview/elm-overview-access-package.png" alt="Diagrama de pacote de acesso e políticas" loading="lazy"><figcaption>Pacote de acesso: recursos + políticas. Imagem: <a href="https://learn.microsoft.com/pt-br/entra/id-governance/entitlement-management-overview" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+<p>Pacote de acesso é o "kit" de grupos, funções de app e sites SharePoint que alguém precisa para uma função ou projeto. A política do pacote define quem pede, quem aprova, por quanto tempo e quando revisa.</p>
+<ol class="steps">
+<li><b>Criar o catálogo</b>Um catálogo por domínio de negócio ou cenário. Delegue a dona do negócio como proprietária do catálogo.<br><span class="mpath"><b>ID Governance</b><i>›</i><b>Entitlement management</b><i>›</i><b>Catalogs</b></span></li>
+<li><b>Adicionar recursos ao catálogo</b>O app e todos os grupos dos quais ele depende.</li>
+<li><b>Criar um pacote por função/grupo</b>A primeira política deve ser de <b>atribuição direta</b> (só administradores atribuem), já com revisão de acesso configurada.<br><span class="mpath"><b>Entitlement management</b><i>›</i><b>Access packages</b><i>›</i><b>New access package</b></span></li>
+<li><b>Configurar SoD</b>Marque pacotes ou grupos incompatíveis. Para exceções, crie um pacote de override com aprovação reforçada.</li>
+<li><b>Migrar os usuários atuais</b>Atribua ao pacote, pela política direta, quem já tinha o acesso. Em massa, use Graph ou PowerShell.</li>
+<li><b>Abrir pedidos</b>Adicione políticas de solicitação com aprovação em uma ou mais fases, justificativa, expiração e revisão recorrente. Usuário pede em <code>myaccess.microsoft.com</code>.</li>
+<li><b>Externos</b>Defina as organizações conectadas que podem solicitar. O convidado é criado na aprovação e removido quando o último acesso expira.</li>
+<li><b>Automação</b>Políticas de atribuição automática por atributo, configurações de ciclo de vida com data, e Logic Apps para fluxos customizados (abrir chamado, criar conta em sistema legado).</li>
+</ol>
+<figure class="fig"><img src="https://learn.microsoft.com/pt-br/entra/id-governance/media/deploy-access-review/5-plan-access-packages-admin-ui.png" alt="Aba Ciclo de vida da política do pacote de acesso com configurações de revisão" loading="lazy"><figcaption>Aba Ciclo de vida da política: expiração e revisões de acesso. Imagem: <a href="https://learn.microsoft.com/pt-br/entra/id-governance/deploy-access-reviews" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+<div class="call"><b class="t">Privilégio mínimo para administrar</b><p>Use a função <b>Identity Governance Administrator</b> em vez de Global Administrator. Para áreas de negócio, delegue como <b>Catalog owner</b> ou <b>Access package manager</b>.</p></div>
+
+<h2 id="revisoes"><span class="n">06</span>Revisões de acesso</h2>
+<figure class="fig"><img src="https://learn.microsoft.com/pt-br/entra/id-governance/media/deploy-access-review/1-planning-review.png" alt="Fluxo das revisões de acesso" loading="lazy"><figcaption>Fluxo de uma revisão de acesso. Imagem: <a href="https://learn.microsoft.com/pt-br/entra/id-governance/deploy-access-reviews" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+<h3>O que revisar</h3>
+<div class="tbl"><table>
+<thead><tr><th>Alvo</th><th>Quando usar</th><th>Quem cria</th></tr></thead>
+<tbody>
+<tr><td>Pacote de acesso</td><td>Padrão para tudo que entrou pelo entitlement management</td><td>Identity Governance Admin, Catalog owner, Access package manager</td></tr>
+<tr><td>Grupo (segurança, M365, Teams)</td><td>Acesso concedido por grupo; convidados em Teams</td><td>User Admin, Identity Governance Admin, dono do grupo (se habilitado)</td></tr>
+<tr><td>Aplicativo</td><td>Atribuição direta, dado crítico, requisito de compliance</td><td>User Admin, Identity Governance Admin</td></tr>
+<tr><td>Funções do Entra e do Azure</td><td>Acesso privilegiado (via PIM)</td><td>Privileged Role Admin; no Azure, User Access Admin ou Owner</td></tr>
+</tbody></table></div>
+<h3>Montar a revisão</h3>
+<ol class="steps">
+<li><b>Escopo</b>Recurso e quem será revisado: todos ou somente convidados.<br><span class="mpath"><b>ID Governance</b><i>›</i><b>Access reviews</b><i>›</i><b>New access review</b></span></li>
+<li><b>Revisores</b>Dono do recurso, gestor, revisor indicado ou o próprio usuário (autoavaliação). Com gestor ou dono, defina revisores de fallback. Não muda depois de iniciada.</li>
+<li><b>Frequência e prazo</b>Mensal, trimestral, anual. Revisões frequentes demais ou com poucos revisores viram "aprovar tudo".</li>
+<li><b>E-mail personalizado</b>Mensagem curta explicando quem pede, o que se espera e onde há material de apoio. Revisores atuam em <code>myaccess.microsoft.com</code>.</li>
+<li><b>Recomendações</b>Habilite as recomendações baseadas em último login (ex.: sem entrada interativa em 90 dias) e, com licença Governance, afinidade usuário-grupo e usuários inativos.</li>
+<li><b>Ação automática</b><b>Auto apply results to resource</b> remove automaticamente quem foi negado. Defina também o que acontece se o revisor não responder.</li>
+</ol>
+<figure class="fig sm"><img src="https://learn.microsoft.com/pt-br/entra/id-governance/media/deploy-access-review/3-automate-actions-settings.png" alt="Configurações de conclusão da revisão com aplicação automática dos resultados" loading="lazy"><figcaption>Configurações de conclusão da revisão. Imagem: <a href="https://learn.microsoft.com/pt-br/entra/id-governance/deploy-access-reviews" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+<p>Exemplo de plano de revisão:</p>
+<div class="tbl"><table>
+<thead><tr><th>Componente</th><th>Valor</th></tr></thead>
+<tbody>
+<tr><td>Recurso</td><td>Acesso ao ERP Financeiro</td></tr>
+<tr><td>Frequência</td><td>Trimestral</td></tr>
+<tr><td>Revisores</td><td>Gestor direto · fallback: dono do sistema</td></tr>
+<tr><td>Prazo</td><td>14 dias</td></tr>
+<tr><td>Ação automática</td><td>Remover negados e quem não teve login em 90 dias</td></tr>
+<tr><td>Sem resposta</td><td>Aplicar recomendação</td></tr>
+</tbody></table></div>
+<div class="call warn"><b class="t">Grupos sincronizados do AD</b><p>Revisões não alteram grupos cuja origem é o AD local. Revise mesmo assim e aplique o resultado manualmente (CSV ou Graph + PowerShell) até migrar para grupos do Entra com writeback.</p></div>
+<p>Revisões que não podem faltar: convidados em grupos e Teams, membros de grupos de <b>exclusão de Acesso Condicional</b>, e todas as funções privilegiadas.</p>
+
+<h2 id="pim"><span class="n">07</span>Acesso privilegiado com PIM</h2>
+<figure class="fig"><img src="https://learn.microsoft.com/pt-br/entra/id-governance/media/identity-governance-overview/privileged-access-lifecycle.png" alt="Ciclo de vida de acesso privilegiado" loading="lazy"><figcaption>Ciclo de vida de acesso privilegiado. Imagem: <a href="https://learn.microsoft.com/pt-br/entra/id-governance/identity-governance-overview" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+<ol class="steps">
+<li><b>Inventariar atribuições</b>Liste quem tem funções do Entra, funções do Azure e grupos privilegiados.<br><span class="mpath"><b>ID Governance</b><i>›</i><b>Privileged Identity Management</b></span></li>
+<li><b>Converter para elegível</b>Troque atribuições permanentes por <b>elegíveis</b>: o administrador ativa a função só quando precisa (just-in-time). Mantenha permanentes apenas as contas de emergência.</li>
+<li><b>Configurar a ativação</b>Por função: duração máxima (ex.: 4 h), MFA ou contexto de autenticação, justificativa, número do chamado e aprovação para as funções mais críticas.</li>
+<li><b>Notificações e alertas</b>Avisos de ativação para a segurança e alertas de atribuições fora do PIM.</li>
+<li><b>Revisões recorrentes</b>Revise trimestralmente pelo menos: Global Administrator, User Administrator, Privileged Authentication Administrator, Conditional Access Administrator, Security Administrator e administradores de serviços M365/Dynamics. Inclua atribuições elegíveis e ativas.</li>
+<li><b>Grupos privilegiados</b>Use PIM para grupos quando o acesso administrativo é concedido por associação a grupo.</li>
+</ol>
+<figure class="fig sm"><img src="https://learn.microsoft.com/pt-br/entra/id-governance/privileged-identity-management/media/pim-configure/role-activation.png" alt="Ativação de função no Privileged Identity Management" loading="lazy"><figcaption>Ativação de função elegível no PIM. Imagem: <a href="https://learn.microsoft.com/pt-br/entra/id-governance/privileged-identity-management/pim-configure" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+
+<h2 id="monitorar"><span class="n">08</span>Monitorar e automatizar</h2>
+<ul>
+<li><b>Atribuições fora do processo:</b> monitore no Azure Monitor atribuições de função de app e mudanças de grupo que não vieram do entitlement management. Questione o dono do app.</li>
+<li><b>Contas criadas direto no app:</b> em apps com banco ou LDAP próprio, confirme que todas as contas vieram do provisionamento do Entra. Use a descoberta de contas para achar órfãs.</li>
+<li><b>Aprovadores e revisores atualizados:</b> quem saiu da empresa ou mudou de área precisa ser trocado nas políticas.</li>
+<li><b>Revisões concluídas:</b> acompanhe a taxa de decisão. Revisor que não decide é sinal de processo mal desenhado.</li>
+<li><b>Desprovisionamento:</b> verifique nos logs de provisionamento que os negados foram removidos do app de destino.</li>
+<li><b>Auditoria:</b> filtre logs de auditoria por categoria <i>Policy</i> e atividades de revisão (criar, aprovar, negar, aplicar decisão).</li>
+<li><b>Relatórios:</b> atribuições por pacote, histórico de mudanças (Azure Monitor), entradas dos últimos 30 dias por app, relatórios históricos no Azure Data Explorer.</li>
+<li><b>Automação:</b> módulo <code>Microsoft.Graph.Identity.Governance</code> com Azure Automation para tarefas agendadas; Graph Explorer para validar consultas antes de levar ao script.</li>
+<li><b>Identidades de agente (IA):</b> agentes com Entra Agent ID são governados pelos mesmos pacotes de acesso, com um patrocinador humano responsável, que passa para o gestor se o patrocinador sair.</li>
+</ul>
+
+<h2 id="piloto"><span class="n">09</span>Piloto e implantação em ondas</h2>
+<ol class="steps">
+<li><b>Escopo pequeno</b>Um app não crítico, um grupo de usuários e revisores engajados.</li>
+<li><b>Sem ação automática no início</b>Revise com aplicação manual dos resultados até entender o impacto.</li>
+<li><b>E-mails válidos</b>Confirme que todos os usuários e revisores têm e-mail no Entra e recebem as notificações.</li>
+<li><b>Registrar remoções</b>Documente todo acesso removido no piloto para restaurar rápido se necessário.</li>
+<li><b>Comunicar a mudança cultural</b>A decisão de acesso passa da TI para o dono do negócio. Treine os revisores e mostre como usar as recomendações.</li>
+<li><b>Expandir</b>App por app, área por área, ligando a ação automática quando o processo estiver estável.</li>
+</ol>
+
+<h2 id="checklist"><span class="n">10</span>Checklist de implantação</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Fundação</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="f1"><span>Licenças Entra ID Governance atribuídas aos usuários governados</span></label></li>
+<li><label><input type="checkbox" data-k="f2"><span>Locatário vinculado a assinatura Azure para convidados</span></label></li>
+<li><label><input type="checkbox" data-k="f3"><span>Logs de auditoria e entrada no Azure Monitor</span></label></li>
+<li><label><input type="checkbox" data-k="f4"><span>Funções privilegiadas revisadas e admins de nuvem isolados do AD</span></label></li>
+<li><label><input type="checkbox" data-k="f5"><span>Atributos de RH (datas, área, cargo, gestor) confiáveis</span></label></li>
+</ul>
+<h3>Ciclo de vida</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="l1"><span>Provisionamento de entrada do RH em produção</span></label></li>
+<li><label><input type="checkbox" data-k="l2"><span>Fluxos joiner, mover e leaver criados e testados</span></label></li>
+<li><label><input type="checkbox" data-k="l3"><span>Atribuição automática por atributo nos pacotes de base</span></label></li>
+</ul>
+<h3>Aplicativos e acesso</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="a1"><span>Matriz de políticas aprovada por app crítico</span></label></li>
+<li><label><input type="checkbox" data-k="a2"><span>SSO e provisionamento configurados</span></label></li>
+<li><label><input type="checkbox" data-k="a3"><span>Assignment required = Yes</span></label></li>
+<li><label><input type="checkbox" data-k="a4"><span>Revisão inicial (linha de base) concluída</span></label></li>
+<li><label><input type="checkbox" data-k="a5"><span>Catálogos, pacotes e SoD configurados</span></label></li>
+<li><label><input type="checkbox" data-k="a6"><span>Usuários atuais migrados para os pacotes</span></label></li>
+<li><label><input type="checkbox" data-k="a7"><span>Políticas de solicitação com aprovação e expiração</span></label></li>
+<li><label><input type="checkbox" data-k="a8"><span>Acesso Condicional aplicado aos apps</span></label></li>
+</ul>
+<h3>Revisões e privilégio</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="r1"><span>Revisões recorrentes de pacotes, grupos e apps</span></label></li>
+<li><label><input type="checkbox" data-k="r2"><span>Revisão de convidados e de exclusões do Acesso Condicional</span></label></li>
+<li><label><input type="checkbox" data-k="r3"><span>Funções privilegiadas elegíveis no PIM, com MFA e justificativa</span></label></li>
+<li><label><input type="checkbox" data-k="r4"><span>Revisão trimestral de funções privilegiadas</span></label></li>
+<li><label><input type="checkbox" data-k="r5"><span>Monitoramento de atribuições fora do processo</span></label></li>
+</ul>
+
+<h2 id="fontes"><span class="n">11</span>Fontes</h2>
+<p>Documentação oficial usada como referência:</p>
+<ul>
+<li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/identity-governance-overview" target="_blank" rel="noopener">O que é o Microsoft Entra ID Governance?</a></li>
+<li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/identity-governance-applications-prepare" target="_blank" rel="noopener">Controlar o acesso para aplicativos no seu ambiente</a></li>
+<li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/identity-governance-applications-define" target="_blank" rel="noopener">Definir políticas organizacionais de acesso a aplicativos</a></li>
+<li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/identity-governance-applications-integrate" target="_blank" rel="noopener">Integrar aplicativos e estabelecer linha de base revisada</a></li>
+<li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/identity-governance-applications-deploy" target="_blank" rel="noopener">Implantar políticas organizacionais para aplicativos</a></li>
+<li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/deploy-access-reviews" target="_blank" rel="noopener">Planejar uma implantação de revisões de acesso</a></li>
+<li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/entitlement-management-overview" target="_blank" rel="noopener">Gerenciamento de direitos</a></li>
+<li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/what-are-lifecycle-workflows" target="_blank" rel="noopener">Fluxos de trabalho do ciclo de vida</a></li>
+<li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/privileged-identity-management/pim-configure" target="_blank" rel="noopener">Privileged Identity Management</a></li>
+<li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/licensing-fundamentals" target="_blank" rel="noopener">Conceitos básicos de licenciamento do Entra ID Governance</a></li>
+</ul>
+<div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Diagramas e capturas © Microsoft, sob licença CC BY 4.0, carregados do Microsoft Learn. Microsoft e Entra são marcas da Microsoft Corporation. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#escopo">00 · Antes de começar</a></li><li><a href="#preparar">01 · Preparar o locatário</a></li><li><a href="#identidade">02 · Ciclo de vida da identidade</a></li><li><a href="#politicas">03 · Políticas de acesso</a></li><li><a href="#aplicativos">04 · Integrar aplicativos</a></li><li><a href="#pacotes">05 · Gerenciamento de direitos</a></li><li><a href="#revisoes">06 · Revisões de acesso</a></li><li><a href="#pim">07 · PIM</a></li><li><a href="#monitorar">08 · Monitorar e automatizar</a></li><li><a href="#piloto">09 · Piloto e ondas</a></li><li><a href="#checklist">10 · Checklist</a></li><li><a href="#fontes">11 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='iga-entra-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});document.getElementById('ck-count').textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  document.getElementById('ck-reset').addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>
