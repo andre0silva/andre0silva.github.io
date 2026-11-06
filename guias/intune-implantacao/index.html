@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Microsoft Intune: implantação passo a passo · Guias · André Ferreira</title>
+<meta name="description" content="Guia prático em português para implantar o Microsoft Intune: configuração do locatário, apps e MAM, conformidade com Acesso Condicional, perfis de configuração, registro de dispositivos e checklist.">
+<meta property="og:title" content="Microsoft Intune: implantação passo a passo · Guias · André Ferreira">
+<meta property="og:description" content="Guia prático em português para implantar o Microsoft Intune: configuração do locatário, apps e MAM, conformidade com Acesso Condicional, perfis de configuração, registro de dispositivos e checklist.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/intune-implantacao/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/intune-implantacao/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7"/></symbol>
+<symbol id="i-in" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+</style>
+<style>
+.fig{margin:16px 0 24px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+.fig img{display:block;width:100%;height:auto;border-radius:6px}
+.fig figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.fig figcaption a{color:var(--muted)}
+</style>
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / Microsoft Intune</p>
+<span class="chip">Infraestrutura</span>
+<h1 style="margin-top:12px">Microsoft Intune: implantação passo a passo</h1>
+<p class="sub">Roteiro objetivo para sair do locatário vazio até dispositivos registrados, protegidos e em conformidade, na ordem que evita retrabalho e chamados no help desk.</p>
+<div class="intro-meta"><span class="chip m">Intune</span><span class="chip m">Microsoft Entra ID</span><span class="chip m">MAM e MDM</span><span class="chip m">Acesso Condicional</span><span class="chip m">Windows · iOS · Android · macOS</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<h2 id="escopo"><span class="n">00</span>Antes de começar</h2>
+<p>A Microsoft organiza a implantação do Intune em cinco etapas. Este guia segue a mesma ordem, mas resume cada uma no que precisa ser feito, onde clicar e o que validar.</p>
+<figure class="fig"><img src="https://learn.microsoft.com/pt-br/intune/fundamentals/media/get-started/get-started-overview.png" alt="Visão geral das cinco etapas de implantação do Intune: configurar, adicionar e proteger apps, conformidade e Acesso Condicional, configurar dispositivos e registrar dispositivos" loading="lazy"><figcaption>As cinco etapas da implantação. Imagem: <a href="https://learn.microsoft.com/pt-br/intune/fundamentals/get-started" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+<div class="call warn"><b class="t">Material independente</b><p>Guia escrito com palavras próprias a partir da documentação pública do Microsoft Learn. Não é material oficial da Microsoft. Os diagramas são da Microsoft (licença CC BY 4.0) e são carregados direto do Microsoft Learn. Nomes de menu mudam com frequência no centro de administração: na dúvida, a <a href="https://learn.microsoft.com/pt-br/intune/fundamentals/get-started" target="_blank" rel="noopener">documentação oficial</a> é a referência final.</p></div>
+
+<h3>Pré-requisitos</h3>
+<div class="tbl"><table>
+<thead><tr><th>Item</th><th>Para que serve</th><th>Observação</th></tr></thead>
+<tbody>
+<tr><td>Licença Intune</td><td>Cada usuário ou dispositivo sem usuário precisa de uma</td><td>Incluída em Microsoft 365 E3/E5, Business Premium, EMS. Também existe avulsa.</td></tr>
+<tr><td>Microsoft Entra ID P1 ou P2</td><td>Acesso Condicional, grupos dinâmicos, registro automático do Windows</td><td>Sem P1 não há bloqueio de acesso por conformidade.</td></tr>
+<tr><td>Windows Autopilot</td><td>Provisionamento de Windows novo direto da caixa</td><td>Incluído em várias assinaturas Microsoft 365.</td></tr>
+<tr><td>Apple MDM Push Certificate</td><td>Gerenciar iOS/iPadOS e macOS</td><td>Exige um Apple ID corporativo. Renovação anual.</td></tr>
+<tr><td>Managed Google Play</td><td>Gerenciar Android Enterprise</td><td>Vinculado com uma conta Google corporativa.</td></tr>
+<tr><td>Certificados SCEP/PKCS</td><td>Wi-Fi, VPN e e-mail com autenticação por certificado</td><td>Opcional no início. Necessário no nível 3.</td></tr>
+</tbody></table></div>
+<ul>
+<li>Liberar no proxy/firewall os <a href="https://learn.microsoft.com/pt-br/intune/fundamentals/endpoints" target="_blank" rel="noopener">endpoints de rede do Intune</a> (domínios <code>*.manage.microsoft.com</code>, <code>*.microsoftonline.com</code> e demais da lista oficial).</li>
+<li>Conferir se as plataformas e versões de sistema estão na lista de <a href="https://learn.microsoft.com/pt-br/intune/fundamentals/ref-supported-platforms" target="_blank" rel="noopener">configurações com suporte</a>.</li>
+<li>Definir o cenário de partida: nada instalado, outro MDM, Configuration Manager ou GPO (ver seção 06).</li>
+<li>Console de trabalho: <a href="https://intune.microsoft.com" target="_blank" rel="noopener"><code>intune.microsoft.com</code></a>. O Microsoft 365 admin center tem um assistente de configuração guiada que pode ser aberto com a função <b>Global Reader</b>.</li>
+</ul>
+
+<h2 id="etapa1"><span class="n">01</span>Configurar o locatário</h2>
+<figure class="fig"><img src="https://learn.microsoft.com/pt-br/intune/fundamentals/media/deploy-setup-step-1/deployment-plan-setup-intune.png" alt="Diagrama destacando a etapa 1: configurar o Microsoft Intune" loading="lazy"><figcaption>Etapa 1. Imagem: <a href="https://learn.microsoft.com/pt-br/intune/fundamentals/deploy-setup-step-1" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+<ol class="steps">
+<li><b>Entrar ou assinar o Intune</b>Se a organização já tem Microsoft 365, entre com a conta corporativa e adicione o Intune à assinatura. Para avaliar, a trial gratuita traz 25 licenças.</li>
+<li><b>Domínio personalizado (opcional)</b>Troque o <code>empresa.onmicrosoft.com</code> pelo domínio da empresa, criando o registro DNS pedido. Se o tenant já vem do Office 365, o domínio provavelmente já está no Entra ID. Pule em ambiente de teste.</li>
+<li><b>Usuários</b>Crie usuários ou sincronize o AD local com o Entra Connect. Obrigatório, exceto para quiosques sem usuário. Exige função <b>User Administrator</b> ou <b>License Administrator</b>.</li>
+<li><b>Grupos</b>Crie grupos de segurança para atribuir políticas. Separe grupos de <b>usuários</b> e de <b>dispositivos</b> e crie um grupo <b>piloto</b> desde já. Com P1, use grupos dinâmicos, por exemplo <code>(device.deviceOSType -eq "Windows")</code>.<br><span class="mpath"><b>Groups</b><i>›</i><b>New group</b></span></li>
+<li><b>Licenças</b>Atribua uma licença Intune a cada usuário antes do registro. Prefira licenciamento por grupo no Entra ID. Administradores não precisam de licença em tenants criados depois de julho de 2021.</li>
+<li><b>RBAC e tags de escopo</b>Use funções internas (por exemplo <b>Policy and Profile Manager</b> para quem cria políticas de registro) ou crie funções personalizadas com o mínimo necessário. Use tags de escopo para que cada equipe ou região veja só os seus objetos.<br><span class="mpath"><b>Tenant administration</b><i>›</i><b>Roles</b></span></li>
+<li><b>Aprovação de múltiplos administradores</b>Exija que um segundo administrador aprove ações de alto impacto, como apagar ou excluir dispositivos e mudar scripts.<br><span class="mpath"><b>Tenant administration</b><i>›</i><b>Multi Admin Approval</b></span></li>
+<li><b>Autoridade de MDM</b>Precisa estar como <b>Intune</b> antes de qualquer registro. Tenants novos já vêm assim. Confira em:<br><span class="mpath"><b>Tenant administration</b><i>›</i><b>Tenant status</b></span></li>
+<li><b>Portal da Empresa</b>Personalize nome, logo, cores, contatos do suporte e link de privacidade. É o que o usuário vê ao registrar o dispositivo e instalar apps.<br><span class="mpath"><b>Tenant administration</b><i>›</i><b>Customization</b></span></li>
+</ol>
+<div class="call"><b class="t">Bloqueie o que não vai gerenciar</b><p>Por padrão, todas as plataformas podem se registrar. Se a empresa não vai suportar, por exemplo, Android pessoal, crie uma restrição antes de liberar o registro:<br><span class="mpath"><b>Devices</b><i>›</i><b>Enrollment</b><i>›</i><b>Device platform restriction</b></span></p></div>
+
+<h2 id="etapa2"><span class="n">02</span>Adicionar e proteger aplicativos</h2>
+<figure class="fig"><img src="https://learn.microsoft.com/pt-br/intune/fundamentals/media/deploy-protect-apps-step-2/deployment-plan-add-apps.png" alt="Diagrama destacando a etapa 2: adicionar e proteger aplicativos" loading="lazy"><figcaption>Etapa 2. Imagem: <a href="https://learn.microsoft.com/pt-br/intune/fundamentals/deploy-protect-apps-step-2" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+<p>Primeiro decida o modelo de gestão para cada tipo de dispositivo:</p>
+<div class="tbl"><table>
+<thead><tr><th>Modelo</th><th>Quando usar</th><th>Limitações</th></tr></thead>
+<tbody>
+<tr><td><b>MAM sem registro</b> (BYOD)</td><td>Celular pessoal que acessa e-mail e Teams</td><td>Não instala apps, não envia certificado, Wi-Fi nem VPN. O usuário baixa os apps da loja.</td></tr>
+<tr><td><b>MDM + MAM</b></td><td>Dispositivo corporativo</td><td>Controle completo: apps, configuração, conformidade e proteção de dados no app.</td></tr>
+</tbody></table></div>
+<ol class="steps">
+<li><b>Linha de base de apps</b>Adicione os apps que todo dispositivo deve ter: Microsoft 365 Apps, Edge, Outlook, Teams, OneDrive e afins. Atribua como <b>Required</b> ao grupo de dispositivos para que já instalem durante o registro.<br><span class="mpath"><b>Apps</b><i>›</i><b>All apps</b><i>›</i><b>Create</b></span></li>
+<li><b>Apps da loja e LOB (opcional)</b>Adicione apps da Microsoft Store, App Store e Google Play gerenciado, além de apps internos (<code>.intunewin</code>, <code>.ipa</code>, <code>.apk</code>). Guarde os arquivos de origem: eles não são exportáveis do Intune.</li>
+<li><b>Políticas de configuração de app</b>Envie configurações prontas para o app (servidor, porta, idioma, marca), evitando que o usuário configure errado. Útil para Outlook e Edge no iOS e Android.<br><span class="mpath"><b>Apps</b><i>›</i><b>App configuration policies</b></span></li>
+<li><b>Políticas de proteção de app (MAM)</b>Exija PIN no contexto corporativo, bloqueie copiar e colar e "salvar como" para fora dos apps gerenciados, bloqueie dispositivos com root ou jailbreak e permita apagamento seletivo só dos dados da empresa.<br><span class="mpath"><b>Apps</b><i>›</i><b>App protection policies</b><i>›</i><b>Create policy</b></span></li>
+<li><b>MFA no Entra ID</b>Habilite MFA no locatário. Ela é pré-requisito prático para proteger os apps em dispositivos que não serão registrados.</li>
+</ol>
+<div class="tbl"><table>
+<thead><tr><th>Nível de proteção de app</th><th>Para quem</th></tr></thead>
+<tbody>
+<tr><td><b>Nível 1</b> · básico</td><td>Mínimo para todo dispositivo móvel: PIN, criptografia dos dados corporativos e apagamento seletivo.</td></tr>
+<tr><td><b>Nível 2</b> · aprimorado</td><td>Maioria dos usuários que acessam dados sensíveis: restringe transferência de dados e exige versão mínima do sistema.</td></tr>
+<tr><td><b>Nível 3</b> · alto</td><td>Usuários de alto risco: PIN mais complexo, mais restrições e defesa contra ameaças móveis (MTD).</td></tr>
+</tbody></table></div>
+<div class="call"><b class="t">Requisitos do usuário para a proteção funcionar</b><p>Conta no Entra ID, licença Intune atribuída, ser membro do grupo alvo da política e entrar no app com a conta corporativa.</p></div>
+
+<h2 id="etapa3"><span class="n">03</span>Conformidade e Acesso Condicional</h2>
+<figure class="fig"><img src="https://learn.microsoft.com/pt-br/intune/fundamentals/media/deploy-compliance-step-3/deployment-plan-compliance-conditional-access.png" alt="Diagrama destacando a etapa 3: políticas de conformidade e Acesso Condicional" loading="lazy"><figcaption>Etapa 3. Imagem: <a href="https://learn.microsoft.com/pt-br/intune/fundamentals/deploy-compliance-step-3" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+<ol class="steps">
+<li><b>Configurações de conformidade do locatário</b>Ajuste o comportamento global. O ponto principal: marcar como <b>não conforme</b> dispositivos sem política de conformidade atribuída, para que equipamento novo ou desconhecido não entre por padrão.<br><span class="mpath"><b>Devices</b><i>›</i><b>Compliance</b><i>›</i><b>Compliance settings</b></span></li>
+<li><b>Modelos de notificação</b>Crie os e-mails que serão enviados ao usuário em caso de não conformidade, com instruções e contato do suporte. A ação de e-mail depende deles.<br><span class="mpath"><b>Devices</b><i>›</i><b>Compliance</b><i>›</i><b>Notifications</b></span></li>
+<li><b>Política de conformidade por plataforma</b>Crie uma política por plataforma e atribua ao grupo piloto.<br><span class="mpath"><b>Devices</b><i>›</i><b>Compliance</b><i>›</i><b>Create policy</b></span></li>
+<li><b>Ações para não conformidade</b>Monte uma sequência com prazos: marcar como não conforme (imediato), e-mail ao usuário (dia 0), lembrete (dia 3), bloqueio remoto ou marcar para desativação (depois de um prazo longo).</li>
+<li><b>Acesso Condicional</b>No Entra ID, crie a política que exige <b>dispositivo marcado como conforme</b> (corporativo) ou <b>app protegido</b> (BYOD) para acessar Exchange, SharePoint e Teams. Comece em modo <b>Report-only</b> e mantenha uma conta de emergência excluída.<br><span class="mpath"><b>Entra admin center</b><i>›</i><b>Protection</b><i>›</i><b>Conditional Access</b><i>›</i><b>New policy</b></span></li>
+</ol>
+<div class="tbl"><table>
+<thead><tr><th>Nível</th><th>O que exigir</th></tr></thead>
+<tbody>
+<tr><td><b>1 · mínimo</b></td><td>Antivírus/antimalware ativo (Windows), versão mínima e máxima de sistema e nível de patch, senha ou PIN com tamanho e complexidade, bloqueio de tela por inatividade.</td></tr>
+<tr><td><b>2 · aprimorado</b></td><td>Criptografia de disco (BitLocker, FileVault, Android), firewall ativo, bloqueio de apps de fontes desconhecidas, expiração e reutilização de senha, root/jailbreak, Secure Boot, TPM e integridade de código.</td></tr>
+<tr><td><b>3 · avançado</b></td><td>Nível de ameaça do Defender for Endpoint ou parceiro MTD, parceiro de conformidade terceiro (ex.: Jamf para macOS), conformidade personalizada por script e JSON (Windows e Linux), integração completa com Acesso Condicional.</td></tr>
+</tbody></table></div>
+<div class="call warn"><b class="t">Conformidade e configuração no mesmo time</b><p>Uma política de conformidade que exige senha de 8 caracteres e um perfil de configuração que pede 6 geram conflito e dispositivos não conformes sem motivo aparente. Alinhe os valores entre quem cuida das duas áreas.</p></div>
+
+<h2 id="etapa4"><span class="n">04</span>Configurar os dispositivos</h2>
+<figure class="fig"><img src="https://learn.microsoft.com/pt-br/intune/fundamentals/media/deploy-configuration-step-4/deployment-plan-config-devices.png" alt="Diagrama destacando a etapa 4: configurar recursos e segurança dos dispositivos" loading="lazy"><figcaption>Etapa 4. Imagem: <a href="https://learn.microsoft.com/pt-br/intune/fundamentals/deploy-configuration-step-4" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+<h3>Nível 1 · linha de base de segurança</h3>
+<div class="tbl"><table>
+<thead><tr><th>Controle</th><th>Windows</th><th>macOS</th><th>iOS / Android</th></tr></thead>
+<tbody>
+<tr><td>Antivírus</td><td>Security baseline ou Endpoint security › Antivirus</td><td>Endpoint security › Antivirus</td><td>Defender for Endpoint ou parceiro MTD</td></tr>
+<tr><td>Detecção e resposta</td><td>Endpoint security › EDR</td><td>Endpoint security › EDR</td><td>Defender for Endpoint ou parceiro MTD</td></tr>
+<tr><td>Firewall</td><td>Endpoint security › Firewall</td><td>Endpoint security › Firewall</td><td>Parceiro MTD</td></tr>
+<tr><td>Senha / PIN</td><td>Security baseline, Device restrictions ou Windows Hello for Business</td><td>Settings catalog › DDM Passcode</td><td>Settings catalog ou Device restrictions</td></tr>
+<tr><td>Atualizações</td><td>Update rings, feature e quality updates</td><td>Settings catalog › atualizações gerenciadas</td><td>iOS: atualizações gerenciadas · Android corporativo: Device restrictions</td></tr>
+</tbody></table></div>
+<p>Caminhos principais:</p>
+<ul>
+<li><span class="mpath"><b>Endpoint security</b><i>›</i><b>Security baselines</b></span> para a linha de base do Windows recomendada pela Microsoft.</li>
+<li><span class="mpath"><b>Devices</b><i>›</i><b>Configuration</b><i>›</i><b>Create</b><i>›</i><b>New policy</b><i>›</i><b>Settings catalog</b></span> para qualquer outra configuração.</li>
+<li><span class="mpath"><b>Devices</b><i>›</i><b>Windows updates</b></span> para anéis e atualizações de recurso e qualidade.</li>
+</ul>
+<h3>Nível 1 · acesso a e-mail, VPN e Wi-Fi</h3>
+<figure class="fig"><img src="https://learn.microsoft.com/pt-br/intune/fundamentals/media/deploy-configuration-step-4/deploy-email-vpn-wifi.png" alt="Perfis de e-mail, VPN e Wi-Fi enviados pelo Intune aos dispositivos dos usuários" loading="lazy"><figcaption>Perfis de e-mail, VPN e Wi-Fi. Imagem: <a href="https://learn.microsoft.com/pt-br/intune/fundamentals/deploy-configuration-step-4" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+<ol class="steps">
+<li><b>E-mail</b>Implante o app (Outlook) e depois o perfil de e-mail, se o app exigir. Em Android Enterprise corporativo, perfil de e-mail não é usado.</li>
+<li><b>VPN</b>Só se houver aplicação não nativa de nuvem. Implante o cliente VPN (Cisco, Check Point, Microsoft Tunnel etc.) e depois o perfil de conexão. Considere VPN por app.</li>
+<li><b>Wi-Fi</b>Perfil com SSID e autenticação para conexão automática no escritório. Desnecessário em equipes 100% remotas.</li>
+</ol>
+<h3>Nível 2 · proteção aprimorada</h3>
+<ul>
+<li>Criptografia de disco: <b>BitLocker</b> com TPM e Secure Boot no Windows (Endpoint security › Disk encryption), <b>FileVault</b> no macOS. iOS já criptografa por padrão; no Android, a tela de bloqueio ativa a criptografia.</li>
+<li>Expiração e histórico de senha, alinhados com a política de conformidade.</li>
+<li>Restrições de recursos: câmera, Bluetooth, armazenamento removível, notificações, via Settings catalog ou Device restrictions.</li>
+<li>Migração de GPO: importe os GPOs e veja o que tem equivalente no Intune.<br><span class="mpath"><b>Devices</b><i>›</i><b>Group Policy analytics</b></span></li>
+</ul>
+<h3>Nível 3 · proteção alta</h3>
+<ul>
+<li>Autenticação sem senha: certificados SCEP/PKCS para Wi-Fi, VPN e e-mail, SSO (plug-in Enterprise SSO no iOS/macOS, Platform SSO no macOS) e MFA no registro do dispositivo.</li>
+<li>Microsoft Tunnel para iOS e Android acessarem recursos locais com autenticação moderna.</li>
+<li><b>LAPS</b> para a conta de administrador local (Windows e macOS).<br><span class="mpath"><b>Endpoint security</b><i>›</i><b>Account protection</b></span></li>
+<li><b>Endpoint Privilege Management</b> para usuários sem direito de administrador elevarem apenas apps aprovados (licença adicional).</li>
+<li>DFCI para controle de firmware UEFI no Windows; modo Common Criteria no Android para ambientes de alta sensibilidade.</li>
+<li>Quiosques e dispositivos compartilhados; scripts PowerShell (Windows) e shell (macOS) para o que não existir nativamente.</li>
+</ul>
+
+<h2 id="etapa5"><span class="n">05</span>Registrar os dispositivos</h2>
+<p>No registro, o dispositivo ganha um objeto no Entra ID e recebe um <b>certificado MDM</b>, que mantém a comunicação com o Intune. A partir daí ele recebe as políticas de apps, conformidade e configuração das etapas anteriores.</p>
+<figure class="fig"><img src="https://learn.microsoft.com/pt-br/intune/device-enrollment/media/guide/mdm-certificate.png" alt="Dispositivo é registrado, objeto é criado no Microsoft Entra ID e o certificado MDM é enviado pelo Intune" loading="lazy"><figcaption>Registro e certificado MDM. Imagem: <a href="https://learn.microsoft.com/pt-br/intune/device-enrollment/guide" target="_blank" rel="noopener">Microsoft Learn</a>.</figcaption></figure>
+<h3>Antes de registrar</h3>
+<ul>
+<li>Autoridade de MDM = Intune, licenças atribuídas e grupos prontos.</li>
+<li>Função <b>Policy and Profile Manager</b> no Intune (algumas plataformas pedem <b>Intune Administrator</b> no Entra).</li>
+<li>Para registro em massa sem usuário final, considere a conta <b>DEM</b> (Device Enrollment Manager), que registra até 1.000 dispositivos móveis. Não funciona com o registro automatizado da Apple.</li>
+<li>Se houver outro MDM, cancele o registro lá primeiro. O dispositivo fica sem proteção até entrar no Intune: planeje a janela.</li>
+</ul>
+<h3>Métodos por plataforma</h3>
+<div class="tbl"><table>
+<thead><tr><th>Plataforma</th><th>Corporativo</th><th>Pessoal (BYOD)</th><th>Reset de fábrica?</th></tr></thead>
+<tbody>
+<tr><td>Windows</td><td>Windows Autopilot, registro automático (MDM user scope), cogerenciamento, Entra hybrid join via GPO</td><td>Portal da Empresa / conta corporativa</td><td>Não</td></tr>
+<tr><td>iOS/iPadOS</td><td>Registro automatizado (ADE via Apple Business Manager), Apple Configurator</td><td>Registro de usuário pelo Portal da Empresa</td><td>Sim (corporativo)</td></tr>
+<tr><td>macOS</td><td>Registro automatizado (ADE)</td><td>Portal da Empresa</td><td>Sim (corporativo)</td></tr>
+<tr><td>Android Enterprise</td><td>Totalmente gerenciado (COBO), dedicado (COSU), perfil de trabalho corporativo (COPE)</td><td>Perfil de trabalho pessoal</td><td>Sim nos corporativos · Não no pessoal</td></tr>
+<tr><td>Linux</td><td colspan="2">App Microsoft Intune no desktop Ubuntu/RHEL</td><td>Não</td></tr>
+</tbody></table></div>
+<p>Pré-requisitos específicos e caminhos:</p>
+<ul>
+<li>Apple: <span class="mpath"><b>Devices</b><i>›</i><b>Enrollment</b><i>›</i><b>Apple</b><i>›</i><b>Apple MDM Push certificate</b></span> e token do Apple Business Manager para ADE.</li>
+<li>Android: <span class="mpath"><b>Devices</b><i>›</i><b>Enrollment</b><i>›</i><b>Android</b><i>›</i><b>Managed Google Play</b></span></li>
+<li>Windows: <span class="mpath"><b>Devices</b><i>›</i><b>Enrollment</b><i>›</i><b>Windows</b><i>›</i><b>Automatic Enrollment</b></span> e perfis de <b>Windows Autopilot</b> no mesmo menu.</li>
+</ul>
+<figure class="fig"><a href="https://download.microsoft.com/download/e/6/2/e6233fdd-a956-4f77-93a5-1aa254ee2917/msft-intune-enrollment-options.pdf" target="_blank" rel="noopener"><img src="https://learn.microsoft.com/pt-br/intune/device-enrollment/media/guide/msft-intune-enrollment-options-thumb-landscape.png" alt="Guia visual das opções de registro do Intune por plataforma" loading="lazy"></a><figcaption>Guia visual das opções de registro por plataforma. Clique para abrir o <a href="https://download.microsoft.com/download/e/6/2/e6233fdd-a956-4f77-93a5-1aa254ee2917/msft-intune-enrollment-options.pdf" target="_blank" rel="noopener">PDF oficial</a>. Imagem: Microsoft Learn.</figcaption></figure>
+<div class="call"><b class="t">Limpeza automática</b><p>O certificado MDM renova sozinho enquanto o dispositivo sincroniza. Dispositivos que param de sincronizar são removidos do Intune 180 dias depois que o certificado expira.</p></div>
+
+<h2 id="migracao"><span class="n">06</span>Cenário de partida</h2>
+<div class="tbl"><table>
+<thead><tr><th>Hoje a empresa usa</th><th>Caminho recomendado</th></tr></thead>
+<tbody>
+<tr><td>Nada</td><td>Seguir as etapas 01 a 05 deste guia, direto no Intune.</td></tr>
+<tr><td>Outro MDM (Workspace ONE, MobileIron, MaaS360)</td><td>Configurar o Intune e as políticas de MAM primeiro, cancelar o registro no MDM antigo, registrar no Intune. Nunca aplicar controles de acesso dos dois MDMs ao mesmo tempo.</td></tr>
+<tr><td>Configuration Manager</td><td><b>Tenant attach</b> (ver dispositivos e executar ações pelo Intune, sem custo extra) ou <b>cogerenciamento</b> (mover workloads aos poucos). Para 100% nuvem: Entra hybrid join, cogerenciamento, mover todos os workloads, desinstalar o cliente. Windows Server continua no ConfigMgr.</td></tr>
+<tr><td>GPO local</td><td>Importar no <b>Group Policy analytics</b> e criar políticas de Settings catalog com o que for compatível.</td></tr>
+<tr><td>Microsoft 365 Basic Mobility and Security</td><td>Seguir o roteiro oficial de migração para o Intune.</td></tr>
+<tr><td>Outro tenant Intune</td><td>Exportar e importar políticas com os scripts Microsoft Graph PowerShell. Atribuições, certificados e apps LOB precisam ser refeitos; dispositivos precisam ser registrados de novo.</td></tr>
+</tbody></table></div>
+
+<h2 id="piloto"><span class="n">07</span>Piloto e implantação em ondas</h2>
+<ol class="steps">
+<li><b>Grupo piloto pequeno</b>TI e alguns usuários-chave de cada área. Atribua políticas de registro, apps, conformidade e configuração só a esse grupo.</li>
+<li><b>Validar</b>Taxa de sucesso de registro; VPN, Wi-Fi, e-mail e certificados funcionando; apps instalados; relatórios de conformidade sem surpresa; proteção de app aplicada.</li>
+<li><b>Preparar o help desk</b>Passo a passo de registro para o usuário, roteiro de atendimento e lista dos erros mais comuns encontrados no piloto.</li>
+<li><b>Expandir em ondas</b>Adicione grupos aos poucos, medindo chamados e falhas de registro entre uma onda e outra.</li>
+<li><b>Prazo só no final</b>Registro voluntário até o suporte ter capacidade estimada. Ative o bloqueio do Acesso Condicional (sair do Report-only) somente quando a base estiver registrada.</li>
+</ol>
+
+<h2 id="checklist"><span class="n">08</span>Checklist de implantação</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Locatário</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="t1"><span>Licenças Intune e Entra ID P1 confirmadas</span></label></li>
+<li><label><input type="checkbox" data-k="t2"><span>Endpoints de rede liberados no proxy/firewall</span></label></li>
+<li><label><input type="checkbox" data-k="t3"><span>Usuários sincronizados e licenciados por grupo</span></label></li>
+<li><label><input type="checkbox" data-k="t4"><span>Grupos de usuários, dispositivos e piloto criados</span></label></li>
+<li><label><input type="checkbox" data-k="t5"><span>Funções RBAC, tags de escopo e aprovação múltipla configuradas</span></label></li>
+<li><label><input type="checkbox" data-k="t6"><span>Autoridade de MDM = Intune</span></label></li>
+<li><label><input type="checkbox" data-k="t7"><span>Portal da Empresa personalizado</span></label></li>
+<li><label><input type="checkbox" data-k="t8"><span>Restrições de plataforma de registro definidas</span></label></li>
+</ul>
+<h3>Apps</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="a1"><span>Linha de base de apps atribuída como Required</span></label></li>
+<li><label><input type="checkbox" data-k="a2"><span>Políticas de proteção de app por plataforma</span></label></li>
+<li><label><input type="checkbox" data-k="a3"><span>MFA habilitada no Entra ID</span></label></li>
+</ul>
+<h3>Conformidade</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="c1"><span>Dispositivo sem política marcado como não conforme</span></label></li>
+<li><label><input type="checkbox" data-k="c2"><span>Modelos de e-mail de não conformidade criados</span></label></li>
+<li><label><input type="checkbox" data-k="c3"><span>Política de conformidade por plataforma com ações em sequência</span></label></li>
+<li><label><input type="checkbox" data-k="c4"><span>Acesso Condicional em Report-only com conta de emergência excluída</span></label></li>
+</ul>
+<h3>Configuração</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="d1"><span>Security baseline do Windows aplicada</span></label></li>
+<li><label><input type="checkbox" data-k="d2"><span>Antivírus, EDR e firewall ativos</span></label></li>
+<li><label><input type="checkbox" data-k="d3"><span>Anéis de atualização configurados</span></label></li>
+<li><label><input type="checkbox" data-k="d4"><span>BitLocker / FileVault com chave salva</span></label></li>
+<li><label><input type="checkbox" data-k="d5"><span>Perfis de Wi-Fi, VPN e e-mail testados</span></label></li>
+<li><label><input type="checkbox" data-k="d6"><span>LAPS configurado</span></label></li>
+</ul>
+<h3>Registro e rollout</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="r1"><span>Certificado Apple MDM Push e Managed Google Play vinculados</span></label></li>
+<li><label><input type="checkbox" data-k="r2"><span>Registro automático do Windows / Autopilot configurado</span></label></li>
+<li><label><input type="checkbox" data-k="r3"><span>Piloto validado e help desk treinado</span></label></li>
+<li><label><input type="checkbox" data-k="r4"><span>Acesso Condicional ativado após registro da base</span></label></li>
+</ul>
+
+<h2 id="fontes"><span class="n">09</span>Fontes</h2>
+<p>Documentação oficial usada como referência:</p>
+<ul>
+<li><a href="https://learn.microsoft.com/pt-br/intune/fundamentals/get-started" target="_blank" rel="noopener">Introdução à implantação do Microsoft Intune</a></li>
+<li><a href="https://learn.microsoft.com/pt-br/intune/fundamentals/deploy-setup-step-1" target="_blank" rel="noopener">Etapa 1: Configurar o Microsoft Intune</a></li>
+<li><a href="https://learn.microsoft.com/pt-br/intune/fundamentals/deploy-protect-apps-step-2" target="_blank" rel="noopener">Etapa 2: Adicionar, configurar e proteger aplicativos</a></li>
+<li><a href="https://learn.microsoft.com/pt-br/intune/fundamentals/deploy-compliance-step-3" target="_blank" rel="noopener">Etapa 3: Planejar políticas de conformidade</a></li>
+<li><a href="https://learn.microsoft.com/pt-br/intune/fundamentals/deploy-configuration-step-4" target="_blank" rel="noopener">Etapa 4: Configurar recursos e configurações do dispositivo</a></li>
+<li><a href="https://learn.microsoft.com/pt-br/intune/device-enrollment/guide" target="_blank" rel="noopener">Guia de registro do Microsoft Intune</a></li>
+<li><a href="https://learn.microsoft.com/pt-br/intune/fundamentals/setup-migration" target="_blank" rel="noopener">Guia de implantação: configurar ou mover para o Intune</a></li>
+<li><a href="https://learn.microsoft.com/pt-br/intune/fundamentals/planning-guide" target="_blank" rel="noopener">Guia de planejamento do Intune</a></li>
+</ul>
+<div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Diagramas © Microsoft, sob licença CC BY 4.0, carregados do Microsoft Learn. Microsoft, Intune e Entra são marcas da Microsoft Corporation. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#escopo">00 · Antes de começar</a></li><li><a href="#etapa1">01 · Configurar o locatário</a></li><li><a href="#etapa2">02 · Apps e proteção</a></li><li><a href="#etapa3">03 · Conformidade e AC</a></li><li><a href="#etapa4">04 · Configurar dispositivos</a></li><li><a href="#etapa5">05 · Registrar dispositivos</a></li><li><a href="#migracao">06 · Cenário de partida</a></li><li><a href="#piloto">07 · Piloto e ondas</a></li><li><a href="#checklist">08 · Checklist</a></li><li><a href="#fontes">09 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='intune-implantacao-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});document.getElementById('ck-count').textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  document.getElementById('ck-reset').addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>
