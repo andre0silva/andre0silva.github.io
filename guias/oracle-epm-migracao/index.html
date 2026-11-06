@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Oracle Cloud EPM: migração, backup e clonagem de ambientes · Guias · André Ferreira</title>
+<meta name="description" content="Guia prático em português para administrar a Migração do Oracle Fusion Cloud EPM: snapshots, backup, exportação e importação, clonagem de ambientes, migração de aplicativos on-premises, EPM Automate e checklist de Go-Live.">
+<meta property="og:title" content="Oracle Cloud EPM: migração, backup e clonagem de ambientes · Guias · André Ferreira">
+<meta property="og:description" content="Guia prático em português para administrar a Migração do Oracle Fusion Cloud EPM: snapshots, backup, exportação e importação, clonagem de ambientes, migração de aplicativos on-premises, EPM Automate e checklist de Go-Live.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/oracle-epm-migracao/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/oracle-epm-migracao/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7"/></symbol>
+<symbol id="i-in" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+pre.cmd{font-family:var(--mono);font-size:.84rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:10px 0 20px}
+pre.cmd code{background:none;padding:0;color:inherit;font-size:inherit}
+pre.cmd .c{color:#cfe8d4}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call,pre.cmd{break-inside:avoid}}
+</style>
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / Oracle Cloud EPM · Migração</p>
+<span class="chip">Infraestrutura</span>
+<h1 style="margin-top:12px">Oracle Cloud EPM: migração, backup e clonagem de ambientes</h1>
+<p class="sub">Roteiro objetivo para administrar a Migração (Lifecycle Management) do Oracle Fusion Cloud EPM: proteger o ambiente, mover artefatos entre teste e produção, clonar ambientes e trazer aplicativos on-premises para a nuvem sem surpresa no Go-Live.</p>
+<div class="intro-meta"><span class="chip m">Cloud EPM</span><span class="chip m">Snapshots e backup</span><span class="chip m">Clonar Ambiente</span><span class="chip m">On-premises → Cloud</span><span class="chip m">EPM Automate</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<h2 id="escopo"><span class="n">00</span>Antes de começar</h2>
+<p>A tela <b>Migração</b> é o ponto central de ciclo de vida do Cloud EPM: backup, exportação e importação de artefatos, upload e download de snapshots e relatórios de auditoria das operações. Ela atende Planning (e módulos), FreeForm, Financial Consolidation and Close, Tax Reporting, Account Reconciliation, Profitability and Cost Management, Enterprise Profitability and Cost Management, Enterprise Data Management, Sales Planning e Strategic Workforce Planning. <b>Narrative Reporting fica fora</b> da Migração, mas pode ser clonado pela tela Clonar Ambiente.</p>
+<div class="call warn"><b class="t">Material independente</b><p>Guia escrito com palavras próprias a partir do manual público <i>Oracle Fusion Cloud EPM · Administração da Migração</i> (F28909-24, junho de 2026) e da experiência em migrações de ambiente. Não é material oficial da Oracle. Oracle é marca registrada da Oracle Corporation. Telas, limites e comandos mudam a cada atualização mensal: a <a href="https://docs.oracle.com/cloud/help/pt_BR/epm-common/EPMSS/EPMSS.pdf" target="_blank" rel="noopener">documentação oficial</a> é a referência final.</p></div>
+<div class="call"><b class="t">EPM não é ERP</b><p>Este guia trata do <b>Cloud EPM</b> (planejamento, consolidação, conciliação). Em projetos de Oracle Fusion Cloud ERP, o EPM costuma vir junto, mas a migração de dados do ERP usa outro ferramental (FBDI, HDL, Setup Manager). Use este guia para a trilha EPM do cronograma.</p></div>
+<h3>O que você precisa ter em mãos</h3>
+<ul>
+<li>Usuário com a função <b>Administrador de Serviço</b> ou a função granular <b>Migrações - Administrar</b> em cada ambiente envolvido.</li>
+<li>Usuário <b>Administrador do Domínio de Identidades</b> se for criar usuários ou clonar usuários e funções.</li>
+<li>URLs dos ambientes de teste e produção e o horário da manutenção diária de cada um.</li>
+<li><b>EPM Automate</b> instalado em uma estação de administração (necessário para arquivos grandes e automação).</li>
+<li>Janela de mudança aprovada e plano de rollback (snapshot do destino guardado fora do ambiente).</li>
+</ul>
+
+<h2 id="conceitos"><span class="n">01</span>Conceitos que evitam erro</h2>
+<div class="diagram"><svg viewBox="0 0 760 230" role="img" aria-label="Fluxo: ambiente de teste gera snapshot, snapshot é baixado ou copiado, importado no ambiente de produção; manutenção diária gera Artifact Snapshot e Backup de Ambiente no Object Storage">
+<defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8z" fill="#71584c"/></marker></defs>
+<g font-family="Source Sans 3, sans-serif" font-size="13" fill="#2d2a27">
+<rect x="20" y="40" width="160" height="64" rx="10" fill="#fff5e3" stroke="#aa4b17" stroke-width="1.5"/><text x="100" y="66" text-anchor="middle" font-weight="600">Ambiente de teste</text><text x="100" y="85" text-anchor="middle" font-size="11" fill="#504e4b">desenvolvimento e homologação</text>
+<rect x="300" y="40" width="160" height="64" rx="10" fill="#ffe2d3" stroke="#aa4b17" stroke-width="1.5"/><text x="380" y="66" text-anchor="middle" font-weight="600">Snapshot (.zip)</text><text x="380" y="85" text-anchor="middle" font-size="11" fill="#504e4b">backup completo ou incremental</text>
+<rect x="580" y="40" width="160" height="64" rx="10" fill="#fff5e3" stroke="#aa4b17" stroke-width="1.5"/><text x="660" y="66" text-anchor="middle" font-weight="600">Ambiente de produção</text><text x="660" y="85" text-anchor="middle" font-size="11" fill="#504e4b">importação controlada</text>
+<rect x="20" y="150" width="440" height="56" rx="10" fill="#cfe8d4" stroke="#5f6e64" stroke-width="1.5"/><text x="240" y="174" text-anchor="middle" font-weight="600">Manutenção diária</text><text x="240" y="192" text-anchor="middle" font-size="11" fill="#504e4b">Artifact Snapshot no ambiente + Backup de Ambiente no Object Storage</text>
+<rect x="580" y="150" width="160" height="56" rx="10" fill="#fff5e3" stroke="#71584c" stroke-width="1.5"/><text x="660" y="174" text-anchor="middle" font-weight="600">Estação de admin</text><text x="660" y="192" text-anchor="middle" font-size="11" fill="#504e4b">EPM Automate / cópia local</text>
+<g stroke="#71584c" stroke-width="1.6" fill="none" marker-end="url(#ar)"><path d="M180 72 H296"/><path d="M460 72 H576"/><path d="M100 104 V146"/><path d="M460 92 C520 110 560 150 600 150"/></g>
+<g font-size="11" fill="#aa4b17" font-family="JetBrains Mono, monospace"><text x="196" y="64">Exportar / Backup</text><text x="476" y="64">Upload + Importar</text><text x="500" y="128">Download</text></g>
+</g></svg></div>
+<div class="tbl"><table>
+<thead><tr><th>Termo</th><th>O que é</th><th>Quando usar</th></tr></thead>
+<tbody>
+<tr><td>Artifact Snapshot (snapshot de manutenção)</td><td>Gerado automaticamente todo dia na manutenção diária. Fica sempre retido.</td><td>Restaurar Planning e clonar pela tela Clonar Ambiente.</td></tr>
+<tr><td>Backup de Ambiente</td><td>Cópia diária completa do ambiente, guardada no Oracle Object Storage. Não pode ser excluída nem renomeada.</td><td>Voltar o ambiente a um estado de dias atrás (<code>restoreEnvironment</code>).</td></tr>
+<tr><td>Backup (snapshot completo)</td><td>Snapshot sob demanda de todo o aplicativo, com dados e artefatos.</td><td>Clonar produção para teste, diagnóstico, ponto de retorno antes de mudança.</td></tr>
+<tr><td>Exportar (snapshot incremental)</td><td>Snapshot só dos artefatos selecionados.</td><td>Promover artefatos testados de teste para produção.</td></tr>
+</tbody></table></div>
+<h3>Regras de operação</h3>
+<ul>
+<li><b>Retenção de 60 dias.</b> Snapshots e arquivos criados ou enviados são removidos após 60 dias. Se o total passar de 150 GB, os mais antigos acima de 60 dias saem primeiro. Baixe o que precisa guardar ou copie para o Object Storage.</li>
+<li><b>Logs do Data Management duram 7 dias.</b> Baixe os que forem evidência de auditoria.</li>
+<li><b>Compatibilidade de versão.</b> Snapshot só importa dentro da faixa de versões suportada do ambiente. Snapshot fora da faixa gera o aviso <code>EPMLCM-26000</code>.</li>
+<li><b>Nunca edite o XML de um snapshot.</b> O formato é proprietário e muda entre versões. Corrija no aplicativo e gere um snapshot novo.</li>
+<li><b>Não rode jobs durante uma importação.</b> Metadados e dados podem mudar no meio do job e o resultado fica errado.</li>
+</ul>
+
+<h2 id="acesso"><span class="n">02</span>Acessar a Migração</h2>
+<ol class="steps">
+<li><b>Entre no ambiente</b>Com Administrador de Serviço ou Migrações - Administrar. A Migração existe separadamente em cada ambiente (teste e produção).</li>
+<li><b>Abra a tela</b><span class="mpath"><b>Ferramentas</b><i>›</i><b>Migração</b></span> ou <span class="mpath"><b>Navegador</b><i>›</i><b>Migração</b></span>. No Profitability and Cost Management: <span class="mpath"><b>Aplicativo</b><i>›</i><b>Migração</b></span>.</li>
+<li><b>Conheça as abas</b><b>Categorias</b> (o que existe no aplicativo para exportar), <b>Instantâneos</b> (snapshots e arquivos no ambiente, com tamanho e data) e <b>Relatórios</b>.</li>
+</ol>
+
+<h2 id="backup"><span class="n">03</span>Backup e exportação</h2>
+<h3>Backup completo</h3>
+<ol class="steps">
+<li><b>Prepare o Essbase</b>O backup de dados do Essbase é a frio. Pare consolidações, reestruturações e qualquer processo que altere cubos ASO e BSO antes de começar.</li>
+<li><b>Inicie</b>Na Migração, clique em <b>Fazer Backup</b> e informe o nome da pasta. Evite caracteres que o Windows não aceita, como <code>:</code>.</li>
+<li><b>Acompanhe</b>O <b>Relatório de Status da Migração</b> abre sozinho. Use <b>Atualizar</b> até concluir. Em <b>Falha</b>, clique no status para ver a causa e a ação corretiva.</li>
+<li><b>Confirme</b>A pasta do backup aparece em <b>Instantâneos</b>. Baixe uma cópia se for o ponto de retorno de uma mudança.</li>
+</ol>
+<div class="call warn"><b class="t">Particularidades por processo</b><ul>
+<li><b>Planning:</b> com muitas smart lists orientadas por membro em cubos ASO, o backup pode falhar por memória. Para restaurar Planning, prefira o snapshot de manutenção diária.</li>
+<li><b>Enterprise Journals:</b> de teste para produção, não leve <code>JOURNAL_ID</code> nem os Dados do Intervalo de Coleta; leve as Equipes se existirem.</li>
+<li><b>Data Management:</b> para levar dados da tabela intermediária, crie primeiro um snapshot de linha de base (Tipo de Instantâneo = Tudo) e ajuste o Modo LCM para incluir configuração e dados. O ambiente entra em manutenção durante a exportação.</li>
+<li><b>Enterprise Data Management:</b> o aplicativo fica em modo de manutenção durante o backup.</li>
+</ul></div>
+<h3>Exportação incremental</h3>
+<ol class="steps">
+<li><b>Selecione os artefatos</b>Em <b>Categorias</b>, marque o componente inteiro ou clique no nome do componente e escolha artefatos específicos em <b>Lista de Artefatos</b>. Itens esmaecidos só existem no backup completo.</li>
+<li><b>Revise</b>Use <b>Artefatos Selecionados</b> para conferir a lista antes de exportar.</li>
+<li><b>Exporte</b><b>Exportar</b> › <b>OK</b>. O nome padrão é <code>usuario data</code>; troque por um padrão do projeto, como <code>GMUD1234_promocao_regras</code>.</li>
+<li><b>Acompanhe</b>No Relatório de Status da Migração, até concluir sem erro.</li>
+</ol>
+<p>Para replicar grupos entre ambientes: <span class="mpath"><b>Categorias</b><i>›</i><b>Grupos e Filiação</b><i>›</i><b>Diretório Nativo</b><i>›</i><b>Grupos</b></span>. Registros de auditoria do aplicativo <b>não</b> passam pela Migração: exporte pelos recursos de auditoria do próprio processo de negócios.</p>
+<p>Para refazer uma exportação com as mesmas seleções: <span class="mpath"><b>Instantâneos</b><i>›</i><b>Ações</b><i>›</i><b>Repetir a Exportação</b></span>, com novo nome de pasta.</p>
+
+<h2 id="mover"><span class="n">04</span>Mover snapshots entre ambientes</h2>
+<div class="tbl"><table>
+<thead><tr><th>Método</th><th>Limite</th><th>Observação</th></tr></thead>
+<tbody>
+<tr><td>Upload pela tela Migração</td><td>Snapshot até <b>2 GB</b>; outros arquivos até <b>500 MB</b></td><td><span class="mpath"><b>Instantâneos</b><i>›</i><b>Fazer Upload</b></span>. Falha se já existir arquivo com o mesmo nome.</td></tr>
+<tr><td>Download pela tela Migração</td><td>Sem limite</td><td><span class="mpath"><b>Instantâneos</b><i>›</i><b>Ações</b><i>›</i><b>Fazer Download</b></span>.</td></tr>
+<tr><td>EPM Automate <code>uploadFile</code> / <code>downloadFile</code></td><td>Acima dos limites da web</td><td>Caminho padrão para snapshots grandes e para automação.</td></tr>
+<tr><td>EPM Automate <code>copySnapshotFromInstance</code></td><td>Direto entre ambientes</td><td>Evita passar o arquivo pela estação local.</td></tr>
+<tr><td>API REST</td><td>Upload, download, listar e restaurar backups</td><td>Para integração com pipelines e orquestradores.</td></tr>
+</tbody></table></div>
+<ul>
+<li><b>Renomear</b> resolve divergência de nome (ex.: o nome que um job espera). <b>Excluir</b> só depois de baixar. Backups de Ambiente não podem ser renomeados nem excluídos.</li>
+<li><b>Nunca exclua o snapshot de manutenção diária.</b></li>
+<li>Download ou clonagem durante a manutenção diária retorna <code>File not found</code>: espere a janela terminar.</li>
+</ul>
+
+<h2 id="importar"><span class="n">05</span>Importar</h2>
+<h3>1. Defina as opções de importação de grupos</h3>
+<p>Em <span class="mpath"><b>Instantâneos</b><i>›</i><b>Opções de Migração</b></span>, escolha como grupos, filiação e funções granulares serão tratados:</p>
+<div class="tbl"><table>
+<thead><tr><th>Opção</th><th>Efeito no destino</th></tr></thead>
+<tbody>
+<tr><td>Criar ou Atualizar</td><td>Cria grupos novos e atualiza a filiação dos existentes; atribui e remove funções granulares. Padrão mais comum.</td></tr>
+<tr><td>Criar</td><td>Só cria grupos novos; ignora mudanças em grupos existentes.</td></tr>
+<tr><td>Atualizar</td><td>Só altera grupos existentes; não cria novos.</td></tr>
+<tr><td>Excluir</td><td>Remove do destino os grupos presentes no arquivo. Use com cuidado.</td></tr>
+</tbody></table></div>
+<p>Comportamento fixo da importação de dados: a validação de membros da dimensão de destino é ignorada e o limite de erros é 100.</p>
+
+<h3>2. Clonar a partir de um backup completo</h3>
+<ol class="steps">
+<li><b>Garanta o destino vazio</b>Não importe um backup completo onde já existe aplicativo. Rode <code>epmautomate recreate</code> para limpar o ambiente antes.</li>
+<li><b>Garanta o snapshot no destino</b>Faça upload ou use <code>copySnapshotFromInstance</code>.</li>
+<li><b>Importe</b><span class="mpath"><b>Instantâneos</b><i>›</i><b>Ações</b><i>›</i><b>Importar</b></span> › <b>OK</b>.</li>
+<li><b>Acompanhe e reentre</b>Atualize o Relatório de Status até concluir. Ao final, saia e entre de novo no ambiente.</li>
+</ol>
+
+<h3>3. Importar artefatos específicos</h3>
+<ol class="steps">
+<li><b>Expanda o snapshot</b>Em <b>Instantâneos</b>, abra o snapshot e clique no componente.</li>
+<li><b>Selecione</b><b>Selecionar Tudo</b> para o componente inteiro, ou marque artefatos em <b>Lista de Artefatos</b>. Confira em <b>Artefatos Selecionados</b>.</li>
+<li><b>Importe</b><b>Importar</b> › <b>OK</b> e acompanhe no Relatório de Status.</li>
+</ol>
+<div class="call warn"><b class="t">Dados do Essbase não vão em incremental</b><p>Planning e Financial Consolidation and Close não aceitam carga incremental de dados do Essbase pela Migração (aviso <i>Essbase data import is only supported during create application</i>). Alternativas: Utilitário de Carregamento de Outline/importação de dados, ou <code>recreate</code> do aplicativo seguido da importação do snapshot completo.</p></div>
+
+<h2 id="restaurar"><span class="n">06</span>Restaurar a partir de um Backup de Ambiente</h2>
+<p>Para voltar o ambiente inteiro ao estado de dias atrás, use os Backups de Ambiente guardados no Object Storage:</p>
+<pre class="cmd"><code><span class="c"># listar backups disponíveis</span>
+epmautomate login ADMIN ARQUIVO_SENHA.epw https://AMBIENTE.oraclecloud.com
+epmautomate listBackups
+<span class="c"># restaurar (consulte a sintaxe completa do restoreEnvironment na sua versão)</span>
+epmautomate restoreEnvironment ...
+epmautomate logout</code></pre>
+<p>O mesmo existe via API REST (Listar Backups e restauração de ambiente). Trate a restauração como mudança emergencial: comunique usuários, congele jobs e valide como em um Go-Live.</p>
+
+<h2 id="clonar"><span class="n">07</span>Clonar ambiente</h2>
+<p>A tela <b>Clonar Ambiente</b> faz uma cópia do ambiente atual em outro ambiente, inclusive Narrative Reporting. Casos típicos: produção para teste, teste para produção e primário para stand-by de recuperação de desastres.</p>
+<div class="call"><b class="t">Tela ou EPM Automate?</b><p>A tela usa somente o Artifact Snapshot mais recente. Para clonar a partir de um Backup de Ambiente ou de um snapshot de manutenção mais antigo, use <code>epmautomate cloneEnvironment</code>. Se o clone precisa refletir mudanças feitas hoje, rode <code>epmautomate runDailyMaintenance</code> antes para regenerar o Artifact Snapshot.</p></div>
+
+<h3>Antes de clonar</h3>
+<ul>
+<li>Gere e guarde fora do ambiente um backup do <b>destino</b>. A clonagem não apaga snapshots nem a caixa de entrada/saída do destino, mas renomeia um Artifact Snapshot existente para <code>Artifact Snapshot_DATA_HORA</code>.</li>
+<li>Comece <b>depois</b> da manutenção diária dos dois ambientes. Se a manutenção da <b>origem</b> começar no meio, a clonagem é encerrada. Para clones longos, mude o horário da manutenção da origem (<code>setDailyMaintenanceStartTime</code>).</li>
+<li>O usuário informado para o destino <b>não pode ter MFA</b>: a clonagem só aceita autenticação básica.</li>
+<li>Clonando para outro domínio de identidades com SSO na origem, configure o SSO no domínio de destino antes.</li>
+<li>Planning com membro de período pré-implantado substituído por membro customizado (ex.: <code>YearTotal</code> renomeado) pode fazer a clonagem falhar.</li>
+</ul>
+
+<h3>O que cada perfil consegue clonar</h3>
+<div class="tbl"><table>
+<thead><tr><th>Função do usuário no destino</th><th>Pode clonar</th></tr></thead>
+<tbody>
+<tr><td>Administrador de Serviço</td><td>Artefatos do aplicativo e, opcionalmente, Data Management, auditoria, Console de Jobs, caixa de entrada/saída e snapshots. <b>Não</b> clona usuários e funções.</td></tr>
+<tr><td>Administrador de Serviço + Administrador do Domínio de Identidades</td><td>Tudo acima, mais usuários e atribuições de função de aplicativo.</td></tr>
+</tbody></table></div>
+
+<h3>Passo a passo</h3>
+<ol class="steps">
+<li><b>Abra a tela na origem</b><span class="mpath"><b>Ferramentas</b><i>›</i><b>Clonar Ambiente</b></span> (no Profitability and Cost Management: <span class="mpath"><b>Aplicativo</b><i>›</i><b>Clonar Ambiente</b></span>).</li>
+<li><b>Informe o destino</b>URL de Destino, usuário (Administrador de Serviço, idealmente também Administrador do Domínio de Identidades, ou Migrações - Administrar) e senha do domínio de identidades.</li>
+<li><b>Usuários e Funções de Aplicativo</b>Marque se quiser levar usuários e funções. Exige Administrador do Domínio de Identidades; sem isso, a importação falha com erro de autorização no Relatório de Status.</li>
+<li><b>Data Management</b>Desmarque se não precisar: com tabelas intermediárias grandes, é o item que mais demora. Só clone se o destino estiver na mesma atualização mensal ou mais nova que a origem.</li>
+<li><b>Console de Jobs e Auditoria de Aplicativo</b>Desmarque o que não for necessário (onde aplicável). Em FCC e Tax Reporting a auditoria já vai no snapshot.</li>
+<li><b>Arquivos e Instantâneos Armazenados</b>Marque para levar caixa de entrada, caixa de saída e snapshots. Arquivos em subpastas <b>não</b> são clonados.</li>
+<li><b>DailyMaintenanceStartTime</b>Desmarque para manter o horário de manutenção atual do destino. Marcado, o destino herda o horário da origem.</li>
+<li><b>Propriedades do Aplicativo</b>Só Account Reconciliation: e-mail, tema, nome, logotipo e imagem de fundo.</li>
+<li><b>Clone</b>Clique em <b>Clonar</b> e acompanhe pelo Relatório de Status da Migração no destino.</li>
+</ol>
+
+<h3>Como os usuários se comportam no clone</h3>
+<ul>
+<li>Não altere logins no destino (ex.: de <code>jdoe</code> para e-mail): isso quebra o controle de acesso.</li>
+<li>Usuários só com Administrador do Domínio de Identidades não são clonados; quem tem essa função mais funções de aplicativo é clonado sem a função de domínio.</li>
+<li>Funções atribuídas por grupo do IDCS chegam como atribuição direta; os grupos IDCS não são clonados.</li>
+<li>O clone <b>adiciona</b>, não sincroniza: não remove funções extras nem usuários que só existem no destino, não altera propriedades nem senhas de usuários existentes.</li>
+<li>Usuários novos recebem senha aleatória e e-mail de ativação.</li>
+<li>Sem levar usuários, quem estiver no snapshot sem função no destino gera <code>EPMIE-00070</code>.</li>
+</ul>
+
+<h3>Depois de clonar (cutover)</h3>
+<div class="tbl"><table>
+<thead><tr><th>Item</th><th>Ação</th></tr></thead>
+<tbody>
+<tr><td>Comunicação</td><td>Divulgar a nova URL do ambiente e as URLs públicas e privadas do Smart View.</td></tr>
+<tr><td>Scripts</td><td>Atualizar URL e senha nos scripts de EPM Automate e API REST.</td></tr>
+<tr><td>Smart View</td><td>Ajustar URLs de conexão e mapeamentos de URL.</td></tr>
+<tr><td>URLs intuitivas e favoritos</td><td>Criar ou repontar URLs intuitivas; orientar usuários a trocar bookmarks.</td></tr>
+<tr><td>Processos integrados</td><td>Atualizar conexões dos fluxos de navegação. O SSO entre instâncias só volta quando todas estiverem no novo domínio.</td></tr>
+<tr><td>SSO</td><td>Reconfigurar se o domínio de identidades mudou (dispensável se feito antes do clone).</td></tr>
+<tr><td>Agente de Integração e integrações</td><td>Reconfigurar o agente e revisar integrações com outros serviços.</td></tr>
+<tr><td>Endereços IP</td><td>Atualizar allowlists de proxy e de outros ambientes, inclusive Fusion ERP, com o IP do destino (<code>nslookup</code>) ou o IP de saída da nova região OCI.</td></tr>
+<tr><td>Relatórios customizados</td><td>Revisar consultas do Task Manager, Supplemental Data Manager e Enterprise Journals: IDs internos podem mudar (não mudam em migração gerenciada pela Oracle).</td></tr>
+</tbody></table></div>
+
+<h2 id="onprem"><span class="n">08</span>On-premises → Cloud EPM</h2>
+<p>A migração de um aplicativo do EPM System on-premises tem duas etapas: <b>segurança</b> (igual para todos os produtos) e <b>artefatos</b> (específica de cada produto).</p>
+
+<h3>Pré-requisitos</h3>
+<ul>
+<li>Aplicativo on-premises <b>estável</b>, no patch mais recente: sem regras inválidas nem erro de atualização de cubo.</li>
+<li>Ambiente Cloud de destino <b>vazio</b>: nenhum aplicativo, nem o de exemplo, e nenhum dado.</li>
+<li>No on-premises: Administrador do Shared Services e administrador do aplicativo. Na nuvem: Administrador de Serviço ou Migrações - Administrar; criar usuários só o Administrador do Domínio de Identidades.</li>
+<li>Propriedades customizadas do aplicativo são ignoradas; a nuvem usa os padrões.</li>
+<li>Nomes de dimensão, atributo e alias sem palavras reservadas (ex.: operação, tipo de conta, agregação, descrição).</li>
+<li>Nome do tipo de plano igual ao nome do cubo (Planning), senão o mapa de dados entre aplicativos falha.</li>
+</ul>
+<h3>O que não migra</h3>
+<div class="tbl"><table>
+<thead><tr><th>Item</th><th>Tratamento</th></tr></thead>
+<tbody>
+<tr><td>Funções customizadas do Shared Services</td><td>Mapear para as funções de aplicativo (seção 10).</td></tr>
+<tr><td>Variáveis de substituição globais do Essbase</td><td>Converter para variáveis do aplicativo antes de exportar.</td></tr>
+<tr><td>Scripts de cálculo, scripts de relatório e arquivos de regra (.rul) do Essbase</td><td>Recriar como regras no Calculation Manager, consultas do Smart View e integrações no Data Management.</td></tr>
+<tr><td>Partições e configurações customizadas do Essbase (cache etc.)</td><td>Não suportado; redesenhar se necessário.</td></tr>
+<tr><td>ACLs do Financial Reports</td><td>Redefinir manualmente no Planning.</td></tr>
+<tr><td>Anotações, jobs em lote, preferências e páginas do Reporting and Analysis/Workspace</td><td>Não migram.</td></tr>
+<tr><td>Objetos de relatório vinculados, tipos MIME customizados, Interactive Reporting, Web Analysis</td><td>Não migram.</td></tr>
+<tr><td>Workforce, Capital Asset, Project Financial, Public Sector Planning; Planning com EPMA; ERP Integrator</td><td>Não migram.</td></tr>
+<tr><td>Scripts e relatórios customizados do FDMEE</td><td>Não migram; ver integração híbrida ou baseada em arquivo.</td></tr>
+</tbody></table></div>
+
+<h3>Etapa 1 · Segurança</h3>
+<ol class="steps">
+<li><b>Gere o Relatório de Provisionamento</b>No Shared Services Console: <span class="mpath"><b>Administração</b><i>›</i><b>Exibir Relatório de Provisionamento</b></span>. Localizar Funções, para Usuários, Funções Efetivas = Sim, agrupar por Usuários. Selecione Shared Services, Reporting and Analysis, FDMEE/ERP Integrator (se houver) e <b>um único</b> aplicativo. Exporte para CSV e guarde em local seguro.</li>
+<li><b>Crie o users.csv</b>Cabeçalho <code>First Name,Last Name,Email,User Login</code>, uma linha por usuário. E-mail único; User Login é opcional se o login for o e-mail.</li>
+<li><b>Crie o Groups.csv</b>No Shared Services: <span class="mpath"><b>Grupos de Aplicativos</b><i>›</i><b>Foundation</b><i>›</i><b>Shared Services</b><i>›</i><b>Grupos</b><i>›</i><b>Exportar para Edição</b></span>. Remova grupos que não dão acesso a artefatos do aplicativo e acrescente os grupos de diretório externo (coluna de herança do relatório).</li>
+<li><b>Crie os arquivos de função</b>Um CSV por função de aplicativo (Administrador do Serviço, Usuário Avançado, Usuário, Visualizador), com cabeçalho <code>User Login</code> e um e-mail por linha. No EDM são só dois arquivos.</li>
+<li><b>Carregue, crie e atribua</b>Com EPM Automate (comandos abaixo). Usuários são do domínio de identidades; funções são por ambiente.</li>
+<li><b>Importe os grupos</b>No Cloud EPM: <span class="mpath"><b>Navegador</b><i>›</i><b>Controle de Acesso</b><i>›</i><b>Relatório de Grupo de Usuários</b><i>›</i><b>Importar de CSV</b></span>, selecione o <code>Groups.csv</code> e confirme.</li>
+</ol>
+<pre class="cmd"><code><span class="c"># como Administrador do Domínio de Identidades</span>
+epmautomate login ADMIN_DOMINIO ARQUIVO_SENHA.epw https://AMBIENTE.oraclecloud.com
+epmautomate uploadFile users.csv
+epmautomate addUsers users.csv userPassword=SenhaInicial1 resetPassword=true
+<span class="c"># atribuição de funções (um arquivo por função)</span>
+epmautomate uploadFile service_admin.csv
+epmautomate assignRole service_admin.csv "Service Administrator"
+epmautomate uploadFile power_user.csv
+epmautomate assignRole power_user.csv "Power User"
+epmautomate listFiles
+epmautomate logout</code></pre>
+<div class="call"><b class="t">Nomes de função</b><p>Use o nome da função como o EPM Automate da sua versão aceita (Administrador do Serviço, Usuário Avançado, Usuário, Visualizador ou o equivalente em inglês). Usuário Avançado e Visualizador não existem no EDM.</p></div>
+
+<h3>Etapa 2 · Artefatos por produto</h3>
+<div class="tbl"><table>
+<thead><tr><th>De (on-premises)</th><th>Para (Cloud EPM)</th><th>Versões aceitas</th><th>Como</th></tr></thead>
+<tbody>
+<tr><td>Planning</td><td>Planning (aplicativo customizado, EPM Enterprise)</td><td>11.1.2.3, 11.1.2.4, 11.2.x (exceto com Essbase 21c)</td><td>Exportar via LCM no Shared Services, compactar, <code>uploadFile</code>, <code>importSnapshot</code>.</td></tr>
+<tr><td>Financial Management (HFM)</td><td>Financial Consolidation and Close</td><td>11.1.2.3, 11.1.2.4</td><td>Cloud EPM Migration Accelerator (patch 28352563 no My Oracle Support).</td></tr>
+<tr><td>Financial Close Management</td><td>Account Reconciliation</td><td>11.1.2.4.250 ou superior</td><td>Exportar no Shared Services, upload, criar aplicativo e importar em 3 passadas.</td></tr>
+<tr><td>Profitability and Cost Management</td><td>Profitability and Cost Management (EPM Enterprise)</td><td>11.1.2.4.x</td><td>Exportar Modelo, ou Standard to Management Ledger Migration Utility (Oracle DB); importar modelo no Console de Aplicativos.</td></tr>
+<tr><td>Management Ledger</td><td>Enterprise Profitability and Cost Management</td><td>11.1.2.4.x</td><td>Exportar Modelo › criar app no PCM › utilitário de migração PCM para EPCM.</td></tr>
+<tr><td>Strategic Finance</td><td>Strategic Modeling</td><td>11.1.2.4.002</td><td>Entidades off-line (.alc) pelo Smart View e criação de modelos a partir do arquivo.</td></tr>
+<tr><td>Data Relationship Management</td><td>Enterprise Data Management</td><td>—</td><td>Exportar cada hierarquia, registrar aplicativo no EDM e importar a dimensão.</td></tr>
+</tbody></table></div>
+
+<h3>Planning: roteiro resumido</h3>
+<ol class="steps">
+<li><b>Exporte no Shared Services</b>Com usuário que seja administrador do Shared Services, Calculation Manager, Reporting and Analysis e do aplicativo. Selecione: Calculation Manager do aplicativo; todos os artefatos do Planning (Configuração, Dados do Essbase, Artefatos Globais, Tipo de Plano, Dados Relacionais, Segurança); objetos do Financial Reporting ligados ao aplicativo, conteúdo de terceiros, <code>HRInternalFolder › DataSources</code> e os <code>UserPOV</code> dos usuários migrados. <b>Exportar</b> para o sistema de arquivos e confirmar o relatório sem erros.</li>
+<li><b>Compacte com Unicode preservado</b>Na pasta <code>import_export</code> do servidor Foundation, compacte as pastas com 7-Zip em formato Zip e parâmetro <code>cu=on</code>. Nomes de artefato terminados em ponto são cortados pelo Windows: corrija o nome dentro do zip.</li>
+<li><b>Envie e importe</b>Ambiente Planning suporta um aplicativo só: remova o existente antes.</li>
+<li><b>Valide</b>Dados do Essbase, formulários comparados com a origem (incluindo dados de driver), dimensões e membros, listas de tarefas e relatórios do Financial Reporting.</li>
+</ol>
+<pre class="cmd"><code>epmautomate login ADMIN ARQUIVO_SENHA.epw https://AMBIENTE.oraclecloud.com
+epmautomate uploadFile OnPremisesApplication.zip
+epmautomate importSnapshot OnPremisesApplication
+epmautomate logout</code></pre>
+
+<h3>Account Reconciliation: ordem de importação</h3>
+<p>Ambiente sem dados e sem aplicativo de exemplo. Crie o aplicativo (<b>Iniciar</b> › <b>Novo</b>) e importe o snapshot do FCM em três passadas, por causa das dependências:</p>
+<ol>
+<li>Nó <b>Comum</b> (calendários, moedas, regras de feriado, unidades organizacionais, equipes).</li>
+<li><b>Reconciliation Manager</b> inteiro, exceto Perfis e Reconciliações.</li>
+<li><b>Perfis</b> e <b>Reconciliações</b>.</li>
+</ol>
+<p>Não leve objetos de relatório se a origem usa MSSQL: a nuvem só usa Oracle Database. Valide períodos, reconciliações abertas (atribuições, trabalho e histórico), formatos, atributos e o acesso de um usuário comum.</p>
+
+<h3>Integrações FDMEE</h3>
+<p>Para Planning e PCM com FDMEE, há dois caminhos depois da migração: manter o FDMEE on-premises com integração híbrida, ou converter as conexões diretas em integração por arquivo no Data Management, automatizada assim:</p>
+<pre class="cmd"><code>epmautomate login ADMIN ARQUIVO_SENHA.epw https://AMBIENTE.oraclecloud.com
+epmautomate uploadFile ARQUIVO_DELIMITADO.txt inbox/repository
+epmautomate runDataRule REGRA PERIODO_INICIAL PERIODO_FINAL REPLACE STORE_DATA inbox/ARQUIVO.dat
+epmautomate logout</code></pre>
+
+<h2 id="relatorios"><span class="n">09</span>Relatórios de controle</h2>
+<div class="tbl"><table>
+<thead><tr><th>Relatório</th><th>Onde</th><th>Para quê</th></tr></thead>
+<tbody>
+<tr><td>Status da Migração</td><td><span class="mpath"><b>Relatórios</b><i>›</i><b>Status da Migração</b></span></td><td>Quem, origem, destino, início, fim, duração e status das operações dos últimos 30 dias. Em falha, mostra artefato e erro. É apagado por <code>recreate</code>: exporte como evidência.</td></tr>
+<tr><td>Histórico de Modificações</td><td><span class="mpath"><b>Instantâneos</b><i>›</i><b>Ações</b><i>›</i><b>Histórico de Modificações</b></span></td><td>Artefatos alterados depois do snapshot. Filtra por artefato ou usuário e exporta os alterados em um snapshot novo.</td></tr>
+<tr><td>Atualizações de Artefato</td><td><span class="mpath"><b>Relatórios</b><i>›</i><b>Atualizações de Artefato</b></span></td><td>Quem mudou o quê, quando e onde, por período e componente. Exporta para CSV: bom anexo de GMUD e de auditoria.</td></tr>
+</tbody></table></div>
+
+<h2 id="funcoes"><span class="n">10</span>Mapeamento de funções</h2>
+<p>As funções do on-premises não existem na nuvem. A regra é: atribua a função de aplicativo que cubra <b>todos</b> os acessos que o usuário tinha. Se qualquer uma das funções dele mapear para Administrador de Serviço, ele vira Administrador de Serviço.</p>
+<div class="tbl"><table>
+<thead><tr><th>Função no Cloud EPM</th><th>Exemplos de origem (Planning)</th></tr></thead>
+<tbody>
+<tr><td>Administrador de Serviço</td><td>Administrador do aplicativo, Administrador de LCM, qualquer função fora das listas abaixo.</td></tr>
+<tr><td>Usuário Avançado</td><td>Usuário Interativo, Criador da Grade Ad Hoc, Supervisor de Aprovações, Content Manager, Criar/Executar Integração no FDMEE, leitura no Essbase.</td></tr>
+<tr><td>Usuário</td><td>Planejador, Usuário Ad Hoc, Publicador de Conteúdo, Drill-Through no FDMEE.</td></tr>
+<tr><td>Visualizador</td><td>Usuário de Exibição, Explorer/Visualizador do Reporting and Analysis.</td></tr>
+</tbody></table></div>
+<p>Para HFM, FCM, PCM/EPCM e DRM, use as tabelas do apêndice A do manual oficial. No HFM, Administrador de Aplicativo e Carregar Sistema viram Administrador de Serviço. No DRM, Usuário do Analytics, Usuário Anônimo, Governance Manager e Usuário do Workflow não são mapeados.</p>
+
+<h2 id="troubleshooting"><span class="n">11</span>Solução de problemas</h2>
+<div class="tbl"><table>
+<thead><tr><th>Sintoma</th><th>Causa provável</th><th>O que fazer</th></tr></thead>
+<tbody>
+<tr><td><code>EPMLCM-26000</code> na importação</td><td>Snapshot de versão incompatível</td><td>Fazer upgrade do snapshot (exceto ARCS e EDM) conforme o EPM Automate, ou gerar novo snapshot.</td></tr>
+<tr><td><code>EPMIE-00070</code></td><td>Usuário do snapshot sem função no destino</td><td>Importar/clonar usuários e funções ou atribuir a função antes.</td></tr>
+<tr><td><code>File not found</code> ao baixar ou clonar</td><td>Manutenção diária gerando ou arquivando o snapshot</td><td>Aguardar a janela terminar.</td></tr>
+<tr><td>Clonagem encerrada no meio</td><td>Manutenção diária da origem começou</td><td>Reagendar a manutenção da origem e repetir.</td></tr>
+<tr><td>Erro de autorização ao clonar usuários</td><td>Usuário sem Administrador do Domínio de Identidades</td><td>Usar usuário com a função ou desmarcar Usuários e Funções.</td></tr>
+<tr><td>Clonagem falha na autenticação</td><td>Usuário de destino com MFA</td><td>Usar conta de serviço sem MFA.</td></tr>
+<tr><td><i>Essbase data import is only supported during create application</i></td><td>Tentativa de importar só dados do Essbase em Planning/FCC</td><td>Importar o snapshot completo após <code>recreate</code> ou carregar dados pelo utilitário.</td></tr>
+<tr><td>Backup do Planning falha por memória</td><td>Smart lists orientadas por membro em ASO</td><td>Usar o snapshot de manutenção diária para restauração.</td></tr>
+<tr><td>Artefato com nome errado após importar</td><td>Unicode não preservado ou nome terminado em ponto</td><td>Recompactar com <code>cu=on</code> e corrigir o nome no zip.</td></tr>
+<tr><td>Upload rejeitado na tela</td><td>Arquivo acima de 2 GB / 500 MB ou nome já existente</td><td>Usar <code>uploadFile</code>; renomear ou excluir o existente.</td></tr>
+</tbody></table></div>
+<p>Para outros erros, abra o detalhe da falha no Relatório de Status e consulte <a href="https://docs.oracle.com/en/cloud/saas/enterprise-performance-management-common/tsepm/sop_migration_issue_resolution.html" target="_blank" rel="noopener">Resolving Migration-Related Errors</a> no Guia de Operações.</p>
+
+<h2 id="checklist"><span class="n">12</span>Checklist de migração e Go-Live</h2>
+<div class="ck-bar"><span id="ck-count">0 de 0 concluídos</span><button type="button" id="ck-reset">Limpar</button><button type="button" onclick="window.print()">Imprimir</button></div>
+<h3>Preparação</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="p1"><span>Contas de Administrador de Serviço / Migrações - Administrar e de Administrador do Domínio de Identidades disponíveis</span></label></li>
+<li><label><input type="checkbox" data-k="p2"><span>Conta de serviço para clonagem sem MFA</span></label></li>
+<li><label><input type="checkbox" data-k="p3"><span>EPM Automate instalado e testado na estação de administração</span></label></li>
+<li><label><input type="checkbox" data-k="p4"><span>Versões de origem e destino compatíveis</span></label></li>
+<li><label><input type="checkbox" data-k="p5"><span>Horários de manutenção diária mapeados e janela de mudança aprovada</span></label></li>
+<li><label><input type="checkbox" data-k="p6"><span>Backup do destino gerado e baixado (ponto de retorno)</span></label></li>
+</ul>
+<h3>On-premises (se aplicável)</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="o1"><span>Aplicativo estável e no patch mais recente</span></label></li>
+<li><label><input type="checkbox" data-k="o2"><span>Ambiente Cloud vazio, sem aplicativo de exemplo</span></label></li>
+<li><label><input type="checkbox" data-k="o3"><span>Variáveis globais convertidas e palavras reservadas revisadas</span></label></li>
+<li><label><input type="checkbox" data-k="o4"><span>Inventário do que não migra e plano de recriação</span></label></li>
+<li><label><input type="checkbox" data-k="o5"><span>Relatório de Provisionamento, users.csv, Groups.csv e arquivos de função prontos</span></label></li>
+<li><label><input type="checkbox" data-k="o6"><span>Usuários criados, funções atribuídas e grupos importados</span></label></li>
+</ul>
+<h3>Execução</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="e1"><span>Jobs e processos que alteram cubos congelados</span></label></li>
+<li><label><input type="checkbox" data-k="e2"><span>Opções de importação de grupos definidas</span></label></li>
+<li><label><input type="checkbox" data-k="e3"><span>Snapshot no destino (upload ou copySnapshotFromInstance)</span></label></li>
+<li><label><input type="checkbox" data-k="e4"><span>Importação/clonagem concluída sem falha no Relatório de Status</span></label></li>
+<li><label><input type="checkbox" data-k="e5"><span>Relatório de Status e Atualizações de Artefato exportados como evidência</span></label></li>
+</ul>
+<h3>Validação e cutover</h3>
+<ul class="checklist">
+<li><label><input type="checkbox" data-k="v1"><span>Dados, formulários, dimensões, regras e relatórios comparados com a origem</span></label></li>
+<li><label><input type="checkbox" data-k="v2"><span>Acesso testado com usuário comum de cada função</span></label></li>
+<li><label><input type="checkbox" data-k="v3"><span>Scripts EPM Automate/REST, Smart View, URLs intuitivas e bookmarks atualizados</span></label></li>
+<li><label><input type="checkbox" data-k="v4"><span>SSO, Agente de Integração e integrações com outros serviços revisados</span></label></li>
+<li><label><input type="checkbox" data-k="v5"><span>Allowlists de IP atualizadas (proxy, Fusion ERP, outras regiões)</span></label></li>
+<li><label><input type="checkbox" data-k="v6"><span>Snapshots importantes baixados antes do prazo de 60 dias</span></label></li>
+<li><label><input type="checkbox" data-k="v7"><span>Usuários comunicados e aceite do negócio registrado</span></label></li>
+</ul>
+
+<h2 id="fontes"><span class="n">13</span>Fontes</h2>
+<p>Documentação oficial usada como referência:</p>
+<ul>
+<li><a href="https://docs.oracle.com/cloud/help/pt_BR/epm-common/EPMSS/EPMSS.pdf" target="_blank" rel="noopener">Oracle Fusion Cloud EPM · Administração da Migração (PDF, pt-BR)</a></li>
+<li><a href="https://docs.oracle.com/en/cloud/saas/enterprise-performance-management-common/epmss/app_migration_to_epm_cloud_heading.html" target="_blank" rel="noopener">Migrating On-Premises Applications to Cloud EPM</a></li>
+<li><a href="https://docs.oracle.com/en/cloud/saas/enterprise-performance-management-common/cgsad/migrating_to_epm_cloud_0.html" target="_blank" rel="noopener">Getting Started for Administrators · Migrating to Cloud EPM</a></li>
+<li><a href="https://docs.oracle.com/en/cloud/saas/enterprise-performance-management-common/tsepm/sop_migration_issue_resolution.html" target="_blank" rel="noopener">Operations Guide · Resolving Migration-Related Errors</a></li>
+<li><a href="https://community.oracle.com/hub/" target="_blank" rel="noopener">Oracle Cloud Customer Connect · comunidade</a></li>
+</ul>
+<div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Fornecido sem garantia; valide em ambiente de teste antes de aplicar em produção. Baseado na edição F28909-24 (junho de 2026). Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#escopo">00 · Antes de começar</a></li><li><a href="#conceitos">01 · Conceitos</a></li><li><a href="#acesso">02 · Acessar a Migração</a></li><li><a href="#backup">03 · Backup e exportação</a></li><li><a href="#mover">04 · Mover snapshots</a></li><li><a href="#importar">05 · Importar</a></li><li><a href="#restaurar">06 · Restaurar backup</a></li><li><a href="#clonar">07 · Clonar ambiente</a></li><li><a href="#onprem">08 · On-premises → Cloud</a></li><li><a href="#relatorios">09 · Relatórios</a></li><li><a href="#funcoes">10 · Mapeamento de funções</a></li><li><a href="#troubleshooting">11 · Solução de problemas</a></li><li><a href="#checklist">12 · Checklist</a></li><li><a href="#fontes">13 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='oracle-epm-migracao-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});document.getElementById('ck-count').textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  document.getElementById('ck-reset').addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>
