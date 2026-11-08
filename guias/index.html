@@ -61,6 +61,9 @@
 .guide .go{display:flex;align-items:center;gap:6px;font-weight:600;color:var(--hi);margin-top:4px}
 .empty{background:var(--panel);border-radius:12px;padding:18px 20px;border:1px dashed var(--line);display:grid;gap:4px;align-content:center;min-height:90px}
 .empty p{margin:0;color:var(--muted);font-size:.94rem}
+.ask{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;background:var(--mark-soft);border-radius:12px;padding:16px 20px;margin:-12px 0 clamp(28px,4vw,40px)}
+.ask p{margin:0}
+.ask a{display:inline-flex;align-items:center;gap:6px;font-weight:600;background:var(--ink);color:var(--on-ink);text-decoration:none;border-radius:10px;padding:9px 16px}
 @media (max-width:820px){.area{grid-template-columns:minmax(0,1fr)}}
 @media (prefers-reduced-motion:reduce){.guide{transition:none}}
 </style>
@@ -71,6 +74,7 @@
 <span class="bar"></span>
 </div>
 <nav class="areas-nav" aria-label="Filtrar guias por área"><a href="#estudos" data-f="estudos" class="has"><b>Estudos</b><span>5 trilhas</span></a><a href="#seguranca" data-f="seguranca" class="has"><b>Segurança</b><span>2 guias</span></a><a href="#rede-firewall" data-f="rede-firewall" class="has"><b>Rede e firewall</b><span>1 guia</span></a><a href="#infraestrutura" data-f="infraestrutura" class="has"><b>Infraestrutura</b><span>2 guias</span></a><a href="#cloud" data-f="cloud" class="soon"><b>Cloud</b><span>0 guias · em preparação</span></a><a href="#observabilidade" data-f="observabilidade" class="soon"><b>Observabilidade</b><span>0 guias · em preparação</span></a><a href="#storage-backup" data-f="storage-backup" class="soon"><b>Storage e backup</b><span>0 guias · em preparação</span></a><a href="#governanca-processos" data-f="governanca-processos" class="soon"><b>Governança e processos</b><span>0 guias · em preparação</span></a></nav>
+<div class="ask"><p><b>Não achou o tema que precisa?</b> Peça um guia ou trilha de estudo.</p><a href="pedidos/">Fazer um pedido <svg class="i"><use href="#i-arrow"/></svg></a></div>
 <p class="pick" id="pick">Selecione uma área acima para ver os guias.</p>
 <div id="areas"><section class="area" id="estudos" hidden>
 <header class="area-h"><h2>Estudos</h2><p>Trilhas para quem quer aprender: conceitos explicados, exemplos, laboratório, plano semanal, autoavaliação e caminho de certificação.</p><span class="cnt">5 trilhas</span></header>
