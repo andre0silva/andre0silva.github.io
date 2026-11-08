@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Redes de computadores: trilha de estudo · Estudos · André Ferreira</title>
+<meta name="description" content="Trilha de estudo gratuita em português de redes de computadores: OSI e TCP/IP, sub-redes com exemplo resolvido, serviços e portas, VLAN, roteamento, diagnóstico, laboratório no Packet Tracer e CCNA.">
+<meta property="og:title" content="Redes de computadores: trilha de estudo · Estudos · André Ferreira">
+<meta property="og:description" content="Trilha de estudo gratuita em português de redes de computadores: OSI e TCP/IP, sub-redes com exemplo resolvido, serviços e portas, VLAN, roteamento, diagnóstico, laboratório no Packet Tracer e CCNA.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/estudo-redes/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/estudo-redes/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#estudos">Estudos</a> / Redes</p>
+<span class="chip">Estudos</span>
+<h1 style="margin-top:12px">Redes de computadores: trilha de estudo</h1>
+<p class="sub">Base sólida em redes: camadas, endereçamento e sub-redes, serviços, switching e roteamento, diagnóstico e laboratório no Packet Tracer, rumo ao CCNA ou Network+.</p>
+<div class="intro-meta"><span class="chip m">Redes</span><span class="chip m">TCP/IP</span><span class="chip m">Sub-redes</span><span class="chip m">VLAN</span><span class="chip m">Packet Tracer</span><span class="chip m">CCNA</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<h2 id="comecar"><span class="n">00</span>Como usar esta trilha</h2>
+<p>Trilha para quem está começando em <b>redes de computadores</b> ou precisa de uma base sólida para infraestrutura, cloud e segurança. Leva do modelo de camadas até VLAN, roteamento e solução de problemas, com laboratório gratuito no Cisco Packet Tracer.</p>
+<div class="kv"><div><b>~60 h</b><span>em 8 semanas</span></div><div><b>Iniciante</b><span>sem pré-requisito técnico</span></div><div><b>8 módulos</b><span>teoria, cálculo e prática</span></div><div><b>CCNA</b><span>ou Network+ como alvo</span></div></div>
+<h2 id="camadas"><span class="n">01</span>Modelos OSI e TCP/IP</h2>
+<figure class="diagram"><svg viewBox="0 0 760 420" role="img" aria-label="Modelo OSI e modelo TCP/IP lado a lado, com exemplos de protocolos e equipamentos por camada" font-family="'Source Sans 3',system-ui,sans-serif" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#504e4b"/></marker></defs><text x="24" y="30" font-size="16" font-weight="700" fill="#2d2a27" text-anchor="start">Sete camadas no OSI, quatro no TCP/IP: a mesma rede vista de dois jeitos</text><text x="24" y="52" font-size="12.5" font-weight="400" fill="#504e4b" text-anchor="start">Use o OSI para raciocinar e o TCP/IP para configurar</text><rect x="24" y="76" width="300" height="40" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="38" y="101" font-size="13.5" font-weight="600" fill="#2d2a27" text-anchor="start">7 · Aplicação</text><text x="310" y="101" font-size="12" font-weight="400" fill="#504e4b" text-anchor="end">HTTP, DNS, SMTP</text><rect x="24" y="122" width="300" height="40" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="38" y="147" font-size="13.5" font-weight="600" fill="#2d2a27" text-anchor="start">6 · Apresentação</text><text x="310" y="147" font-size="12" font-weight="400" fill="#504e4b" text-anchor="end">TLS, codificação</text><rect x="24" y="168" width="300" height="40" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="38" y="193" font-size="13.5" font-weight="600" fill="#2d2a27" text-anchor="start">5 · Sessão</text><text x="310" y="193" font-size="12" font-weight="400" fill="#504e4b" text-anchor="end">controle de sessão</text><rect x="24" y="214" width="300" height="40" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="38" y="239" font-size="13.5" font-weight="600" fill="#2d2a27" text-anchor="start">4 · Transporte</text><text x="310" y="239" font-size="12" font-weight="400" fill="#504e4b" text-anchor="end">TCP, UDP · portas</text><rect x="24" y="260" width="300" height="40" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="38" y="285" font-size="13.5" font-weight="600" fill="#2d2a27" text-anchor="start">3 · Rede</text><text x="310" y="285" font-size="12" font-weight="400" fill="#504e4b" text-anchor="end">IP, ICMP · roteador</text><rect x="24" y="306" width="300" height="40" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="38" y="331" font-size="13.5" font-weight="600" fill="#2d2a27" text-anchor="start">2 · Enlace</text><text x="310" y="331" font-size="12" font-weight="400" fill="#504e4b" text-anchor="end">Ethernet, MAC · switch</text><rect x="24" y="352" width="300" height="40" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="38" y="377" font-size="13.5" font-weight="600" fill="#2d2a27" text-anchor="start">1 · Física</text><text x="310" y="377" font-size="12" font-weight="400" fill="#504e4b" text-anchor="end">cabo, fibra, rádio</text><rect x="436" y="76" width="300" height="132" rx="8" fill="#fbeeeb" stroke="#b9b1ab" stroke-width="1.25"/><text x="450" y="143.0" font-size="13.5" font-weight="600" fill="#2d2a27" text-anchor="start">Aplicação</text><text x="722" y="143.0" font-size="12" font-weight="400" fill="#504e4b" text-anchor="end">HTTP, DNS, SSH, DHCP</text><path d="M326 138.0H434" fill="none" stroke="#b9b1ab" stroke-width="1" marker-end="url(#ah)" stroke-dasharray="3 4"/><rect x="436" y="214" width="300" height="40" rx="8" fill="#fbeeeb" stroke="#b9b1ab" stroke-width="1.25"/><text x="450" y="235.0" font-size="13.5" font-weight="600" fill="#2d2a27" text-anchor="start">Transporte</text><text x="722" y="235.0" font-size="12" font-weight="400" fill="#504e4b" text-anchor="end">TCP, UDP</text><path d="M326 230.0H434" fill="none" stroke="#b9b1ab" stroke-width="1" marker-end="url(#ah)" stroke-dasharray="3 4"/><rect x="436" y="260" width="300" height="40" rx="8" fill="#fbeeeb" stroke="#b9b1ab" stroke-width="1.25"/><text x="450" y="281.0" font-size="13.5" font-weight="600" fill="#2d2a27" text-anchor="start">Internet</text><text x="722" y="281.0" font-size="12" font-weight="400" fill="#504e4b" text-anchor="end">IPv4, IPv6, ICMP</text><path d="M326 276.0H434" fill="none" stroke="#b9b1ab" stroke-width="1" marker-end="url(#ah)" stroke-dasharray="3 4"/><rect x="436" y="306" width="300" height="86" rx="8" fill="#fbeeeb" stroke="#b9b1ab" stroke-width="1.25"/><text x="450" y="350.0" font-size="13.5" font-weight="600" fill="#2d2a27" text-anchor="start">Acesso à rede</text><text x="722" y="350.0" font-size="12" font-weight="400" fill="#504e4b" text-anchor="end">Ethernet, Wi-Fi</text><path d="M326 345.0H434" fill="none" stroke="#b9b1ab" stroke-width="1" marker-end="url(#ah)" stroke-dasharray="3 4"/><text x="24" y="410" font-size="12" font-weight="700" fill="#504e4b" text-anchor="start">OSI</text><text x="436" y="410" font-size="12" font-weight="700" fill="#504e4b" text-anchor="start">TCP/IP</text></svg><figcaption>Cada camada resolve um problema e conversa com a de cima e a de baixo. Ao investigar um problema, comece pela camada 1 e suba.</figcaption></figure>
+<p>Dica de solução de problemas: link apagado é camada 1; MAC não aprendido ou VLAN errada é camada 2; IP, máscara, gateway ou rota é camada 3; porta bloqueada é camada 4; certificado ou DNS é camada 7.</p>
+<h2 id="enderecamento"><span class="n">02</span>Endereçamento IPv4 e sub-redes</h2>
+<p>Um endereço IPv4 tem 32 bits divididos em rede e host. A máscara (ou o prefixo <code>/n</code>) diz quantos bits são da rede.</p>
+<div class="tbl"><table><thead><tr><th>Prefixo</th><th>Máscara</th><th>Endereços</th><th>Hosts utilizáveis</th></tr></thead><tbody><tr><td>/24</td><td>255.255.255.0</td><td>256</td><td>254</td></tr><tr><td>/25</td><td>255.255.255.128</td><td>128</td><td>126</td></tr><tr><td>/26</td><td>255.255.255.192</td><td>64</td><td>62</td></tr><tr><td>/27</td><td>255.255.255.224</td><td>32</td><td>30</td></tr><tr><td>/28</td><td>255.255.255.240</td><td>16</td><td>14</td></tr><tr><td>/30</td><td>255.255.255.252</td><td>4</td><td>2</td></tr></tbody></table></div>
+<h3>Exemplo resolvido: dividir 192.168.10.0/24 em 4 sub-redes</h3>
+<p>Quatro sub-redes pedem 2 bits a mais (2² = 4), então o prefixo vai de /24 para /26, com blocos de 64 endereços.</p>
+<div class="tbl"><table><thead><tr><th>Sub-rede</th><th>Rede</th><th>Primeiro host</th><th>Último host</th><th>Broadcast</th></tr></thead><tbody><tr><td>1</td><td>192.168.10.0/26</td><td>.1</td><td>.62</td><td>.63</td></tr><tr><td>2</td><td>192.168.10.64/26</td><td>.65</td><td>.126</td><td>.127</td></tr><tr><td>3</td><td>192.168.10.128/26</td><td>.129</td><td>.190</td><td>.191</td></tr><tr><td>4</td><td>192.168.10.192/26</td><td>.193</td><td>.254</td><td>.255</td></tr></tbody></table></div>
+<div class="call"><b class="t">Faixas privadas (RFC 1918)</b><p><code>10.0.0.0/8</code>, <code>172.16.0.0/12</code> e <code>192.168.0.0/16</code>. Não são roteadas na internet e saem por NAT.</p></div>
+<p>IPv6 usa 128 bits em hexadecimal (ex.: <code>2001:db8::1</code>). Em redes locais, o padrão é usar /64 por sub-rede.</p>
+<h2 id="servicos"><span class="n">03</span>Serviços essenciais e portas</h2>
+<div class="tbl"><table><thead><tr><th>Serviço</th><th>Para que serve</th><th>Porta</th></tr></thead><tbody><tr><td>DHCP</td><td>Entrega IP, máscara, gateway e DNS automaticamente (descoberta, oferta, pedido, confirmação)</td><td>UDP 67/68</td></tr><tr><td>DNS</td><td>Traduz nomes em IPs</td><td>UDP/TCP 53</td></tr><tr><td>HTTP / HTTPS</td><td>Web; HTTPS com TLS</td><td>TCP 80 / 443</td></tr><tr><td>SSH</td><td>Acesso remoto seguro a equipamentos e servidores</td><td>TCP 22</td></tr><tr><td>RDP</td><td>Área de trabalho remota do Windows</td><td>TCP 3389</td></tr><tr><td>LDAP / LDAPS</td><td>Consulta ao diretório (AD)</td><td>TCP 389 / 636</td></tr><tr><td>SNMP</td><td>Monitoramento de equipamentos</td><td>UDP 161</td></tr><tr><td>NTP</td><td>Sincronizar relógio, essencial para logs e Kerberos</td><td>UDP 123</td></tr></tbody></table></div>
+<p><b>TCP</b> é orientado à conexão e garante entrega (handshake SYN, SYN-ACK, ACK). <b>UDP</b> não garante entrega e é usado onde velocidade importa mais, como voz, vídeo e DNS.</p>
+<h2 id="switching"><span class="n">04</span>Switching, VLAN e roteamento</h2>
+<ul><li><b>Switch</b> encaminha quadros pelo endereço MAC dentro da mesma rede (camada 2).</li><li><b>VLAN</b> divide um switch em redes lógicas separadas; o tráfego entre VLANs precisa de roteamento.</li><li><b>Trunk 802.1Q</b> leva várias VLANs num mesmo cabo, com marcação (tag).</li><li><b>STP</b> evita loops entre switches bloqueando caminhos redundantes.</li><li><b>Roteador</b> encaminha pacotes entre redes pelo IP (camada 3), com rotas estáticas ou protocolos como OSPF.</li><li><b>NAT/PAT</b> traduz IPs privados para um IP público na saída para a internet.</li></ul>
+<h3>Exemplo: duas VLANs com router-on-a-stick (Cisco IOS)</h3>
+<pre class="cli"><span class="c">! Switch: cria as VLANs, porta de acesso e trunk</span>
+Switch(config)# vlan 10
+Switch(config-vlan)# name ADM
+Switch(config-vlan)# vlan 20
+Switch(config-vlan)# name TI
+Switch(config-vlan)# interface fa0/1
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 10
+Switch(config-if)# interface gi0/1
+Switch(config-if)# switchport mode trunk
+
+<span class="c">! Roteador: uma subinterface por VLAN</span>
+Router(config)# interface gi0/0
+Router(config-if)# no shutdown
+Router(config-if)# interface gi0/0.10
+Router(config-subif)# encapsulation dot1Q 10
+Router(config-subif)# ip address 192.168.10.1 255.255.255.0
+Router(config-subif)# interface gi0/0.20
+Router(config-subif)# encapsulation dot1Q 20
+Router(config-subif)# ip address 192.168.20.1 255.255.255.0</pre>
+<p>Os PCs da VLAN 10 usam <code>192.168.10.1</code> como gateway e os da VLAN 20 usam <code>192.168.20.1</code>. O roteador passa a ligar as duas redes.</p>
+<h2 id="troubleshooting"><span class="n">05</span>Ferramentas de diagnóstico</h2>
+<div class="tbl"><table><thead><tr><th>Comando</th><th>Sistema</th><th>O que mostra</th></tr></thead><tbody><tr><td><code>ipconfig /all</code> · <code>ip a</code></td><td>Windows · Linux</td><td>IP, máscara, gateway, DNS e MAC</td></tr><tr><td><code>ping 8.8.8.8</code></td><td>Todos</td><td>Se há conectividade IP com o destino</td></tr><tr><td><code>tracert</code> · <code>traceroute</code></td><td>Windows · Linux</td><td>Por quais roteadores o pacote passa</td></tr><tr><td><code>nslookup</code> · <code>dig</code></td><td>Todos · Linux</td><td>Se o nome resolve e para qual IP</td></tr><tr><td><code>Test-NetConnection host -Port 443</code></td><td>Windows (PowerShell)</td><td>Se a porta TCP está aberta</td></tr><tr><td><code>show ip interface brief</code></td><td>Cisco IOS</td><td>Estado e IP de cada interface</td></tr><tr><td><code>show vlan brief</code> · <code>show mac address-table</code></td><td>Cisco IOS</td><td>VLANs por porta e MACs aprendidos</td></tr></tbody></table></div><p>Roteiro prático: ping no próprio gateway, depois num IP externo, depois num nome. Se o IP externo responde e o nome não, o problema é DNS.</p>
+<h2 id="lab"><span class="n">06</span>Laboratório guiado no Packet Tracer</h2>
+<ol class="steps"><li><b>Instale o Packet Tracer</b>É gratuito com cadastro na Cisco Networking Academy.</li><li><b>Monte a topologia</b>1 roteador, 1 switch e 4 PCs: dois na VLAN 10 e dois na VLAN 20.</li><li><b>Configure VLANs e trunk</b>Use os comandos do módulo de switching.</li><li><b>Configure o roteador</b>Subinterfaces 802.1Q com os gateways de cada VLAN.</li><li><b>Ative o DHCP no roteador</b>Crie um pool por VLAN e confirme que os PCs recebem IP sozinhos.</li><li><b>Teste e quebre</b>Faça ping entre VLANs; depois troque a VLAN de uma porta e diagnostique com os comandos <code>show</code>.</li></ol>
+<h2 id="plano"><span class="n">07</span>Plano de estudo em 8 semanas</h2>
+<div class="tbl"><table><thead><tr><th>Semana</th><th>Estudo</th></tr></thead><tbody><tr><td>1</td><td>Modelos OSI e TCP/IP, Ethernet, cabeamento, MAC e ARP</td></tr><tr><td>2</td><td>IPv4, máscaras e sub-redes: treinar cálculo todos os dias</td></tr><tr><td>3</td><td>Serviços: DHCP, DNS, NAT; TCP × UDP e portas</td></tr><tr><td>4</td><td>Switching: VLAN, trunk, STP; laboratório de VLANs</td></tr><tr><td>5</td><td>Roteamento: rotas estáticas e OSPF básico</td></tr><tr><td>6</td><td>IPv6, Wi-Fi (2,4, 5 e 6 GHz, SSID, WPA3) e segurança básica (ACL, port security)</td></tr><tr><td>7</td><td>Automação e cloud: noções de APIs, JSON e redes em nuvem; diagnóstico</td></tr><tr><td>8</td><td>Revisão pelo blueprint oficial da prova e simulados</td></tr></tbody></table></div>
+<h2 id="autoavaliacao"><span class="n">08</span>Autoavaliação</h2>
+<details class="qa"><summary>Quantos hosts utilizáveis tem uma /27?</summary><div><p>30: são 32 endereços menos rede e broadcast.</p></div></details><details class="qa"><summary>Qual a máscara de uma /26?</summary><div><p>255.255.255.192.</p></div></details><details class="qa"><summary>Um PC tem IP 169.254.x.x. O que isso indica?</summary><div><p>Não recebeu IP do DHCP e se autoconfigurou (APIPA). Verifique o DHCP, a VLAN e o cabo.</p></div></details><details class="qa"><summary>Por que dois PCs em VLANs diferentes não se comunicam sem roteador?</summary><div><p>Cada VLAN é uma rede de camada 2 separada; passar de uma para outra exige roteamento de camada 3.</p></div></details><details class="qa"><summary>Ping no IP do site funciona, mas o nome não abre. Onde está o problema?</summary><div><p>Na resolução de nomes: DNS.</p></div></details><details class="qa"><summary>Qual a diferença entre switch e roteador?</summary><div><p>Switch encaminha por MAC dentro de uma rede; roteador encaminha por IP entre redes.</p></div></details>
+<h2 id="certificacoes"><span class="n">09</span>Certificações relacionadas</h2>
+<div class="tbl"><table><thead><tr><th>Certificação</th><th>Foco</th><th>Observação</th></tr></thead><tbody><tr><td>Cisco CCNA (200-301)</td><td>Redes corporativas com foco Cisco</td><td>A versão 1.1 vale até 02/02/2027; a versão 2.0 passa a ser a única a partir de 03/02/2027</td></tr><tr><td>CompTIA Network+</td><td>Redes neutras em relação a fornecedores</td><td>Boa alternativa para quem não trabalha com Cisco</td></tr><tr><td>Cursos da Cisco Networking Academy</td><td>Introdução a redes e Packet Tracer</td><td>Vários cursos introdutórios gratuitos</td></tr></tbody></table></div><p>Confirme datas e versões na página oficial antes de agendar.</p>
+<h2 id="progresso"><span class="n">10</span>Checklist de progresso</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div><h3>Fundamentos</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Explico OSI e TCP/IP com exemplos</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Calculo sub-redes sem calculadora</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Sei as portas dos 8 serviços da tabela</span></label></li></ul><h3>Prática</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c4"><span>Montei VLANs e trunk no Packet Tracer</span></label></li><li><label><input type="checkbox" data-k="c5"><span>Configurei router-on-a-stick</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Configurei DHCP por VLAN</span></label></li><li><label><input type="checkbox" data-k="c7"><span>Diagnostiquei um problema com comandos show</span></label></li></ul><h3>Prova</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c8"><span>Li o blueprint oficial da prova escolhida</span></label></li><li><label><input type="checkbox" data-k="c9"><span>Fiz ao menos 2 simulados</span></label></li></ul>
+<h2 id="fontes"><span class="n">11</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://www.netacad.com/" target="_blank" rel="noopener">Cisco Networking Academy (Packet Tracer e cursos)</a></li><li><a href="https://learningnetwork.cisco.com/s/ccna" target="_blank" rel="noopener">Cisco Learning Network: CCNA</a></li><li><a href="https://www.comptia.org/certifications/network" target="_blank" rel="noopener">CompTIA Network+</a></li><li><a href="https://www.rfc-editor.org/rfc/rfc1918" target="_blank" rel="noopener">RFC 1918: endereços privados</a></li></ul>
+<div class="call"><p>© 2026 André Ferreira · Trilha sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias; não é material oficial da Cisco ou da CompTIA. Cisco, CCNA e Packet Tracer são marcas da Cisco Systems. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#comecar">00 · Como usar</a></li><li><a href="#camadas">01 · Camadas</a></li><li><a href="#enderecamento">02 · Endereçamento IP</a></li><li><a href="#servicos">03 · Serviços e portas</a></li><li><a href="#switching">04 · Switching e roteamento</a></li><li><a href="#troubleshooting">05 · Diagnóstico</a></li><li><a href="#lab">06 · Laboratório</a></li><li><a href="#plano">07 · Plano de estudo</a></li><li><a href="#autoavaliacao">08 · Autoavaliação</a></li><li><a href="#certificacoes">09 · Certificações</a></li><li><a href="#progresso">10 · Checklist</a></li><li><a href="#fontes">11 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='estudo-estudo-redes-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

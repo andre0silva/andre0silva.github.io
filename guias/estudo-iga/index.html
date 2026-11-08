@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IGA: governança de identidades, trilha de estudo · Estudos · André Ferreira</title>
+<meta name="description" content="Trilha de estudo gratuita em português sobre IGA (Identity Governance and Administration): ciclo de vida JML, RBAC, SoD, pacotes de acesso, revisões, PIM, laboratório com Entra ID e SC-300.">
+<meta property="og:title" content="IGA: governança de identidades, trilha de estudo · Estudos · André Ferreira">
+<meta property="og:description" content="Trilha de estudo gratuita em português sobre IGA (Identity Governance and Administration): ciclo de vida JML, RBAC, SoD, pacotes de acesso, revisões, PIM, laboratório com Entra ID e SC-300.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/estudo-iga/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/estudo-iga/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#estudos">Estudos</a> / IGA</p>
+<span class="chip">Estudos</span>
+<h1 style="margin-top:12px">IGA: governança de identidades, trilha de estudo</h1>
+<p class="sub">Governança de identidades sem mistério: ciclo de vida a partir do RH, papéis, SoD, revisões de acesso e acesso privilegiado, com laboratório no Microsoft Entra.</p>
+<div class="intro-meta"><span class="chip m">IGA</span><span class="chip m">Entra ID Governance</span><span class="chip m">JML</span><span class="chip m">SoD</span><span class="chip m">PIM</span><span class="chip m">SC-300</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<h2 id="comecar"><span class="n">00</span>Como usar esta trilha</h2>
+<p>Trilha para quem quer entender <b>Governança e Administração de Identidades (IGA)</b>: analistas de IAM, segurança, auditoria e infraestrutura. Os conceitos valem para qualquer ferramenta (SailPoint, Saviynt, One Identity, Microsoft Entra ID Governance); os exemplos práticos usam o Entra.</p>
+<div class="kv"><div><b>~30 h</b><span>em 4 semanas</span></div><div><b>Intermediário</b><span>com base em AD/Entra</span></div><div><b>6 módulos</b><span>conceito, prática e prova</span></div><div><b>SC-300</b><span>certificação alvo</span></div></div>
+<h3>Pré-requisitos</h3>
+<ul><li>Usuários, grupos e permissões no Active Directory ou Entra ID.</li><li>Noções de autenticação (SSO, MFA) e de processos de RH (admissão, transferência, desligamento).</li></ul>
+<div class="call"><b class="t">Depois desta trilha</b><p>Para implantar, use o <a href="../iga-entra-id-governance/">guia de implantação de IGA com Entra ID Governance</a>.</p></div>
+<h2 id="conceitos"><span class="n">01</span>IAM, IGA e PAM: o que é cada um</h2>
+<div class="tbl"><table><thead><tr><th>Sigla</th><th>Pergunta que responde</th><th>Exemplos</th></tr></thead><tbody><tr><td>IAM</td><td>Quem é você e como entra?</td><td>SSO, MFA, diretório, Acesso Condicional</td></tr><tr><td>IGA</td><td>Quem deveria ter qual acesso, por quê e até quando?</td><td>Ciclo de vida, solicitações, revisões, SoD</td></tr><tr><td>PAM</td><td>Como controlar contas e acessos privilegiados?</td><td>Acesso just-in-time, cofre de senhas, gravação de sessão</td></tr></tbody></table></div>
+<h3>Vocabulário essencial</h3>
+<div class="tbl"><table><thead><tr><th>Termo</th><th>Significado</th></tr></thead><tbody><tr><td>Fonte da verdade</td><td>Sistema que manda na identidade, normalmente o RH</td></tr><tr><td>Joiner, Mover, Leaver (JML)</td><td>Admissão, mudança de cargo ou área, desligamento</td></tr><tr><td>Acesso de nascença (birthright)</td><td>O que todo colaborador recebe pelo cargo, sem pedir</td></tr><tr><td>RBAC / ABAC</td><td>Acesso por papel ou por atributos (área, cargo, local)</td></tr><tr><td>Menor privilégio</td><td>Cada pessoa tem só o necessário, pelo tempo necessário</td></tr><tr><td>SoD (segregação de funções)</td><td>Impedir combinações perigosas, como cadastrar e aprovar o pagamento do mesmo fornecedor</td></tr><tr><td>Revisão de acessos (certificação)</td><td>Gestor ou dono do sistema confirma periodicamente quem deve manter o acesso</td></tr><tr><td>Conta órfã</td><td>Conta ativa sem dono válido, típica de desligado não removido</td></tr></tbody></table></div>
+<figure class="diagram"><svg viewBox="0 0 760 384" role="img" aria-label="Ciclo de vida da identidade em IGA: o RH dispara joiner, mover e leaver e a governança revisa os acessos" font-family="'Source Sans 3',system-ui,sans-serif" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#504e4b"/></marker></defs><text x="24" y="30" font-size="16" font-weight="700" fill="#2d2a27" text-anchor="start">O RH dispara o ciclo; a governança revisa o que ficou</text><text x="24" y="52" font-size="12.5" font-weight="400" fill="#504e4b" text-anchor="start">Ciclo de vida da identidade (joiner, mover, leaver) e controles contínuos</text><rect x="24" y="84" width="150" height="88" rx="8" fill="#2d2a27" stroke="#2d2a27" stroke-width="1.25"/><text x="36" y="108" font-size="14" font-weight="600" fill="#fff5e3" text-anchor="start">RH</text><text x="36" y="125" font-size="12" font-weight="400" fill="#f3e6d8" text-anchor="start">fonte da verdade</text><text x="36" y="141" font-size="12" font-weight="400" fill="#f3e6d8" text-anchor="start">admissão, mudança,</text><text x="36" y="157" font-size="12" font-weight="400" fill="#f3e6d8" text-anchor="start">desligamento</text><rect x="214" y="84" width="170" height="72" rx="8" fill="#ffe2d3" stroke="#fe5000" stroke-width="2"/><text x="226" y="108" font-size="14" font-weight="600" fill="#2d2a27" text-anchor="start">Plataforma IGA</text><text x="226" y="125" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">identidade única</text><text x="226" y="141" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">regras e políticas</text><rect x="424" y="76" width="150" height="72" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="436" y="100" font-size="14" font-weight="600" fill="#2d2a27" text-anchor="start">Joiner</text><text x="436" y="117" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">acessos de</text><text x="436" y="133" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">nascença (birthright)</text><rect x="424" y="156" width="150" height="72" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="436" y="180" font-size="14" font-weight="600" fill="#2d2a27" text-anchor="start">Mover</text><text x="436" y="197" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">ajusta acessos,</text><text x="436" y="213" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">remove os antigos</text><rect x="424" y="236" width="150" height="72" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="436" y="260" font-size="14" font-weight="600" fill="#2d2a27" text-anchor="start">Leaver</text><text x="436" y="277" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">bloqueia e remove</text><text x="436" y="293" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">tudo no mesmo dia</text><rect x="614" y="140" width="122" height="72" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="626" y="164" font-size="14" font-weight="600" fill="#2d2a27" text-anchor="start">Sistemas</text><text x="626" y="181" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">AD, Entra ID,</text><text x="626" y="197" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">ERP, SaaS</text><path d="M174 128H212" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><path d="M384 120H422" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><path d="M384 128H404V192H422" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><path d="M384 136H396V272H422" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><path d="M574 112H594V176H612" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><path d="M574 192H612" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><path d="M574 272H594V208H612" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><rect x="24" y="324" width="712" height="44" rx="8" fill="#fbeeeb" stroke="#b9b1ab" stroke-width="1"/><text x="40" y="351" font-size="13" font-weight="700" fill="#2d2a27" text-anchor="start">Controles contínuos:</text><text x="178" y="351" font-size="13" font-weight="400" fill="#2d2a27" text-anchor="start">solicitação com aprovação · revisão de acessos · SoD · acesso privilegiado JIT · auditoria</text></svg><figcaption>O RH alimenta a plataforma de IGA, que cria, ajusta e remove acessos nos sistemas. Controles contínuos corrigem o que o ciclo automático não cobre.</figcaption></figure>
+<h2 id="ciclo"><span class="n">02</span>Ciclo de vida na prática</h2>
+<h3>Exemplo: Maria, analista financeira</h3>
+<div class="tbl"><table><thead><tr><th>Evento</th><th>Gatilho no RH</th><th>O que a IGA faz</th></tr></thead><tbody><tr><td>Joiner</td><td>Admissão com início em 03/02</td><td>Cria a conta 1 dia antes, licença M365, grupos do Financeiro, acesso de leitura ao ERP</td></tr><tr><td>Mover</td><td>Promovida a coordenadora</td><td>Inclui aprovação de pagamentos no ERP e remove o perfil de lançamento (SoD)</td></tr><tr><td>Leaver</td><td>Desligamento em 15/09</td><td>Bloqueia login no mesmo dia, revoga sessões, remove grupos e licença e transfere arquivos ao gestor</td></tr></tbody></table></div>
+<div class="call warn"><b class="t">Onde as empresas erram</b><ul><li>O mover só adiciona acessos e nunca remove: em poucos anos o colaborador acumula privilégios.</li><li>O leaver depende de chamado manual: a conta fica ativa por dias.</li><li>Terceiros e prestadores ficam fora do RH e, portanto, fora do ciclo.</li></ul></div>
+<h3>Como isso é feito no Microsoft Entra</h3>
+<div class="tbl"><table><thead><tr><th>Necessidade</th><th>Recurso do Entra</th></tr></thead><tbody><tr><td>Trazer identidades do RH</td><td>Provisionamento de entrada (Workday, SuccessFactors ou API)</td></tr><tr><td>Tarefas de admissão e desligamento</td><td>Lifecycle Workflows</td></tr><tr><td>Solicitar acesso com aprovação e validade</td><td>Entitlement Management (pacotes de acesso)</td></tr><tr><td>Revisar acessos periodicamente</td><td>Access Reviews</td></tr><tr><td>Acesso administrativo sob demanda</td><td>Privileged Identity Management (PIM)</td></tr><tr><td>Levar contas para os apps</td><td>Provisionamento de saída via SCIM</td></tr></tbody></table></div>
+<p>Vários desses recursos exigem licença Microsoft Entra ID Governance ou Entra Suite. Confira o licenciamento atual na documentação antes de planejar.</p>
+<h2 id="lab"><span class="n">03</span>Laboratório guiado</h2>
+<ol class="steps"><li><b>Monte o cenário</b>Em um locatário de teste, crie 5 usuários com os atributos <code>department</code> e <code>jobTitle</code> preenchidos.</li><li><b>Grupo dinâmico</b>Crie um grupo dinâmico com a regra <code>user.department -eq "Financeiro"</code> e veja os membros entrarem sozinhos.</li><li><b>Pacote de acesso</b>Crie um catálogo Financeiro e um pacote com o grupo e um app SaaS, aprovação do gestor e validade de 90 dias.</li><li><b>Solicite</b>Com um usuário de teste, peça o pacote no portal My Access e aprove com o gestor.</li><li><b>Revisão</b>Crie uma revisão de acessos do grupo para o gestor, com remoção automática de quem não for confirmado.</li><li><b>PIM</b>Torne um usuário elegível ao papel Administrador de Usuários, com MFA e justificativa na ativação.</li><li><b>Leaver</b>Desabilite um usuário e confira em quais grupos, apps e sessões ele ainda aparece.</li></ol>
+<h2 id="plano"><span class="n">04</span>Plano de estudo em 4 semanas</h2>
+<div class="tbl"><table><thead><tr><th>Semana</th><th>Estudo</th><th>Prática</th></tr></thead><tbody><tr><td>1</td><td>IAM × IGA × PAM, vocabulário, JML e fonte da verdade</td><td>Mapear o JML de uma empresa fictícia</td></tr><tr><td>2</td><td>RBAC, SoD, pacotes de acesso, revisões</td><td>Passos 1 a 5 do laboratório</td></tr><tr><td>3</td><td>PIM, Lifecycle Workflows, provisionamento de entrada e SCIM</td><td>Passos 6 e 7 do laboratório</td></tr><tr><td>4</td><td>Auditoria, métricas, LGPD; guia de estudo do SC-300</td><td>Simulado e revisão dos pontos fracos</td></tr></tbody></table></div>
+<h2 id="metricas"><span class="n">05</span>Métricas que mostram maturidade</h2>
+<div class="tbl"><table><thead><tr><th>Métrica</th><th>Por que importa</th></tr></thead><tbody><tr><td>Tempo de provisionamento na admissão</td><td>Produtividade no primeiro dia</td></tr><tr><td>Tempo de revogação no desligamento</td><td>Principal risco de segurança do ciclo</td></tr><tr><td>Contas órfãs encontradas</td><td>Mostra falhas no leaver</td></tr><tr><td>% de revisões concluídas no prazo</td><td>Exigência comum de auditoria</td></tr><tr><td>Conflitos de SoD abertos</td><td>Risco de fraude</td></tr><tr><td>Administradores permanentes versus elegíveis</td><td>Superfície de ataque privilegiada</td></tr></tbody></table></div>
+<h2 id="autoavaliacao"><span class="n">06</span>Autoavaliação</h2>
+<details class="qa"><summary>Qual a diferença entre IAM e IGA?</summary><div><p>IAM cuida de autenticar e autorizar o acesso. IGA governa quem deveria ter cada acesso, por quê e por quanto tempo.</p></div></details><details class="qa"><summary>Por que o RH deve ser a fonte da verdade?</summary><div><p>Porque é onde admissão, mudança e desligamento acontecem primeiro. Assim o ciclo de acessos acompanha a vida real do colaborador.</p></div></details><details class="qa"><summary>Dê um exemplo de conflito de SoD.</summary><div><p>A mesma pessoa cadastrar um fornecedor e aprovar o pagamento a ele.</p></div></details><details class="qa"><summary>O que é acesso just-in-time?</summary><div><p>O privilégio fica elegível e só é ativado quando necessário, por tempo limitado, com justificativa e às vezes aprovação.</p></div></details><details class="qa"><summary>O que uma revisão de acessos resolve que o JML não resolve?</summary><div><p>Acessos concedidos fora do ciclo, exceções e acúmulos. O gestor confirma ou remove periodicamente.</p></div></details><details class="qa"><summary>Qual o maior risco de um leaver manual?</summary><div><p>A conta ativa após o desligamento, com acesso a dados e sistemas.</p></div></details>
+<h2 id="certificacoes"><span class="n">07</span>Certificações relacionadas</h2>
+<div class="tbl"><table><thead><tr><th>Certificação</th><th>Foco</th><th>Observação</th></tr></thead><tbody><tr><td>SC-300: Identity and Access Administrator</td><td>Microsoft Entra, Acesso Condicional, governança</td><td>Prova principal para IGA no ecossistema Microsoft; conteúdo revisado em 2026</td></tr><tr><td>SC-900</td><td>Fundamentos de segurança e identidade Microsoft</td><td>Bom ponto de partida</td></tr><tr><td>CIDPro (IDPro)</td><td>Identidade, neutra em relação a fornecedores</td><td>Baseada no corpo de conhecimento da IDPro</td></tr><tr><td>Certificações de fornecedores</td><td>SailPoint, Saviynt e outros</td><td>Úteis quando a vaga cita a ferramenta</td></tr></tbody></table></div>
+<h2 id="progresso"><span class="n">08</span>Checklist de progresso</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div><h3>Conceitos</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Diferencio IAM, IGA e PAM</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Explico JML com um exemplo real</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Dou 2 exemplos de conflito de SoD</span></label></li></ul><h3>Prática</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c4"><span>Criei um grupo dinâmico</span></label></li><li><label><input type="checkbox" data-k="c5"><span>Criei e solicitei um pacote de acesso</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Configurei uma revisão de acessos</span></label></li><li><label><input type="checkbox" data-k="c7"><span>Ativei um papel pelo PIM</span></label></li></ul><h3>Prova</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c8"><span>Li o guia de estudo do SC-300</span></label></li><li><label><input type="checkbox" data-k="c9"><span>Fiz a avaliação prática gratuita da Microsoft</span></label></li></ul>
+<h2 id="fontes"><span class="n">09</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/identity-governance-overview" target="_blank" rel="noopener">O que é o Microsoft Entra ID Governance</a></li><li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/entitlement-management-overview" target="_blank" rel="noopener">Entitlement Management</a></li><li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/access-reviews-overview" target="_blank" rel="noopener">Revisões de acesso</a></li><li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/privileged-identity-management/pim-configure" target="_blank" rel="noopener">Privileged Identity Management</a></li><li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/what-are-lifecycle-workflows" target="_blank" rel="noopener">Lifecycle Workflows</a></li><li><a href="https://learn.microsoft.com/credentials/certifications/resources/study-guides/sc-300" target="_blank" rel="noopener">Guia de estudo do exame SC-300</a></li><li><a href="https://bok.idpro.org/" target="_blank" rel="noopener">IDPro: corpo de conhecimento</a></li><li><a href="https://andre0silva.github.io/guias/iga-entra-id-governance/" target="_blank" rel="noopener">Guia de implantação de IGA neste portfólio</a></li></ul>
+<div class="call"><p>© 2026 André Ferreira · Trilha sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública; não é material oficial de nenhum fornecedor. Microsoft e Entra são marcas da Microsoft Corporation. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#comecar">00 · Como usar</a></li><li><a href="#conceitos">01 · Conceitos</a></li><li><a href="#ciclo">02 · Ciclo de vida</a></li><li><a href="#lab">03 · Laboratório</a></li><li><a href="#plano">04 · Plano de estudo</a></li><li><a href="#metricas">05 · Métricas</a></li><li><a href="#autoavaliacao">06 · Autoavaliação</a></li><li><a href="#certificacoes">07 · Certificações</a></li><li><a href="#progresso">08 · Checklist</a></li><li><a href="#fontes">09 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='estudo-estudo-iga-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

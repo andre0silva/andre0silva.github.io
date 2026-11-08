@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cibersegurança: trilha de estudo · Estudos · André Ferreira</title>
+<meta name="description" content="Trilha de estudo gratuita em português para começar em cibersegurança: fundamentos, NIST CSF 2.0, CIS Controls, ISO 27001, ameaças, resposta a incidentes, laboratório com SIEM e certificações.">
+<meta property="og:title" content="Cibersegurança: trilha de estudo · Estudos · André Ferreira">
+<meta property="og:description" content="Trilha de estudo gratuita em português para começar em cibersegurança: fundamentos, NIST CSF 2.0, CIS Controls, ISO 27001, ameaças, resposta a incidentes, laboratório com SIEM e certificações.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/estudo-cyberseguranca/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/estudo-cyberseguranca/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#estudos">Estudos</a> / Cibersegurança</p>
+<span class="chip">Estudos</span>
+<h1 style="margin-top:12px">Cibersegurança: trilha de estudo</h1>
+<p class="sub">Primeiros passos em segurança da informação: fundamentos, frameworks, ameaças, resposta a incidentes, carreiras e um laboratório caseiro com SIEM.</p>
+<div class="intro-meta"><span class="chip m">Cibersegurança</span><span class="chip m">NIST CSF 2.0</span><span class="chip m">CIS Controls</span><span class="chip m">MITRE ATT&CK</span><span class="chip m">Security+</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<h2 id="comecar"><span class="n">00</span>Como usar esta trilha</h2>
+<p>Trilha de entrada em <b>cibersegurança</b> para quem vem de suporte, infraestrutura, redes ou desenvolvimento. Cobre fundamentos, frameworks, as principais ameaças, defesa em camadas, resposta a incidentes e um laboratório caseiro, com caminho de certificação.</p>
+<div class="kv"><div><b>~60 h</b><span>em 8 semanas</span></div><div><b>Iniciante</b><span>com base em redes</span></div><div><b>8 módulos</b><span>teoria e prática</span></div><div><b>SC-900 → Security+</b><span>caminho sugerido</span></div></div>
+<div class="call"><b class="t">Antes de começar</b><p>Segurança se apoia em redes e em identidade. Se essas bases estiverem fracas, faça antes a <a href="../estudo-redes/">trilha de redes</a> e depois a de <a href="../estudo-iga/">IGA</a>.</p></div>
+<h2 id="fundamentos"><span class="n">01</span>Fundamentos</h2>
+<div class="tbl"><table><thead><tr><th>Conceito</th><th>O que significa</th><th>Exemplo</th></tr></thead><tbody><tr><td>Confidencialidade</td><td>Só quem pode vê o dado</td><td>Criptografia do disco do notebook</td></tr><tr><td>Integridade</td><td>O dado não é alterado sem autorização</td><td>Hash e assinatura digital</td></tr><tr><td>Disponibilidade</td><td>O serviço funciona quando precisa</td><td>Backup e redundância contra ransomware</td></tr><tr><td>Autenticação, autorização e auditoria</td><td>Quem é, o que pode e o que fez</td><td>MFA, papéis e logs</td></tr><tr><td>Ameaça, vulnerabilidade e risco</td><td>Risco = probabilidade de a ameaça explorar a vulnerabilidade × impacto</td><td>Servidor sem patch exposto na internet</td></tr><tr><td>Defesa em profundidade</td><td>Várias camadas de controle</td><td>MFA + EDR + segmentação + backup</td></tr><tr><td>Zero Trust</td><td>Verificar sempre, menor privilégio, assumir a violação</td><td>Acesso Condicional por usuário, dispositivo e risco</td></tr></tbody></table></div>
+<p>Vulnerabilidades públicas recebem um identificador <b>CVE</b> e uma nota de gravidade <b>CVSS</b> de 0 a 10. Saber ler um alerta de CVE e decidir a prioridade do patch é tarefa diária.</p>
+<h2 id="frameworks"><span class="n">02</span>Frameworks que organizam a segurança</h2>
+<figure class="diagram"><svg viewBox="0 0 760 280" role="img" aria-label="As seis funções do NIST Cybersecurity Framework 2.0, com Governar no centro das demais" font-family="'Source Sans 3',system-ui,sans-serif" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#504e4b"/></marker></defs><text x="24" y="30" font-size="16" font-weight="700" fill="#2d2a27" text-anchor="start">Governar orienta as outras cinco funções do NIST CSF 2.0</text><text x="24" y="52" font-size="12.5" font-weight="400" fill="#504e4b" text-anchor="start">Do inventário à recuperação: o ciclo de um programa de segurança</text><rect x="24" y="72" width="712" height="56" rx="8" fill="#2d2a27" stroke="#2d2a27" stroke-width="1.25"/><text x="380.0" y="96" font-size="14" font-weight="600" fill="#fff5e3" text-anchor="middle">Governar (GV)</text><text x="380.0" y="113" font-size="12" font-weight="400" fill="#f3e6d8" text-anchor="middle">estratégia, papéis, políticas, riscos e fornecedores</text><rect x="24" y="168" width="132" height="72" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="36" y="192" font-size="14" font-weight="600" fill="#2d2a27" text-anchor="start">Identificar (ID)</text><text x="36" y="209" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">ativos, riscos,</text><text x="36" y="225" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">vulnerabilidades</text><path d="M90.0 128V166" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><path d="M156 204H168" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><rect x="169" y="168" width="132" height="72" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="181" y="192" font-size="14" font-weight="600" fill="#2d2a27" text-anchor="start">Proteger (PR)</text><text x="181" y="209" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">identidade, MFA,</text><text x="181" y="225" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">hardening, backup</text><path d="M235.0 128V166" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><path d="M301 204H313" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><rect x="314" y="168" width="132" height="72" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="326" y="192" font-size="14" font-weight="600" fill="#2d2a27" text-anchor="start">Detectar (DE)</text><text x="326" y="209" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">monitoramento,</text><text x="326" y="225" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">SIEM, alertas</text><path d="M380.0 128V166" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><path d="M446 204H458" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><rect x="459" y="168" width="132" height="72" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="471" y="192" font-size="14" font-weight="600" fill="#2d2a27" text-anchor="start">Responder (RS)</text><text x="471" y="209" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">conter, investigar,</text><text x="471" y="225" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">comunicar</text><path d="M525.0 128V166" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><path d="M591 204H603" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><rect x="604" y="168" width="132" height="72" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="616" y="192" font-size="14" font-weight="600" fill="#2d2a27" text-anchor="start">Recuperar (RC)</text><text x="616" y="209" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">restaurar, aprender,</text><text x="616" y="225" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">melhorar</text><path d="M670.0 128V166" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><text x="24" y="266" font-size="11.5" font-weight="400" fill="#504e4b" text-anchor="start">Fonte: NIST CSF 2.0 (fevereiro de 2024). Resumo com palavras próprias.</text></svg><figcaption>As seis funções do NIST CSF 2.0. A versão 2.0 acrescentou Governar, que trata segurança como decisão de gestão e não só de TI.</figcaption></figure>
+<div class="tbl"><table><thead><tr><th>Framework</th><th>Para que serve</th><th>Quando usar</th></tr></thead><tbody><tr><td>NIST CSF 2.0</td><td>Organizar o programa de segurança em 6 funções</td><td>Diagnóstico de maturidade e plano de ação</td></tr><tr><td>CIS Controls v8.1</td><td>18 controles priorizados em grupos de implementação (IG1 a IG3)</td><td>Saber por onde começar com poucos recursos</td></tr><tr><td>ISO/IEC 27001:2022</td><td>Sistema de gestão certificável, com 93 controles no Anexo A</td><td>Exigência de clientes e auditorias</td></tr><tr><td>MITRE ATT&CK</td><td>Catálogo de táticas e técnicas reais de atacantes</td><td>Detecção, threat hunting e testes</td></tr><tr><td>LGPD</td><td>Lei brasileira de proteção de dados pessoais</td><td>Qualquer tratamento de dados pessoais no Brasil</td></tr></tbody></table></div>
+<h2 id="ameacas"><span class="n">03</span>Ameaças mais comuns e como se defender</h2>
+<div class="tbl"><table><thead><tr><th>Ameaça</th><th>Como acontece</th><th>Controles principais</th></tr></thead><tbody><tr><td>Phishing</td><td>E-mail ou mensagem que rouba senha ou instala malware</td><td>MFA resistente a phishing, filtro de e-mail, treinamento</td></tr><tr><td>Roubo de credenciais</td><td>Senha vazada ou reutilizada</td><td>MFA, bloqueio de autenticação legada, monitoramento de risco de login</td></tr><tr><td>Ransomware</td><td>Criptografa dados e pede resgate, muitas vezes após roubo de dados</td><td>Backup imutável e offline, EDR, patch, segmentação, menor privilégio</td></tr><tr><td>Exploração de vulnerabilidade</td><td>Ataque a sistema exposto sem correção</td><td>Inventário, gestão de vulnerabilidades, patch por prioridade</td></tr><tr><td>Abuso de privilégio</td><td>Conta administrativa usada indevidamente</td><td>PIM/PAM, acesso just-in-time, revisão de acessos</td></tr><tr><td>Engenharia social</td><td>Golpe por telefone ou mensagem fingindo ser alguém</td><td>Processos de verificação e cultura de segurança</td></tr></tbody></table></div>
+<h2 id="resposta"><span class="n">04</span>Resposta a incidentes</h2>
+<p>O guia clássico do NIST para resposta a incidentes (SP 800-61) organiza o trabalho em fases. A revisão 3, de 2025, passou a alinhar a resposta às funções do CSF 2.0, mas a lógica continua a mesma:</p>
+<ol class="steps"><li><b>Preparação</b>Plano, contatos, ferramentas, logs habilitados e exercícios de mesa.</li><li><b>Detecção e análise</b>Confirmar se é incidente, avaliar o escopo e a gravidade.</li><li><b>Contenção</b>Isolar máquinas, bloquear contas, cortar o acesso do atacante.</li><li><b>Erradicação e recuperação</b>Remover a causa, restaurar de backup limpo, monitorar.</li><li><b>Lições aprendidas</b>Relatório, ajustes de controles e do próprio plano.</li></ol>
+<div class="call warn"><b class="t">Exemplo: conta comprometida no Microsoft 365</b><ul><li>Redefinir a senha e revogar sessões e tokens.</li><li>Revisar métodos de MFA e regras de caixa de correio criadas pelo atacante.</li><li>Verificar logs de login e e-mails enviados.</li><li>Comunicar a área de privacidade se houver dado pessoal envolvido (LGPD).</li></ul></div>
+<h2 id="carreira"><span class="n">05</span>Áreas de atuação</h2>
+<div class="tbl"><table><thead><tr><th>Área</th><th>O que faz</th><th>Base recomendada</th></tr></thead><tbody><tr><td>SOC / análise de segurança</td><td>Monitora alertas, investiga e responde</td><td>Redes, SIEM, sistemas operacionais</td></tr><tr><td>IAM / identidade</td><td>Gerencia acessos, MFA, governança</td><td>AD, Entra ID, IGA</td></tr><tr><td>GRC</td><td>Governança, riscos, normas e auditoria</td><td>ISO 27001, NIST, LGPD</td></tr><tr><td>Segurança de infraestrutura e cloud</td><td>Protege servidores, rede e nuvem</td><td>Redes, cloud, hardening</td></tr><tr><td>Pentest / red team</td><td>Testa defesas atacando com autorização</td><td>Redes, Linux, programação</td></tr></tbody></table></div>
+<h2 id="lab"><span class="n">06</span>Laboratório caseiro</h2>
+<ol class="steps"><li><b>Monte o ambiente</b>Num PC com 16 GB de RAM, crie VMs com VirtualBox ou Hyper-V: um Windows, um Linux e um SIEM.</li><li><b>Instale um SIEM gratuito</b>O Wazuh é aberto e reúne SIEM e XDR; instale o agente no Windows e no Linux.</li><li><b>Gere eventos</b>Erre senhas várias vezes, crie um usuário administrador local e veja os alertas chegarem.</li><li><b>Mapeie no ATT&CK</b>Para cada alerta, encontre a técnica correspondente no MITRE ATT&CK.</li><li><b>Pratique em plataformas</b>TryHackMe e Blue Team Labs têm salas gratuitas para iniciantes em defesa.</li><li><b>Documente</b>Escreva um relatório curto de incidente para cada exercício: vira portfólio.</li></ol>
+<h2 id="plano"><span class="n">07</span>Plano de estudo em 8 semanas</h2>
+<div class="tbl"><table><thead><tr><th>Semana</th><th>Estudo</th></tr></thead><tbody><tr><td>1</td><td>Fundamentos: tríade CIA, AAA, risco, Zero Trust</td></tr><tr><td>2</td><td>Identidade e acesso: MFA, Acesso Condicional, menor privilégio</td></tr><tr><td>3</td><td>Redes seguras: firewall, segmentação, VPN, TLS</td></tr><tr><td>4</td><td>Ameaças e vulnerabilidades: phishing, ransomware, CVE e CVSS</td></tr><tr><td>5</td><td>Frameworks: NIST CSF 2.0, CIS Controls, ISO 27001, LGPD</td></tr><tr><td>6</td><td>Detecção: logs, SIEM, EDR; laboratório com Wazuh</td></tr><tr><td>7</td><td>Resposta a incidentes e continuidade: backup, plano, exercício de mesa</td></tr><tr><td>8</td><td>Revisão pelos objetivos da prova escolhida e simulados</td></tr></tbody></table></div>
+<h2 id="autoavaliacao"><span class="n">08</span>Autoavaliação</h2>
+<details class="qa"><summary>Quais são os três pilares da tríade CIA?</summary><div><p>Confidencialidade, integridade e disponibilidade.</p></div></details><details class="qa"><summary>Qual função foi acrescentada no NIST CSF 2.0?</summary><div><p>Governar (Govern), que coloca segurança como responsabilidade da gestão.</p></div></details><details class="qa"><summary>Qual o controle mais eficaz contra roubo de credenciais?</summary><div><p>MFA, de preferência resistente a phishing, combinado com bloqueio de autenticação legada.</p></div></details><details class="qa"><summary>Por que o backup precisa ser imutável ou offline?</summary><div><p>Porque o ransomware procura e criptografa ou apaga backups acessíveis pela rede.</p></div></details><details class="qa"><summary>O que é o MITRE ATT&CK?</summary><div><p>Uma base de táticas e técnicas usadas por atacantes reais, usada para criar e testar detecções.</p></div></details><details class="qa"><summary>Qual a primeira ação ao detectar uma conta comprometida?</summary><div><p>Conter: redefinir a senha, revogar sessões e bloquear o acesso do atacante antes de investigar a fundo.</p></div></details>
+<h2 id="certificacoes"><span class="n">09</span>Certificações relacionadas</h2>
+<div class="tbl"><table><thead><tr><th>Certificação</th><th>Nível</th><th>Observação</th></tr></thead><tbody><tr><td>Microsoft SC-900</td><td>Fundamentos</td><td>Segurança, compliance e identidade no ecossistema Microsoft</td></tr><tr><td>ISC2 Certified in Cybersecurity (CC)</td><td>Entrada</td><td>Fundamentos neutros em relação a fornecedores</td></tr><tr><td>CompTIA Security+</td><td>Entrada / intermediário</td><td>SY0-701 é a versão atual; a SY0-801 tem lançamento previsto para novembro de 2026 e a 701 em inglês sai em junho de 2027</td></tr><tr><td>CompTIA CySA+ / Microsoft SC-200</td><td>Intermediário</td><td>Para quem segue para SOC e análise</td></tr></tbody></table></div><p>Datas de versão mudam. Confira a página oficial antes de agendar.</p>
+<h2 id="progresso"><span class="n">10</span>Checklist de progresso</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div><h3>Fundamentos</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Explico CIA, AAA e Zero Trust</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Leio um CVE e interpreto o CVSS</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Explico as 6 funções do NIST CSF 2.0</span></label></li></ul><h3>Prática</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c4"><span>Montei o laboratório com SIEM</span></label></li><li><label><input type="checkbox" data-k="c5"><span>Mapeei 5 alertas no MITRE ATT&CK</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Escrevi um relatório de incidente</span></label></li></ul><h3>Carreira</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c7"><span>Escolhi uma área de atuação</span></label></li><li><label><input type="checkbox" data-k="c8"><span>Escolhi e agendei a primeira certificação</span></label></li></ul>
+<h2 id="fontes"><span class="n">11</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://www.nist.gov/cyberframework" target="_blank" rel="noopener">NIST Cybersecurity Framework</a></li><li><a href="https://www.cisecurity.org/controls" target="_blank" rel="noopener">CIS Critical Security Controls</a></li><li><a href="https://attack.mitre.org/" target="_blank" rel="noopener">MITRE ATT&CK</a></li><li><a href="https://csrc.nist.gov/pubs/sp/800/61/r3/final" target="_blank" rel="noopener">NIST SP 800-61 Rev. 3: resposta a incidentes</a></li><li><a href="https://learn.microsoft.com/credentials/certifications/security-compliance-and-identity-fundamentals/" target="_blank" rel="noopener">Microsoft SC-900</a></li><li><a href="https://www.comptia.org/certifications/security" target="_blank" rel="noopener">CompTIA Security+</a></li><li><a href="https://wazuh.com/" target="_blank" rel="noopener">Wazuh</a></li><li><a href="https://andre0silva.github.io/guias/estudo-redes/" target="_blank" rel="noopener">Trilha de redes neste portfólio</a></li></ul>
+<div class="call"><p>© 2026 André Ferreira · Trilha sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública do NIST, CIS, MITRE e fornecedores citados; não é material oficial. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#comecar">00 · Como usar</a></li><li><a href="#fundamentos">01 · Fundamentos</a></li><li><a href="#frameworks">02 · Frameworks</a></li><li><a href="#ameacas">03 · Ameaças</a></li><li><a href="#resposta">04 · Incidentes</a></li><li><a href="#carreira">05 · Carreiras</a></li><li><a href="#lab">06 · Laboratório</a></li><li><a href="#plano">07 · Plano de estudo</a></li><li><a href="#autoavaliacao">08 · Autoavaliação</a></li><li><a href="#certificacoes">09 · Certificações</a></li><li><a href="#progresso">10 · Checklist</a></li><li><a href="#fontes">11 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='estudo-estudo-cyberseguranca-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

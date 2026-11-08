@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Microsoft Intune: trilha de estudo · Estudos · André Ferreira</title>
+<meta name="description" content="Trilha de estudo gratuita em português para aprender Microsoft Intune: conceitos, registro por plataforma, conformidade, Acesso Condicional, apps, laboratório e preparação para o MD-102.">
+<meta property="og:title" content="Microsoft Intune: trilha de estudo · Estudos · André Ferreira">
+<meta property="og:description" content="Trilha de estudo gratuita em português para aprender Microsoft Intune: conceitos, registro por plataforma, conformidade, Acesso Condicional, apps, laboratório e preparação para o MD-102.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/estudo-intune/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/estudo-intune/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#estudos">Estudos</a> / Microsoft Intune</p>
+<span class="chip">Estudos</span>
+<h1 style="margin-top:12px">Microsoft Intune: trilha de estudo</h1>
+<p class="sub">Do zero ao laboratório: conceitos, registro de dispositivos, conformidade, Acesso Condicional, apps e atualizações, com plano de 5 semanas rumo ao MD-102.</p>
+<div class="intro-meta"><span class="chip m">Intune</span><span class="chip m">Entra ID</span><span class="chip m">MDM · MAM</span><span class="chip m">Autopilot</span><span class="chip m">MD-102</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<h2 id="comecar"><span class="n">00</span>Como usar esta trilha</h2>
+<p>Trilha para quem quer aprender a <b>gerenciar e proteger dispositivos com Microsoft Intune</b>: analistas de suporte, administradores de Windows e quem mira a certificação MD-102 (Endpoint Administrator).</p>
+<div class="kv"><div><b>~40 h</b><span>em 5 semanas</span></div><div><b>Iniciante</b><span>com noção de Windows</span></div><div><b>7 módulos</b><span>do conceito ao laboratório</span></div><div><b>MD-102</b><span>certificação alvo</span></div></div>
+<h3>Pré-requisitos</h3>
+<ul><li>Saber administrar Windows 10/11 no básico.</li><li>Noções de Microsoft 365 e de usuários e grupos no Entra ID.</li><li>Um locatário de teste (trial do Microsoft 365 ou do Intune) para o laboratório.</li></ul>
+<div class="call"><b class="t">Depois desta trilha</b><p>Para implantar em produção, siga o <a href="../intune-implantacao/">guia de implantação do Intune</a>, que traz a ordem oficial de configuração e o checklist de rollout.</p></div>
+<h2 id="conceitos"><span class="n">01</span>Conceitos que você precisa dominar</h2>
+<div class="tbl"><table><thead><tr><th>Conceito</th><th>O que é</th><th>Exemplo</th></tr></thead><tbody><tr><td>UEM / MDM</td><td>Gerenciar o dispositivo inteiro: configurações, apps, segurança e limpeza remota</td><td>Notebook corporativo com BitLocker obrigatório</td></tr><tr><td>MAM</td><td>Proteger só os dados dentro dos apps, sem gerenciar o aparelho</td><td>Celular pessoal com Outlook protegido, sem copiar e colar para apps pessoais</td></tr><tr><td>Registro (enrollment)</td><td>Processo que coloca o dispositivo sob gestão do Intune</td><td>Autopilot no primeiro login do notebook</td></tr><tr><td>Política de conformidade</td><td>Regras mínimas que o dispositivo deve cumprir</td><td>Criptografia ligada, sistema atualizado, sem jailbreak</td></tr><tr><td>Acesso Condicional</td><td>Regra do Entra ID que libera ou bloqueia o acesso com base em sinais</td><td>Exigir dispositivo em conformidade para abrir o Teams</td></tr><tr><td>Perfil de configuração</td><td>Conjunto de ajustes aplicado ao dispositivo</td><td>Wi-Fi corporativo, restrições, catálogo de configurações</td></tr><tr><td>Cogerenciamento</td><td>Intune e Configuration Manager dividindo cargas de trabalho</td><td>Updates pelo Intune, softwares legados pelo ConfigMgr</td></tr></tbody></table></div>
+<figure class="diagram"><svg viewBox="0 0 760 300" role="img" aria-label="Como o Intune decide se um dispositivo acessa os apps da empresa" font-family="'Source Sans 3',system-ui,sans-serif" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#504e4b"/></marker></defs><text x="24" y="30" font-size="16" font-weight="700" fill="#2d2a27" text-anchor="start">Só dispositivo em conformidade chega aos dados</text><text x="24" y="52" font-size="12.5" font-weight="400" fill="#504e4b" text-anchor="start">Do registro ao acesso: o caminho que todo dispositivo percorre</text><rect x="24" y="84" width="160" height="72" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="36" y="108" font-size="14" font-weight="600" fill="#2d2a27" text-anchor="start">1. Registro</text><text x="36" y="125" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">Autopilot, ADE,</text><text x="36" y="141" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">Android Enterprise</text><rect x="212" y="84" width="160" height="72" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="224" y="108" font-size="14" font-weight="600" fill="#2d2a27" text-anchor="start">2. Políticas</text><text x="224" y="125" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">configuração, apps,</text><text x="224" y="141" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">segurança, updates</text><rect x="400" y="84" width="160" height="72" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="412" y="108" font-size="14" font-weight="600" fill="#2d2a27" text-anchor="start">3. Conformidade</text><text x="412" y="125" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">Intune avalia regras</text><text x="412" y="141" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">e marca o status</text><rect x="588" y="84" width="148" height="72" rx="8" fill="#ffe2d3" stroke="#fe5000" stroke-width="2"/><text x="600" y="108" font-size="14" font-weight="600" fill="#2d2a27" text-anchor="start">4. Acesso</text><text x="600" y="125" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">Acesso Condicional</text><text x="600" y="141" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">no Entra ID</text><path d="M184 120H210" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><path d="M372 120H398" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><path d="M560 120H586" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><rect x="588" y="200" width="148" height="56" rx="8" fill="#cfe8d4" stroke="#5f6e64" stroke-width="1.25"/><text x="600" y="224" font-size="14" font-weight="600" fill="#2d2a27" text-anchor="start">Apps liberados</text><text x="600" y="241" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">M365, SaaS, VPN</text><rect x="400" y="200" width="160" height="72" rx="8" fill="#fff5e3" stroke="#b9b1ab" stroke-width="1.25"/><text x="412" y="224" font-size="14" font-weight="600" fill="#2d2a27" text-anchor="start">Bloqueio</text><text x="412" y="241" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">remediação e aviso</text><text x="412" y="257" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">ao usuário</text><path d="M662 156V198" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><text x="670" y="186" font-size="12" font-weight="600" fill="#5f6e64" text-anchor="start">conforme</text><path d="M600 156V170H480V198" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)"/><text x="488" y="186" font-size="12" font-weight="600" fill="#aa4b17" text-anchor="start">não conforme</text><path d="M400 236H292V158" fill="none" stroke="#b9b1ab" stroke-width="1.5" marker-end="url(#ah)" stroke-dasharray="4 4"/><text x="212" y="256" font-size="12" font-weight="400" fill="#504e4b" text-anchor="start">corrige e reavalia</text></svg><figcaption>O Intune avalia a conformidade e o Entra ID decide o acesso. Sem a dupla conformidade + Acesso Condicional, o Intune apenas configura: não protege os dados.</figcaption></figure>
+<h2 id="registro"><span class="n">02</span>Registro de dispositivos por plataforma</h2>
+<div class="tbl"><table><thead><tr><th>Plataforma</th><th>Corporativo</th><th>Pessoal (BYOD)</th></tr></thead><tbody><tr><td>Windows</td><td>Windows Autopilot, ingresso no Entra ID, cogerenciamento</td><td>Registro do usuário ou só MAM nos apps</td></tr><tr><td>iOS/iPadOS e macOS</td><td>Registro automatizado (ADE) via Apple Business Manager</td><td>Registro de usuário (User Enrollment) ou MAM</td></tr><tr><td>Android</td><td>Android Enterprise: totalmente gerenciado, dedicado ou corporativo com perfil de trabalho</td><td>Perfil de trabalho</td></tr></tbody></table></div>
+<div class="call warn"><b class="t">Ponto de prova e de entrevista</b><p>Para Apple, é preciso um certificado push MDM da Apple, renovado anualmente com o mesmo Apple ID. Se vencer ou for renovado com outra conta, todos os dispositivos Apple precisam ser registrados de novo.</p></div>
+<h3>Windows Autopilot em uma frase</h3>
+<p>O fabricante ou revendedor registra o hash do hardware no locatário; o usuário liga o notebook, entra com a conta corporativa e o equipamento se configura sozinho, sem imagem e sem técnico.</p>
+<h2 id="politicas"><span class="n">03</span>Configuração, segurança e atualizações</h2>
+<div class="tbl"><table><thead><tr><th>Área</th><th>Onde fica</th><th>O que configurar primeiro</th></tr></thead><tbody><tr><td>Configuração</td><td>Dispositivos → Configuração</td><td>Wi-Fi, VPN, restrições e o catálogo de configurações</td></tr><tr><td>Segurança do endpoint</td><td>Segurança do ponto de extremidade</td><td>Antivírus, firewall, BitLocker/FileVault, EDR, redução da superfície de ataque</td></tr><tr><td>Linhas de base</td><td>Segurança do ponto de extremidade → Linhas de base de segurança</td><td>Baseline do Windows como ponto de partida</td></tr><tr><td>Atualizações do Windows</td><td>Dispositivos → Atualizações</td><td>Anéis de atualização: piloto, TI, geral</td></tr><tr><td>Conformidade</td><td>Dispositivos → Conformidade</td><td>Criptografia, versão mínima, senha, nível de ameaça</td></tr></tbody></table></div>
+<p>Os nomes de menu mudam com frequência no centro de administração do Intune. Aprenda a lógica, não o caminho exato.</p>
+<h3>Anéis de atualização na prática</h3>
+<div class="tbl"><table><thead><tr><th>Anel</th><th>Público</th><th>Adiamento de qualidade</th></tr></thead><tbody><tr><td>Piloto</td><td>TI e voluntários (~5%)</td><td>0 dias</td></tr><tr><td>Rápido</td><td>Áreas tolerantes (~20%)</td><td>3 a 5 dias</td></tr><tr><td>Geral</td><td>Restante da empresa</td><td>7 a 10 dias</td></tr></tbody></table></div>
+<p>Os números são um exemplo comum de mercado; ajuste à realidade de cada empresa.</p>
+<h2 id="apps"><span class="n">04</span>Aplicativos e proteção de dados</h2>
+<div class="tbl"><table><thead><tr><th>Tipo de app</th><th>Como entra no Intune</th><th>Exemplo</th></tr></thead><tbody><tr><td>Win32</td><td>Pacote .intunewin gerado pela ferramenta de empacotamento</td><td>Instalador .exe ou .msi com regras de detecção</td></tr><tr><td>Microsoft Store</td><td>Catálogo integrado da Store</td><td>Company Portal, apps da Store</td></tr><tr><td>Microsoft 365 Apps</td><td>Tipo de app próprio</td><td>Word, Excel, Outlook, Teams</td></tr><tr><td>Apps móveis</td><td>Lojas da Apple e do Google gerenciadas</td><td>Outlook e Teams no celular</td></tr></tbody></table></div>
+<h3>Política de proteção de app (MAM)</h3>
+<ul><li>Bloquear copiar e colar de apps corporativos para pessoais.</li><li>Exigir PIN ou biometria para abrir o app.</li><li>Impedir salvar arquivos fora do OneDrive/SharePoint.</li><li>Apagar só os dados corporativos quando o colaborador sai (limpeza seletiva).</li></ul>
+<h2 id="lab"><span class="n">05</span>Laboratório guiado</h2>
+<ol class="steps"><li><b>Prepare o locatário</b>Ative um trial do Microsoft 365 E5 ou do Intune, crie 2 usuários de teste e os grupos <code>GRP-Intune-Piloto</code> e <code>GRP-Intune-Dispositivos</code>.</li><li><b>Habilite o registro</b>Confira a autoridade de MDM, permita o registro de Windows e defina quem pode registrar.</li><li><b>Registre uma VM Windows 11</b>Em Configurações → Contas → Acessar trabalho ou escola, conecte com o usuário de teste.</li><li><b>Crie uma política de conformidade</b>Exija BitLocker, firewall e versão mínima do Windows; atribua ao grupo piloto.</li><li><b>Crie o Acesso Condicional</b>No Entra ID, exija dispositivo em conformidade para Office 365, primeiro em modo somente relatório.</li><li><b>Distribua um app</b>Publique o Company Portal e um app Win32 empacotado com a ferramenta de preparação.</li><li><b>Teste o bloqueio</b>Desligue o firewall da VM, sincronize e veja o dispositivo ficar não conforme e o acesso ser bloqueado.</li><li><b>Limpe</b>Use as ações remotas: sincronizar, reiniciar e retirar (Retire).</li></ol>
+<h2 id="plano"><span class="n">06</span>Plano de estudo em 5 semanas</h2>
+<div class="tbl"><table><thead><tr><th>Semana</th><th>Estudo</th><th>Prática</th></tr></thead><tbody><tr><td>1</td><td>Conceitos, licenças, Entra ID (usuários, grupos, ingresso de dispositivos)</td><td>Locatário de teste montado</td></tr><tr><td>2</td><td>Registro: Windows, Autopilot, Apple ADE, Android Enterprise</td><td>VM Windows registrada</td></tr><tr><td>3</td><td>Conformidade, Acesso Condicional, segurança do endpoint, linhas de base</td><td>Bloqueio por não conformidade funcionando</td></tr><tr><td>4</td><td>Apps (Win32, Store, M365), MAM, atualizações do Windows</td><td>App Win32 publicado e anel de atualização criado</td></tr><tr><td>5</td><td>Relatórios, solução de problemas, revisão do guia de estudo do MD-102 e avaliação prática gratuita</td><td>Simulado acima de 80%</td></tr></tbody></table></div>
+<h2 id="autoavaliacao"><span class="n">07</span>Autoavaliação</h2>
+<details class="qa"><summary>Qual a diferença entre MDM e MAM?</summary><div><p>MDM gerencia o dispositivo inteiro. MAM protege só os dados dentro dos apps, ideal para celular pessoal.</p></div></details><details class="qa"><summary>Por que uma política de conformidade sozinha não bloqueia o acesso?</summary><div><p>Ela só marca o dispositivo como conforme ou não. Quem bloqueia é o Acesso Condicional do Entra ID que exige dispositivo em conformidade.</p></div></details><details class="qa"><summary>O que acontece se o certificado push MDM da Apple vencer?</summary><div><p>Os dispositivos Apple perdem a comunicação com o Intune e precisam ser registrados de novo.</p></div></details><details class="qa"><summary>Quando usar Retire e quando usar Wipe?</summary><div><p>Retire remove dados e políticas corporativas e preserva os pessoais. Wipe restaura o dispositivo ao padrão de fábrica.</p></div></details><details class="qa"><summary>Para que serve um anel de atualização piloto?</summary><div><p>Testar as atualizações num grupo pequeno antes de liberar para toda a empresa.</p></div></details><details class="qa"><summary>Por que testar Acesso Condicional em modo somente relatório?</summary><div><p>Para ver quem seria bloqueado antes de bloquear de verdade e evitar parar a empresa.</p></div></details>
+<h2 id="certificacoes"><span class="n">08</span>Certificações relacionadas</h2>
+<div class="tbl"><table><thead><tr><th>Certificação</th><th>Nível</th><th>Observação</th></tr></thead><tbody><tr><td>MD-102: Microsoft 365 Certified Endpoint Administrator Associate</td><td>Associado</td><td>Prova principal de Intune. O conteúdo é revisado com frequência; leia o guia de estudo oficial antes</td></tr><tr><td>SC-300: Identity and Access Administrator</td><td>Associado</td><td>Complementa com Entra ID e Acesso Condicional</td></tr><tr><td>MS-900 / SC-900</td><td>Fundamentos</td><td>Opcionais para quem está começando</td></tr></tbody></table></div><p>As certificações associadas da Microsoft têm renovação anual gratuita por avaliação online.</p>
+<h2 id="progresso"><span class="n">09</span>Checklist de progresso</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div><h3>Conceitos</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Explico MDM, MAM e cogerenciamento</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Explico como conformidade e Acesso Condicional trabalham juntos</span></label></li></ul><h3>Prática</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c3"><span>Registrei uma VM Windows</span></label></li><li><label><input type="checkbox" data-k="c4"><span>Criei política de conformidade e AC em modo relatório</span></label></li><li><label><input type="checkbox" data-k="c5"><span>Publiquei um app Win32</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Criei uma política de proteção de app</span></label></li><li><label><input type="checkbox" data-k="c7"><span>Criei anéis de atualização</span></label></li></ul><h3>Prova</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c8"><span>Li o guia de estudo do MD-102</span></label></li><li><label><input type="checkbox" data-k="c9"><span>Fiz a avaliação prática gratuita da Microsoft</span></label></li><li><label><input type="checkbox" data-k="c10"><span>Agendei a prova</span></label></li></ul>
+<h2 id="fontes"><span class="n">10</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://learn.microsoft.com/pt-br/intune/fundamentals/get-started" target="_blank" rel="noopener">Introdução à implantação do Microsoft Intune</a></li><li><a href="https://learn.microsoft.com/pt-br/intune/device-enrollment/guide" target="_blank" rel="noopener">Guia de registro do Microsoft Intune</a></li><li><a href="https://learn.microsoft.com/pt-br/intune/fundamentals/planning-guide" target="_blank" rel="noopener">Guia de planejamento do Intune</a></li><li><a href="https://learn.microsoft.com/credentials/certifications/resources/study-guides/md-102" target="_blank" rel="noopener">Guia de estudo do exame MD-102</a></li><li><a href="https://andre0silva.github.io/guias/intune-implantacao/" target="_blank" rel="noopener">Guia de implantação do Intune neste portfólio</a></li></ul>
+<div class="call"><p>© 2026 André Ferreira · Trilha sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir da documentação pública do Microsoft Learn; não é material oficial. Microsoft, Intune e Entra são marcas da Microsoft Corporation. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#comecar">00 · Como usar</a></li><li><a href="#conceitos">01 · Conceitos</a></li><li><a href="#registro">02 · Registro</a></li><li><a href="#politicas">03 · Políticas</a></li><li><a href="#apps">04 · Apps</a></li><li><a href="#lab">05 · Laboratório</a></li><li><a href="#plano">06 · Plano de estudo</a></li><li><a href="#autoavaliacao">07 · Autoavaliação</a></li><li><a href="#certificacoes">08 · Certificações</a></li><li><a href="#progresso">09 · Checklist</a></li><li><a href="#fontes">10 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='estudo-estudo-intune-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>
