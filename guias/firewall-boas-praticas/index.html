@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Firewall: zonas, regras e revisão · Guias · André Ferreira</title>
+<meta name="description" content="Guia prático em português de boas práticas de firewall independente de fabricante: zonas, matriz de fluxos, padrão de regras, nomenclatura, recursos de NGFW, revisão periódica e gestão de mudanças.">
+<meta property="og:title" content="Firewall: zonas, regras e revisão · Guias · André Ferreira">
+<meta property="og:description" content="Guia prático em português de boas práticas de firewall independente de fabricante: zonas, matriz de fluxos, padrão de regras, nomenclatura, recursos de NGFW, revisão periódica e gestão de mudanças.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/firewall-boas-praticas/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/firewall-boas-praticas/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#rede-firewall">Rede e firewall</a> / Firewall</p>
+<span class="chip">Rede e firewall</span> <span class="chip m">Nível Pleno</span>
+<h1 style="margin-top:12px">Firewall: zonas, regras e revisão</h1>
+<p class="sub">Como organizar zonas e regras para que o firewall continue legível e seguro depois de anos de mudanças, com matriz de fluxos e roteiro de revisão.</p>
+<div class="intro-meta"><span class="chip m">Firewall</span><span class="chip m">NGFW</span><span class="chip m">Segmentação</span><span class="chip m">Zonas</span><span class="chip m">Regras</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<div class="kv"><div><b>Pleno</b><span>nível</span></div><div><b>Negar tudo</b><span>regra padrão</span></div><div><b>6 zonas</b><span>no exemplo</span></div><div><b>Trimestral</b><span>revisão de regras</span></div></div>
+<p>Vale para Fortinet, Palo Alto, Check Point, Sophos, pfSense/OPNsense e Meraki MX. Os nomes de menu mudam; os princípios não.</p>
+<h2 id="zonas"><span class="n">01</span>Zonas e matriz de fluxos</h2>
+<div class="tbl"><table><thead><tr><th>Origem ↓ / Destino →</th><th>Internet</th><th>DMZ</th><th>Servidores</th><th>Usuários</th><th>Gerência</th></tr></thead><tbody><tr><td>Internet</td><td>—</td><td>Só serviços publicados</td><td>Negado</td><td>Negado</td><td>Negado</td></tr><tr><td>DMZ</td><td>Atualizações</td><td>—</td><td>Portas específicas</td><td>Negado</td><td>Negado</td></tr><tr><td>Servidores</td><td>Atualizações e APIs listadas</td><td>Conforme app</td><td>Por aplicação</td><td>Negado</td><td>Negado</td></tr><tr><td>Usuários</td><td>Web com filtro</td><td>Conforme app</td><td>Portas da aplicação</td><td>—</td><td>Negado</td></tr><tr><td>Gerência</td><td>Atualizações</td><td>Administração</td><td>Administração</td><td>Suporte</td><td>—</td></tr></tbody></table></div><p>Visitantes e IoT ficam em zonas próprias, com acesso apenas à internet ou a destinos listados.</p>
+<h2 id="regras"><span class="n">02</span>Padrão de regras</h2>
+<ul><li>Regra final explícita de negar tudo, com log ligado.</li><li>Origem, destino e serviço sempre específicos: nada de <code>any</code> em mais de um campo.</li><li>Objetos e grupos com nome legível (<code>SRV-ERP-APP</code>, <code>GRP-SRV-AD</code>) em vez de IPs soltos.</li><li>Regras específicas antes das genéricas.</li><li>Cada regra com dono, chamado ou GMUD e data de revisão no comentário.</li><li>Regras temporárias com data de expiração.</li></ul><h3>Exemplo de regra documentada</h3><div class="tbl"><table><thead><tr><th>Campo</th><th>Valor</th></tr></thead><tbody><tr><td>Nome</td><td>USR-to-ERP-HTTPS</td></tr><tr><td>Origem</td><td>Zona Usuários · GRP-USR-FINANCEIRO</td></tr><tr><td>Destino</td><td>Zona Servidores · SRV-ERP-APP</td></tr><tr><td>Serviço</td><td>TCP 443</td></tr><tr><td>Ação</td><td>Permitir, com IPS e log</td></tr><tr><td>Comentário</td><td>Dono: TI Sistemas · GMUD 2026-1123 · revisar em 05/2027</td></tr></tbody></table></div>
+<h2 id="ngfw"><span class="n">03</span>Recursos de próxima geração</h2>
+<div class="tbl"><table><thead><tr><th>Recurso</th><th>Uso</th><th>Cuidado</th></tr></thead><tbody><tr><td>Identificação de aplicação</td><td>Liberar por aplicação, não só por porta</td><td>Testar antes de trocar regras por porta</td></tr><tr><td>IPS</td><td>Bloquear exploração de falhas conhecidas</td><td>Começar em modo de alerta nos perfis novos</td></tr><tr><td>Filtro de URL e DNS</td><td>Bloquear categorias de risco</td><td>Lista de exceções com aprovação</td></tr><tr><td>Inspeção TLS</td><td>Ver ameaças dentro do HTTPS</td><td>Excluir bancos, saúde e apps com certificado fixo; avisar sobre privacidade</td></tr><tr><td>Identidade do usuário</td><td>Regras por grupo do AD ou Entra ID</td><td>Depende de integração estável</td></tr></tbody></table></div>
+<h2 id="revisao"><span class="n">04</span>Roteiro de revisão trimestral</h2>
+<ol class="steps"><li><b>Exporte as regras com contadores de uso</b>A maioria dos fabricantes mostra acertos e última utilização.</li><li><b>Regras sem uso há 90 dias</b>Confirme com o dono e desative antes de apagar.</li><li><b>Regras amplas</b>Procure <code>any</code> e redes inteiras liberadas e reduza o escopo.</li><li><b>Temporárias vencidas</b>Remova.</li><li><b>Sombreadas e duplicadas</b>Regras que nunca são alcançadas porque outra acima já cobre o tráfego.</li><li><b>Backup</b>Guarde a configuração antes e depois, fora do equipamento.</li></ol>
+<h2 id="checklist"><span class="n">05</span>Checklist</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div><h3>Desenho</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Zonas definidas</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Matriz de fluxos aprovada</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Negar tudo com log no final</span></label></li></ul><h3>Operação</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c4"><span>Toda regra com dono e GMUD</span></label></li><li><label><input type="checkbox" data-k="c5"><span>Objetos nomeados</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Revisão trimestral agendada</span></label></li><li><label><input type="checkbox" data-k="c7"><span>Backup automático da configuração</span></label></li></ul>
+<h2 id="fontes"><span class="n">06</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://csrc.nist.gov/pubs/sp/800/41/r1/final" target="_blank" rel="noopener">NIST SP 800-41 Rev. 1: políticas de firewall</a></li><li><a href="https://www.cisecurity.org/controls/network-infrastructure-management" target="_blank" rel="noopener">CIS Control 12: gestão da infraestrutura de rede</a></li><li><a href="https://www.cisecurity.org/controls/network-monitoring-and-defense" target="_blank" rel="noopener">CIS Control 13: monitoramento e defesa da rede</a></li></ul>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública; não é material oficial de nenhum fornecedor. Fornecido sem garantia: valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#zonas">01 · Zonas</a></li><li><a href="#regras">02 · Padrão de regras</a></li><li><a href="#ngfw">03 · Recursos de NGFW</a></li><li><a href="#revisao">04 · Revisão</a></li><li><a href="#checklist">05 · Checklist</a></li><li><a href="#fontes">06 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='firewall-boas-praticas-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

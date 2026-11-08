@@ -70,10 +70,10 @@
 <div class="ph">
 <p class="crumb"><a href="../">Início</a> / Guias</p>
 <h1>Guias</h1>
-<p class="sub">Material prático para implementar, não só para ler: roteiros, checklists, autoavaliações e modelos prontos. Gratuito, em português, sob licença CC BY-NC 4.0. 5 guias de implantação e 5 trilhas de estudo em 8 áreas.</p>
+<p class="sub">Material prático para implementar, não só para ler: roteiros, checklists, autoavaliações e modelos prontos. Gratuito, em português, sob licença CC BY-NC 4.0. 35 guias de implantação e 5 trilhas de estudo em 8 áreas.</p>
 <span class="bar"></span>
 </div>
-<nav class="areas-nav" aria-label="Filtrar guias por área"><a href="#estudos" data-f="estudos" class="has"><b>Estudos</b><span>5 trilhas</span></a><a href="#seguranca" data-f="seguranca" class="has"><b>Segurança</b><span>2 guias</span></a><a href="#rede-firewall" data-f="rede-firewall" class="has"><b>Rede e firewall</b><span>1 guia</span></a><a href="#infraestrutura" data-f="infraestrutura" class="has"><b>Infraestrutura</b><span>2 guias</span></a><a href="#cloud" data-f="cloud" class="soon"><b>Cloud</b><span>0 guias · em preparação</span></a><a href="#observabilidade" data-f="observabilidade" class="soon"><b>Observabilidade</b><span>0 guias · em preparação</span></a><a href="#storage-backup" data-f="storage-backup" class="soon"><b>Storage e backup</b><span>0 guias · em preparação</span></a><a href="#governanca-processos" data-f="governanca-processos" class="soon"><b>Governança e processos</b><span>0 guias · em preparação</span></a></nav>
+<nav class="areas-nav" aria-label="Filtrar guias por área"><a href="#estudos" data-f="estudos" class="has"><b>Estudos</b><span>5 trilhas</span></a><a href="#seguranca" data-f="seguranca" class="has"><b>Segurança</b><span>5 guias</span></a><a href="#rede-firewall" data-f="rede-firewall" class="has"><b>Rede e firewall</b><span>5 guias</span></a><a href="#infraestrutura" data-f="infraestrutura" class="has"><b>Infraestrutura</b><span>5 guias</span></a><a href="#cloud" data-f="cloud" class="has"><b>Cloud</b><span>5 guias</span></a><a href="#observabilidade" data-f="observabilidade" class="has"><b>Observabilidade</b><span>5 guias</span></a><a href="#storage-backup" data-f="storage-backup" class="has"><b>Storage e backup</b><span>5 guias</span></a><a href="#governanca-processos" data-f="governanca-processos" class="has"><b>Governança e processos</b><span>5 guias</span></a></nav>
 <div class="ask"><p><b>Não achou o tema que precisa?</b> Peça um guia ou trilha de estudo.</p><a href="pedidos/">Fazer um pedido <svg class="i"><use href="#i-arrow"/></svg></a></div>
 <p class="pick" id="pick">Selecione uma área acima para ver os guias.</p>
 <div id="areas"><section class="area" id="estudos" hidden>
@@ -110,7 +110,7 @@
 <span class="go">Começar a trilha <svg class="i"><use href="#i-arrow"/></svg></span>
 </a></div>
 </section><section class="area" id="seguranca" hidden>
-<header class="area-h"><h2>Segurança</h2><p>Normas, identidade e controles de segurança aplicados.</p><span class="cnt">2 guias</span></header>
+<header class="area-h"><h2>Segurança</h2><p>Normas, identidade e controles de segurança aplicados.</p><span class="cnt">5 guias</span></header>
 <div class="guides"><a class="guide" href="iga-entra-id-governance/">
 <div class="g-top"><span class="chip">Segurança</span><span class="g-st">Disponível</span></div>
 <h3>IGA com Entra ID Governance · Implantação</h3>
@@ -123,18 +123,60 @@
 <p>Como levar a norma de segurança de sistemas de IA para dentro de programas ISO 27001 e 42001, com foco em agentes como identidades privilegiadas.</p>
 <ul class="g-hl"><li>Roteiro em 7 passos</li><li>9 ameaças</li><li>Autoavaliação com 40 perguntas</li><li>Modelos .xlsx</li></ul>
 <span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="acesso-condicional-base/">
+<div class="g-top"><span class="chip">Segurança</span><span class="g-st">Nível Pleno</span></div>
+<h3>Acesso Condicional · Políticas base</h3>
+<p>Contas de emergência, bloqueio de autenticação legada, MFA, países e dispositivo em conformidade, com rollout em modo somente relatório.</p>
+<ul class="g-hl"><li>7 políticas base</li><li>Contas de emergência</li><li>Rollout por ondas</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="hardening-windows-server/">
+<div class="g-top"><span class="chip">Segurança</span><span class="g-st">Nível Júnior</span></div>
+<h3>Hardening de Windows Server</h3>
+<p>Atualizações, Windows LAPS, SMB, RDP, firewall, Defender e auditoria, com comandos PowerShell e linha de base.</p>
+<ul class="g-hl"><li>8 prioridades</li><li>Comandos PowerShell</li><li>Linha de base CIS</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="gestao-vulnerabilidades/">
+<div class="g-top"><span class="chip">Segurança</span><span class="g-st">Nível Pleno</span></div>
+<h3>Gestão de vulnerabilidades e patches</h3>
+<p>Do inventário ao relatório: priorização com CVSS, EPSS e CISA KEV, prazos de correção, exceções e métricas.</p>
+<ul class="g-hl"><li>Ciclo em 6 etapas</li><li>Exemplo de priorização</li><li>Prazos e métricas</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
 </a></div>
 </section><section class="area" id="rede-firewall" hidden>
-<header class="area-h"><h2>Rede e firewall</h2><p>Segmentação, perímetro e redes corporativas.</p><span class="cnt">1 guia</span></header>
+<header class="area-h"><h2>Rede e firewall</h2><p>Segmentação, perímetro e redes corporativas.</p><span class="cnt">5 guias</span></header>
 <div class="guides"><a class="guide" href="meraki-ms-mr36/">
 <div class="g-top"><span class="chip">Rede e firewall</span><span class="g-st">Disponível</span></div>
 <h3>Meraki MS + MR36 · Instalação e configuração</h3>
 <p>Do plano de VLANs e PoE ao AP validado em campo: Dashboard, portas, spanning tree, SSIDs, RF profiles, solução de problemas e checklist de implantação.</p>
 <ul class="g-hl"><li>Planejamento de VLAN e PoE</li><li>Switches MS</li><li>AP MR36 Wi-Fi 6</li><li>Checklist interativo</li></ul>
 <span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="plano-ip-vlans/">
+<div class="g-top"><span class="chip">Rede e firewall</span><span class="g-st">Nível Júnior</span></div>
+<h3>Plano de endereçamento IP e VLANs</h3>
+<p>Padrão 10.site.VLAN.0/24, exemplo completo de um site, reservas para cloud e VPN, DHCP e documentação em IPAM.</p>
+<ul class="g-hl"><li>Exemplo com 9 VLANs</li><li>Reserva para cloud</li><li>IPAM</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="firewall-boas-praticas/">
+<div class="g-top"><span class="chip">Rede e firewall</span><span class="g-st">Nível Pleno</span></div>
+<h3>Firewall · Zonas, regras e revisão</h3>
+<p>Matriz de fluxos entre zonas, padrão de regras documentadas, recursos de NGFW e roteiro de revisão trimestral.</p>
+<ul class="g-hl"><li>Matriz de fluxos</li><li>Regra documentada</li><li>Revisão trimestral</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="vpn-ipsec-site-to-site/">
+<div class="g-top"><span class="chip">Rede e firewall</span><span class="g-st">Nível Pleno</span></div>
+<h3>VPN IPsec site-to-site</h3>
+<p>IKEv2, fase 1 e fase 2, planilha de parâmetros, policy-based versus route-based e roteiro de troubleshooting.</p>
+<ul class="g-hl"><li>Planilha pronta</li><li>Portas e NAT-T</li><li>Troubleshooting</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="wifi-8021x-nps/">
+<div class="g-top"><span class="chip">Rede e firewall</span><span class="g-st">Nível Pleno</span></div>
+<h3>Wi-Fi corporativo com 802.1X</h3>
+<p>WPA2/WPA3-Enterprise, EAP-TLS versus PEAP, VLAN dinâmica e configuração do NPS no Windows Server.</p>
+<ul class="g-hl"><li>Desenho de SSIDs</li><li>NPS passo a passo</li><li>Eventos 6272/6273</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
 </a></div>
 </section><section class="area" id="infraestrutura" hidden>
-<header class="area-h"><h2>Infraestrutura</h2><p>Virtualização, servidores, endpoints, datacenter e ambientes ERP/EPM.</p><span class="cnt">2 guias</span></header>
+<header class="area-h"><h2>Infraestrutura</h2><p>Virtualização, servidores, endpoints, datacenter e ambientes ERP/EPM.</p><span class="cnt">5 guias</span></header>
 <div class="guides"><a class="guide" href="intune-implantacao/">
 <div class="g-top"><span class="chip">Infraestrutura</span><span class="g-st">Disponível</span></div>
 <h3>Microsoft Intune · Implantação passo a passo</h3>
@@ -147,19 +189,157 @@
 <p>Snapshots, backup, exportação e importação entre teste e produção, clonagem de ambientes e migração de aplicativos on-premises para o Cloud EPM, com EPM Automate e checklist de Go-Live.</p>
 <ul class="g-hl"><li>Snapshots e retenção</li><li>Clonar Ambiente</li><li>On-premises → Cloud</li><li>Checklist interativo</li></ul>
 <span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="active-directory-boas-praticas/">
+<div class="g-top"><span class="chip">Infraestrutura</span><span class="g-st">Nível Pleno</span></div>
+<h3>Active Directory · Boas práticas</h3>
+<p>Desenho do domínio, DNS, horário, OUs, camadas administrativas, lixeira do AD e comandos de saúde.</p>
+<ul class="g-hl"><li>Desenho e DNS</li><li>Camadas 0, 1 e 2</li><li>dcdiag e repadmin</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="hardening-linux/">
+<div class="g-top"><span class="chip">Infraestrutura</span><span class="g-st">Nível Júnior</span></div>
+<h3>Servidor Linux seguro · Primeiros passos</h3>
+<p>Usuários e sudo, SSH por chave, atualizações automáticas, firewall, SELinux/AppArmor e logs, para Ubuntu e RHEL.</p>
+<ul class="g-hl"><li>Ubuntu e RHEL</li><li>SSH por chave</li><li>Checklist de 30 min</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="ansible-primeiros-passos/">
+<div class="g-top"><span class="chip">Infraestrutura</span><span class="g-st">Nível Júnior</span></div>
+<h3>Ansible · Primeiros passos</h3>
+<p>Inventário, comandos ad hoc, primeiro playbook com modo de verificação, idempotência, Vault e boas práticas.</p>
+<ul class="g-hl"><li>Primeiro playbook</li><li>Modo --check</li><li>Ansible Vault</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
 </a></div>
 </section><section class="area" id="cloud" hidden>
-<header class="area-h"><h2>Cloud</h2><p>Arquitetura híbrida e multicloud.</p><span class="cnt">0 guias</span></header>
-<div class="empty"><span class="label">Em preparação</span><p>Guia desta área em produção. Enquanto isso, veja os <a href="../artigos/">artigos</a> relacionados.</p></div>
+<header class="area-h"><h2>Cloud</h2><p>Arquitetura híbrida e multicloud.</p><span class="cnt">5 guias</span></header>
+<div class="guides"><a class="guide" href="azure-landing-zone/">
+<div class="g-top"><span class="chip">Cloud</span><span class="g-st">Nível Pleno</span></div>
+<h3>Azure · Fundação com landing zone</h3>
+<p>Grupos de gerenciamento, nomenclatura, tags, Azure Policy, RBAC, logs centralizados e orçamentos.</p>
+<ul class="g-hl"><li>Hierarquia CAF</li><li>Azure Policy</li><li>Azure CLI</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="azure-rede-hub-spoke/">
+<div class="g-top"><span class="chip">Cloud</span><span class="g-st">Nível Pleno</span></div>
+<h3>Azure · Rede hub-spoke</h3>
+<p>VNets, sub-redes obrigatórias, peering, NSG, UDR, Azure Firewall e private endpoints, com Azure CLI.</p>
+<ul class="g-hl"><li>Plano de endereços</li><li>Peering com gateway</li><li>NSG e UDR</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="oci-primeiro-tenancy/">
+<div class="g-top"><span class="chip">Cloud</span><span class="g-st">Nível Júnior</span></div>
+<h3>OCI · Primeiro tenancy</h3>
+<p>Compartimentos, grupos e políticas IAM, VCN com gateways, Cloud Guard, tags e orçamentos.</p>
+<ul class="g-hl"><li>Compartimentos</li><li>Políticas IAM</li><li>Primeira VCN</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="aws-conta-segura/">
+<div class="g-top"><span class="chip">Cloud</span><span class="g-st">Nível Júnior</span></div>
+<h3>AWS · Conta segura desde o primeiro dia</h3>
+<p>Root protegido, Organizations, IAM Identity Center, CloudTrail, GuardDuty, S3 sem acesso público e orçamentos.</p>
+<ul class="g-hl"><li>Checklist de 10 itens</li><li>AWS CLI</li><li>Custos e alertas</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="finops-custos-cloud/">
+<div class="g-top"><span class="chip">Cloud</span><span class="g-st">Nível Júnior</span></div>
+<h3>FinOps · Custos em cloud</h3>
+<p>Fases do FinOps, tags, orçamentos, desligamento fora do horário, órfãos, reservas e métricas, para Azure, AWS e OCI.</p>
+<ul class="g-hl"><li>Ações rápidas</li><li>Exemplo de cálculo</li><li>Azure · AWS · OCI</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a></div>
 </section><section class="area" id="observabilidade" hidden>
-<header class="area-h"><h2>Observabilidade</h2><p>Monitoramento, alertas e logs.</p><span class="cnt">0 guias</span></header>
-<div class="empty"><span class="label">Em preparação</span><p>Guia desta área em produção. Enquanto isso, veja os <a href="../artigos/">artigos</a> relacionados.</p></div>
+<header class="area-h"><h2>Observabilidade</h2><p>Monitoramento, alertas e logs.</p><span class="cnt">5 guias</span></header>
+<div class="guides"><a class="guide" href="zabbix-do-zero/">
+<div class="g-top"><span class="chip">Observabilidade</span><span class="g-st">Nível Júnior</span></div>
+<h3>Zabbix do zero</h3>
+<p>Arquitetura, instalação, agent 2, templates, triggers e notificações no Teams, Telegram ou e-mail.</p>
+<ul class="g-hl"><li>Agent 2</li><li>Templates prontos</li><li>Primeiro alerta</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="prometheus-grafana/">
+<div class="g-top"><span class="chip">Observabilidade</span><span class="g-st">Nível Pleno</span></div>
+<h3>Prometheus e Grafana</h3>
+<p>Stack em Docker Compose, node_exporter, PromQL do dia a dia, regra de alerta e dashboards.</p>
+<ul class="g-hl"><li>Docker Compose</li><li>PromQL</li><li>Regras de alerta</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="logs-centralizados-elastic/">
+<div class="g-top"><span class="chip">Observabilidade</span><span class="g-st">Nível Pleno</span></div>
+<h3>Logs centralizados com Elastic</h3>
+<p>Elastic Agent e Fleet, integrações, buscas KQL, ciclo de vida dos índices e dimensionamento de armazenamento.</p>
+<ul class="g-hl"><li>Fleet e agentes</li><li>Buscas KQL</li><li>Retenção e tamanho</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="uptime-kuma/">
+<div class="g-top"><span class="chip">Observabilidade</span><span class="g-st">Nível Júnior</span></div>
+<h3>Uptime Kuma · Disponibilidade</h3>
+<p>Instalação com Docker, monitores HTTP, porta, DNS e push, notificações e página de status.</p>
+<ul class="g-hl"><li>15 min para instalar</li><li>Monitor push</li><li>Página de status</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="alertas-slo/">
+<div class="g-top"><span class="chip">Observabilidade</span><span class="g-st">Nível Pleno</span></div>
+<h3>Alertas que funcionam</h3>
+<p>Alertar sintomas, severidades e roteamento, runbooks, SLI, SLO, orçamento de erro e métricas de fadiga.</p>
+<ul class="g-hl"><li>Antes e depois</li><li>Tabela de SLO</li><li>Fadiga de alerta</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a></div>
 </section><section class="area" id="storage-backup" hidden>
-<header class="area-h"><h2>Storage e backup</h2><p>Armazenamento, backup e recuperação de desastres.</p><span class="cnt">0 guias</span></header>
-<div class="empty"><span class="label">Em preparação</span><p>Guia desta área em produção. Enquanto isso, veja os <a href="../artigos/">artigos</a> relacionados.</p></div>
+<header class="area-h"><h2>Storage e backup</h2><p>Armazenamento, backup e recuperação de desastres.</p><span class="cnt">5 guias</span></header>
+<div class="guides"><a class="guide" href="estrategia-backup-32110/">
+<div class="g-top"><span class="chip">Storage e backup</span><span class="g-st">Nível Júnior</span></div>
+<h3>Estratégia de backup 3-2-1-1-0</h3>
+<p>Regra 3-2-1-1-0, níveis de criticidade com RPO e RTO, retenção GFS e ferramentas.</p>
+<ul class="g-hl"><li>Regra 3-2-1-1-0</li><li>RPO e RTO por nível</li><li>Retenção GFS</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="backup-imutavel-ransomware/">
+<div class="g-top"><span class="chip">Storage e backup</span><span class="g-st">Nível Pleno</span></div>
+<h3>Backup imutável contra ransomware</h3>
+<p>Object Lock, repositório Linux endurecido, cópia offline, isolamento de credenciais e alertas de ataque ao backup.</p>
+<ul class="g-hl"><li>3 opções de imutabilidade</li><li>Isolamento</li><li>Teste de prova</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="teste-restore-dr/">
+<div class="g-top"><span class="chip">Storage e backup</span><span class="g-st">Nível Pleno</span></div>
+<h3>Testes de restore e DR</h3>
+<p>Tipos de teste, frequência por nível, runbook de restauração, exercício de mesa, métricas e evidências.</p>
+<ul class="g-hl"><li>Runbook de restauração</li><li>Exercício de mesa</li><li>Métricas de RTO</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="raid-storage-fundamentos/">
+<div class="g-top"><span class="chip">Storage e backup</span><span class="g-st">Nível Júnior</span></div>
+<h3>RAID e storage · Fundamentos</h3>
+<p>Níveis de RAID com cálculo de capacidade, HDD, SSD e NVMe, IOPS e latência, DAS, NAS e SAN.</p>
+<ul class="g-hl"><li>Cálculo de RAID</li><li>IOPS e latência</li><li>DAS · NAS · SAN</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="backup-microsoft-365/">
+<div class="g-top"><span class="chip">Storage e backup</span><span class="g-st">Nível Pleno</span></div>
+<h3>Backup do Microsoft 365</h3>
+<p>Responsabilidade compartilhada, lixeiras e retenção nativas, Microsoft 365 Backup e ferramentas de terceiros.</p>
+<ul class="g-hl"><li>Limites nativos</li><li>Opções de backup</li><li>Plano de teste</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a></div>
 </section><section class="area" id="governanca-processos" hidden>
-<header class="area-h"><h2>Governança e processos</h2><p>Mudança, ITIL e gestão de TI.</p><span class="cnt">0 guias</span></header>
-<div class="empty"><span class="label">Em preparação</span><p>Guia desta área em produção. Enquanto isso, veja os <a href="../artigos/">artigos</a> relacionados.</p></div>
+<header class="area-h"><h2>Governança e processos</h2><p>Mudança, ITIL e gestão de TI.</p><span class="cnt">5 guias</span></header>
+<div class="guides"><a class="guide" href="gestao-mudancas-gmud/">
+<div class="g-top"><span class="chip">Governança e processos</span><span class="g-st">Nível Júnior</span></div>
+<h3>Gestão de mudanças: GMUD e CAB</h3>
+<p>Tipos de mudança, modelo de GMUD, matriz de risco, gatilho de rollback, fluxo até o CAB e métricas.</p>
+<ul class="g-hl"><li>Modelo de GMUD</li><li>Matriz de risco</li><li>Gatilho de rollback</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="incidentes-problemas/">
+<div class="g-top"><span class="chip">Governança e processos</span><span class="g-st">Nível Júnior</span></div>
+<h3>Incidentes e problemas</h3>
+<p>Matriz de prioridade, SLAs, escalonamento, incidente maior, 5 porquês, post-mortem sem culpados e métricas.</p>
+<ul class="g-hl"><li>Matriz P1 a P4</li><li>Incidente maior</li><li>Exemplo de 5 porquês</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="inventario-cmdb/">
+<div class="g-top"><span class="chip">Governança e processos</span><span class="g-st">Nível Pleno</span></div>
+<h3>Inventário de ativos e CMDB</h3>
+<p>O que registrar, atributos mínimos, relacionamentos, fontes automáticas, reconciliação e qualidade dos dados.</p>
+<ul class="g-hl"><li>Mapa de serviço</li><li>Fontes automáticas</li><li>Indicadores de qualidade</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="documentacao-runbooks/">
+<div class="g-top"><span class="chip">Governança e processos</span><span class="g-st">Nível Júnior</span></div>
+<h3>Documentação técnica e runbooks</h3>
+<p>Tipos de documento, modelo de runbook, regras de escrita, prints com destaque e como manter atualizado.</p>
+<ul class="g-hl"><li>Modelo de runbook</li><li>Regras de escrita</li><li>Onde guardar</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a><a class="guide" href="continuidade-bia/">
+<div class="g-top"><span class="chip">Governança e processos</span><span class="g-st">Nível Pleno</span></div>
+<h3>Continuidade de negócio: BIA e plano</h3>
+<p>PCN × DRP, BIA com exemplo, MTPD, RTO e RPO, estratégias, conteúdo do plano e testes.</p>
+<ul class="g-hl"><li>BIA com exemplo</li><li>MTPD · RTO · RPO</li><li>Estratégias</li></ul>
+<span class="go">Abrir guia <svg class="i"><use href="#i-arrow"/></svg></span>
+</a></div>
 </section></div>
 <script>
 (function(){

@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OCI: organizando o primeiro tenancy · Guias · André Ferreira</title>
+<meta name="description" content="Guia prático em português para organizar um tenancy da Oracle Cloud Infrastructure: compartimentos, grupos e políticas IAM, VCN com sub-redes e gateways, segurança básica e custos.">
+<meta property="og:title" content="OCI: organizando o primeiro tenancy · Guias · André Ferreira">
+<meta property="og:description" content="Guia prático em português para organizar um tenancy da Oracle Cloud Infrastructure: compartimentos, grupos e políticas IAM, VCN com sub-redes e gateways, segurança básica e custos.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/oci-primeiro-tenancy/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/oci-primeiro-tenancy/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#cloud">Cloud</a> / OCI tenancy</p>
+<span class="chip">Cloud</span> <span class="chip m">Nível Júnior</span>
+<h1 style="margin-top:12px">OCI: organizando o primeiro tenancy</h1>
+<p class="sub">Compartimentos, políticas IAM em linguagem quase natural e a primeira VCN, para começar a usar a OCI sem abrir mão de controle.</p>
+<div class="intro-meta"><span class="chip m">OCI</span><span class="chip m">Compartimentos</span><span class="chip m">IAM</span><span class="chip m">VCN</span><span class="chip m">Always Free</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<div class="kv"><div><b>Júnior</b><span>nível</span></div><div><b>Always Free</b><span>para o laboratório</span></div><div><b>Compartimentos</b><span>como pastas</span></div><div><b>Políticas</b><span>em texto</span></div></div><div class="tbl"><table><thead><tr><th>Conceito</th><th>O que é</th></tr></thead><tbody><tr><td>Tenancy</td><td>A conta da empresa na OCI</td></tr><tr><td>Região e domínio de disponibilidade</td><td>Localização física; algumas regiões têm mais de um domínio de disponibilidade</td></tr><tr><td>Compartimento</td><td>Pasta lógica que agrupa recursos e recebe permissões e orçamentos</td></tr><tr><td>Domínio de identidade</td><td>Onde ficam usuários e grupos; pode federar com o Entra ID</td></tr><tr><td>Política</td><td>Frase que diz qual grupo pode fazer o quê e onde</td></tr></tbody></table></div>
+<h2 id="compartimentos"><span class="n">01</span>Estrutura de compartimentos</h2>
+<pre class="cli">tenancy (raiz: só administração)
+├── cmp-rede          (VCNs, DRG, gateways)
+├── cmp-seguranca     (Vault, chaves, Cloud Guard)
+├── cmp-prd
+│   ├── cmp-prd-erp
+│   └── cmp-prd-web
+├── cmp-hml
+└── cmp-sandbox</pre><p>Não crie recursos no compartimento raiz. Separar a rede num compartimento próprio permite que o time de rede a administre sem acesso às VMs das aplicações.</p>
+<h2 id="politicas"><span class="n">02</span>Políticas IAM</h2>
+<pre class="cli">Allow group AdminsRede to manage virtual-network-family in compartment cmp-rede
+Allow group AdminsERP to manage instance-family in compartment cmp-prd:cmp-prd-erp
+Allow group AdminsERP to use virtual-network-family in compartment cmp-rede
+Allow group Auditores to read all-resources in tenancy</pre><div class="tbl"><table><thead><tr><th>Verbo</th><th>Permissão</th></tr></thead><tbody><tr><td>inspect</td><td>Listar</td></tr><tr><td>read</td><td>Listar e ver detalhes</td></tr><tr><td>use</td><td>Usar recursos existentes</td></tr><tr><td>manage</td><td>Tudo, inclusive criar e apagar</td></tr></tbody></table></div><p>Em tenancies com domínios de identidade, o grupo pode precisar do nome do domínio na frente, como <code>'Default'/'AdminsRede'</code>.</p>
+<h2 id="vcn"><span class="n">03</span>Primeira VCN</h2>
+<div class="tbl"><table><thead><tr><th>Componente</th><th>Função</th></tr></thead><tbody><tr><td>VCN</td><td>Rede virtual, por exemplo 10.110.0.0/16</td></tr><tr><td>Sub-rede pública</td><td>Recursos com IP público, como balanceador de carga</td></tr><tr><td>Sub-rede privada</td><td>Servidores sem IP público</td></tr><tr><td>Internet gateway</td><td>Saída e entrada da internet para a sub-rede pública</td></tr><tr><td>NAT gateway</td><td>Saída para a internet a partir da sub-rede privada</td></tr><tr><td>Service gateway</td><td>Acesso a serviços da Oracle, como Object Storage, sem passar pela internet</td></tr><tr><td>DRG</td><td>Ligação com o datacenter (VPN ou FastConnect) e com outras VCNs</td></tr><tr><td>Security lists e NSGs</td><td>Regras de firewall; prefira NSGs, aplicados por recurso</td></tr></tbody></table></div><p>O assistente de criação de VCN com conectividade de internet já cria sub-redes pública e privada e os três gateways.</p>
+<h2 id="seguranca"><span class="n">04</span>Segurança e custo</h2>
+<ul><li>MFA para todos os administradores; não use o usuário inicial no dia a dia.</li><li>Cloud Guard ativo para apontar configurações arriscadas.</li><li>O serviço de Auditoria registra as chamadas de API automaticamente; envie os logs ao SIEM se precisar de retenção maior.</li><li>Tags definidas (namespace de tags) para centro de custo e ambiente.</li><li>Orçamento com alerta em cada compartimento principal.</li></ul>
+<h2 id="checklist"><span class="n">05</span>Checklist</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div><h3>Tenancy</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Compartimentos criados</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Grupos e políticas por função</span></label></li><li><label><input type="checkbox" data-k="c3"><span>MFA em todos os administradores</span></label></li><li><label><input type="checkbox" data-k="c4"><span>VCN com sub-redes pública e privada</span></label></li><li><label><input type="checkbox" data-k="c5"><span>Cloud Guard ativo</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Tags e orçamentos configurados</span></label></li></ul>
+<h2 id="fontes"><span class="n">06</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://docs.oracle.com/en-us/iaas/Content/Identity/compartments/managingcompartments.htm" target="_blank" rel="noopener">Gerenciar compartimentos</a></li><li><a href="https://docs.oracle.com/en-us/iaas/Content/Identity/policieshow/how-policies-work.htm" target="_blank" rel="noopener">Como as políticas funcionam</a></li><li><a href="https://docs.oracle.com/en-us/iaas/Content/Identity/policiescommon/commonpolicies.htm" target="_blank" rel="noopener">Políticas comuns</a></li><li><a href="https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/overview.htm" target="_blank" rel="noopener">Visão geral de rede (VCN)</a></li><li><a href="https://www.oracle.com/cloud/free/" target="_blank" rel="noopener">Oracle Cloud Free Tier</a></li></ul>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública; não é material oficial de nenhum fornecedor. Oracle e OCI são marcas da Oracle Corporation. Fornecido sem garantia: valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#compartimentos">01 · Compartimentos</a></li><li><a href="#politicas">02 · Políticas IAM</a></li><li><a href="#vcn">03 · Rede</a></li><li><a href="#seguranca">04 · Segurança e custo</a></li><li><a href="#checklist">05 · Checklist</a></li><li><a href="#fontes">06 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='oci-primeiro-tenancy-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

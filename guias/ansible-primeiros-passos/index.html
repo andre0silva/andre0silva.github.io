@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ansible: automação para administradores · Guias · André Ferreira</title>
+<meta name="description" content="Guia prático em português para começar com Ansible: conceitos, instalação, inventário, comandos ad hoc, primeiro playbook, modo de verificação, segredos com Vault e boas práticas.">
+<meta property="og:title" content="Ansible: automação para administradores · Guias · André Ferreira">
+<meta property="og:description" content="Guia prático em português para começar com Ansible: conceitos, instalação, inventário, comandos ad hoc, primeiro playbook, modo de verificação, segredos com Vault e boas práticas.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/ansible-primeiros-passos/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/ansible-primeiros-passos/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#infraestrutura">Infraestrutura</a> / Ansible</p>
+<span class="chip">Infraestrutura</span> <span class="chip m">Nível Júnior</span>
+<h1 style="margin-top:12px">Ansible: automação para administradores</h1>
+<p class="sub">Do primeiro ping ao primeiro playbook que padroniza servidores, sem agente instalado e com execução segura em modo de verificação.</p>
+<div class="intro-meta"><span class="chip m">Ansible</span><span class="chip m">Automação</span><span class="chip m">YAML</span><span class="chip m">Linux</span><span class="chip m">IaC</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<div class="kv"><div><b>Júnior</b><span>nível</span></div><div><b>Sem agente</b><span>usa SSH ou WinRM</span></div><div><b>YAML</b><span>linguagem dos playbooks</span></div><div><b>2 h</b><span>até o primeiro playbook</span></div></div><div class="tbl"><table><thead><tr><th>Conceito</th><th>O que é</th></tr></thead><tbody><tr><td>Nó de controle</td><td>Máquina Linux (ou WSL no Windows) onde o Ansible roda</td></tr><tr><td>Inventário</td><td>Lista de servidores e grupos</td></tr><tr><td>Módulo</td><td>Unidade de trabalho: instalar pacote, copiar arquivo, reiniciar serviço</td></tr><tr><td>Playbook</td><td>Arquivo YAML com a sequência de tarefas</td></tr><tr><td>Idempotência</td><td>Rodar de novo não muda nada se já está no estado desejado</td></tr><tr><td>Role</td><td>Pacote reutilizável de tarefas, arquivos e variáveis</td></tr></tbody></table></div>
+<h2 id="instalar"><span class="n">01</span>Instalação e inventário</h2>
+<pre class="cli">python3 -m pip install --user ansible
+ansible --version</pre><p>Arquivo <code>inventory.ini</code>:</p><pre class="cli">[web]
+web01 ansible_host=10.1.20.11
+web02 ansible_host=10.1.20.12
+
+[web:vars]
+ansible_user=ansible</pre><pre class="cli"># Testar a conexão com todos os servidores do grupo
+ansible web -i inventory.ini -m ansible.builtin.ping</pre>
+<h2 id="playbook"><span class="n">02</span>Primeiro playbook</h2>
+<p>Arquivo <code>web.yml</code>, para Ubuntu:</p><pre class="cli">- name: Servidores web padronizados
+  hosts: web
+  become: true
+  tasks:
+    - name: Atualizar cache e pacotes
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: dist
+
+    - name: Instalar nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+    - name: Garantir nginx ativo na inicialização
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true</pre><pre class="cli"># Simular sem alterar nada e mostrar as diferenças
+ansible-playbook -i inventory.ini web.yml --check --diff
+
+# Executar de verdade
+ansible-playbook -i inventory.ini web.yml</pre><p>Rode o playbook duas vezes: na segunda, as tarefas devem aparecer como <code>ok</code> e não como <code>changed</code>. Isso é idempotência.</p>
+<h2 id="windows"><span class="n">03</span>E o Windows?</h2>
+<p>O Ansible também gerencia Windows pelas coleções <code>ansible.windows</code> e <code>community.windows</code>, conectando por WinRM ou SSH. O nó de controle continua sendo Linux.</p>
+<h2 id="boas-praticas"><span class="n">04</span>Boas práticas</h2>
+<ul><li>Playbooks e inventário versionados no Git, com revisão antes de rodar em produção.</li><li>Senhas e chaves no Ansible Vault (<code>ansible-vault create segredos.yml</code>), nunca em texto puro.</li><li>Sempre <code>--check --diff</code> antes de mudanças em produção, e por grupos pequenos (<code>--limit</code>).</li><li>Nomes completos de módulos (<code>ansible.builtin.apt</code>) e validação com <code>ansible-lint</code>.</li><li>Quando o playbook crescer, separe em roles.</li></ul>
+<h2 id="checklist"><span class="n">05</span>Checklist</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div><h3>Prática</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Ansible instalado</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Inventário com 2 servidores</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Ping funcionando</span></label></li><li><label><input type="checkbox" data-k="c4"><span>Playbook rodado em modo de verificação</span></label></li><li><label><input type="checkbox" data-k="c5"><span>Segunda execução sem mudanças</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Segredo guardado no Vault</span></label></li><li><label><input type="checkbox" data-k="c7"><span>Tudo versionado no Git</span></label></li></ul>
+<h2 id="fontes"><span class="n">06</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://docs.ansible.com/ansible/latest/getting_started/index.html" target="_blank" rel="noopener">Ansible: primeiros passos</a></li><li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html" target="_blank" rel="noopener">Módulo ansible.builtin.apt</a></li><li><a href="https://docs.ansible.com/ansible/latest/vault_guide/index.html" target="_blank" rel="noopener">Ansible Vault</a></li></ul>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública; não é material oficial de nenhum fornecedor. Ansible e Red Hat são marcas da Red Hat. Fornecido sem garantia: valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#instalar">01 · Instalar</a></li><li><a href="#playbook">02 · Primeiro playbook</a></li><li><a href="#windows">03 · Windows</a></li><li><a href="#boas-praticas">04 · Boas práticas</a></li><li><a href="#checklist">05 · Checklist</a></li><li><a href="#fontes">06 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='ansible-primeiros-passos-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>
