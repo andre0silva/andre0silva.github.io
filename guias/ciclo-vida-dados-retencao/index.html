@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ciclo de vida dos dados: retenção, camadas e descarte · Guias · André Ferreira</title>
+<meta name="description" content="Guia em português de ciclo de vida dos dados: inventário e classificação, tabela de temporalidade, camadas de storage (quente, fria, arquivo), object storage com políticas de ciclo de vida, retenção legal, LGPD e descarte seguro.">
+<meta property="og:title" content="Ciclo de vida dos dados: retenção, camadas e descarte · Guias · André Ferreira">
+<meta property="og:description" content="Guia em português de ciclo de vida dos dados: inventário e classificação, tabela de temporalidade, camadas de storage (quente, fria, arquivo), object storage com políticas de ciclo de vida, retenção legal, LGPD e descarte seguro.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/ciclo-vida-dados-retencao/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/ciclo-vida-dados-retencao/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#storage-backup">Storage e backup</a> / Ciclo de vida dos dados</p>
+<span class="chip">Storage e backup</span> <span class="chip m">Nível Sênior</span>
+<h1 style="margin-top:12px">Ciclo de vida dos dados: retenção, camadas e descarte</h1>
+<p class="sub">Como decidir quanto tempo guardar cada dado, em que camada de storage, e como descartar com segurança, equilibrando custo, LGPD e exigências legais.</p>
+<div class="intro-meta"><span class="chip m">Retenção</span><span class="chip m">Arquivamento</span><span class="chip m">LGPD</span><span class="chip m">Object storage</span><span class="chip m">Descarte</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<div class="kv"><div><b>Sênior</b><span>nível</span></div><div><b>3 camadas</b><span>quente, fria, arquivo</span></div><div><b>Tabela</b><span>de temporalidade aprovada</span></div><div><b>NIST 800-88</b><span>descarte de mídia</span></div></div>
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<p>Guardar tudo para sempre parece seguro, mas aumenta custo, risco de vazamento e contraria a LGPD (necessidade e eliminação ao fim do tratamento). Apagar cedo demais viola obrigações fiscais e trabalhistas. A regra vem do jurídico e do negócio; a TI implementa.</p>
+<h2 id="inventario"><span class="n">01</span>Inventário e classificação</h2>
+<ol class="steps"><li><b>Onde estão os dados</b>File servers, SharePoint/OneDrive, bancos, e-mail, backups, buckets, SaaS.</li><li><b>Classificação</b>Público, interno, confidencial, restrito; marque dados pessoais e sensíveis.</li><li><b>Dono</b>Cada repositório com área responsável pela decisão de retenção.</li></ol>
+<h2 id="temporalidade"><span class="n">02</span>Tabela de temporalidade</h2>
+<div class="tbl"><table><thead><tr><th>Tipo de dado</th><th>Retenção</th><th>Base</th><th>Ação ao fim</th></tr></thead><tbody><tr><td>Documentos fiscais</td><td>Conforme prazo legal aplicável</td><td>Legislação tributária</td><td>Eliminar</td></tr><tr><td>Registros trabalhistas</td><td>Conforme prazo legal aplicável</td><td>Legislação trabalhista e previdenciária</td><td>Eliminar ou anonimizar</td></tr><tr><td>Logs de acesso a aplicações de internet</td><td>Mínimo legal do Marco Civil</td><td>Lei 12.965/2014</td><td>Eliminar</td></tr><tr><td>Currículos de candidatos não contratados</td><td>Definido pela empresa (ex.: 6 meses)</td><td>LGPD, consentimento</td><td>Eliminar</td></tr><tr><td>Backups operacionais</td><td>30 a 90 dias</td><td>Política interna</td><td>Expirar</td></tr></tbody></table></div>
+<ul><li>Os prazos exatos devem ser validados pelo jurídico; a tabela é aprovada formalmente e revisada anualmente.</li></ul>
+<h2 id="camadas"><span class="n">03</span>Camadas de storage</h2>
+<div class="tbl"><table><thead><tr><th>Camada</th><th>Acesso</th><th>Exemplo</th></tr></thead><tbody><tr><td>Quente</td><td>Frequente, baixa latência</td><td>Flash local, blob/objeto hot</td></tr><tr><td>Fria</td><td>Ocasional</td><td>Objeto cool/infrequent access, NAS de capacidade</td></tr><tr><td>Arquivo</td><td>Raro, recuperação em horas</td><td>Archive tier, Glacier, OCI Archive, fita</td></tr></tbody></table></div>
+<ul><li>Políticas de ciclo de vida no object storage movem e expiram objetos automaticamente por idade ou último acesso.</li><li>Considere custo de recuperação e tempo de reidratação do arquivo antes de mover dados que podem ser pedidos com urgência.</li></ul>
+<h2 id="legal"><span class="n">04</span>Retenção legal e imutabilidade</h2>
+<ul><li><b>Legal hold:</b> suspende a eliminação de dados ligados a processo ou investigação, por ordem do jurídico.</li><li><b>WORM/imutabilidade:</b> buckets com bloqueio de objeto em modo compliance para dados que não podem ser alterados.</li><li>Microsoft Purview (ou equivalente) para políticas de retenção em e-mail, Teams e SharePoint.</li></ul>
+<h2 id="descarte"><span class="n">05</span>Descarte seguro</h2>
+<ul><li>Eliminação lógica por política (expiração) com registro do que foi eliminado e quando.</li><li>Backups: a retenção do backup não pode ultrapassar a do dado, salvo justificativa; documente.</li><li>Mídias físicas: sanitização conforme NIST SP 800-88 (limpar, purgar ou destruir) com certificado.</li><li>Pedidos de titulares (LGPD): processo para localizar e eliminar ou anonimizar, com exceções legais registradas.</li></ul>
+<div class="call warn"><b class="t">Backup eterno</b><p>Fita ou repositório de backup com dados pessoais de 10 anos atrás, sem justificativa, é passivo de LGPD. Alinhe a retenção do backup à tabela de temporalidade.</p></div>
+<h2 id="checklist"><span class="n">06</span>Checklist</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Governança</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Inventário de repositórios com dono</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Classificação aplicada</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Tabela de temporalidade aprovada pelo jurídico</span></label></li></ul>
+<h3>Técnica</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c4"><span>Políticas de ciclo de vida no object storage</span></label></li><li><label><input type="checkbox" data-k="c5"><span>Retenção em e-mail e colaboração</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Legal hold disponível</span></label></li><li><label><input type="checkbox" data-k="c7"><span>Retenção do backup alinhada</span></label></li></ul>
+<h3>Descarte</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c8"><span>Registro de eliminações</span></label></li><li><label><input type="checkbox" data-k="c9"><span>Sanitização de mídia com certificado</span></label></li><li><label><input type="checkbox" data-k="c10"><span>Processo para pedidos de titulares</span></label></li></ul>
+<h2 id="fontes"><span class="n">07</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm" target="_blank" rel="noopener">Lei 13.709/2018 (LGPD)</a></li><li><a href="https://csrc.nist.gov/pubs/sp/800/88/r1/final" target="_blank" rel="noopener">NIST SP 800-88: sanitização de mídia</a></li><li><a href="https://learn.microsoft.com/en-us/purview/retention" target="_blank" rel="noopener">Microsoft Purview: retenção</a></li></ul>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública e experiência de campo. Marcas citadas pertencem aos seus donos. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#inventario">01 · Inventário e classificação</a></li><li><a href="#temporalidade">02 · Tabela de temporalidade</a></li><li><a href="#camadas">03 · Camadas de storage</a></li><li><a href="#legal">04 · Retenção legal e imutabilidade</a></li><li><a href="#descarte">05 · Descarte seguro</a></li><li><a href="#checklist">06 · Checklist</a></li><li><a href="#fontes">07 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='ciclo-vida-dados-retencao-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

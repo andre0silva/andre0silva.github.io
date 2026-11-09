@@ -92,7 +92,7 @@ pre.cli .c{color:#cfe8d4}
 </style>
 <div class="ph" style="padding-bottom:12px">
 <p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#observabilidade">Observabilidade</a> / Prometheus e Grafana</p>
-<span class="chip">Observabilidade</span> <span class="chip m">Nível Pleno</span>
+<span class="chip">Observabilidade</span> <span class="chip m">Nível N3</span>
 <h1 style="margin-top:12px">Prometheus e Grafana: métricas e dashboards</h1>
 <p class="sub">Uma stack de métricas pronta em Docker Compose, com as consultas PromQL que respondem às perguntas do dia a dia e uma regra de alerta de exemplo.</p>
 <div class="intro-meta"><span class="chip m">Prometheus</span><span class="chip m">Grafana</span><span class="chip m">PromQL</span><span class="chip m">node_exporter</span><span class="chip m">Docker</span></div>
@@ -103,7 +103,7 @@ pre.cli .c{color:#cfe8d4}
 <article class="gbody">
 
 <h2 id="antes"><span class="n">00</span>Antes de começar</h2>
-<div class="kv"><div><b>Pleno</b><span>nível</span></div><div><b>Pull</b><span>Prometheus busca as métricas</span></div><div><b>9090 · 3000 · 9100</b><span>portas principais</span></div><div><b>2 h</b><span>de laboratório</span></div></div><div class="tbl"><table><thead><tr><th>Componente</th><th>Função</th><th>Porta padrão</th></tr></thead><tbody><tr><td>Prometheus</td><td>Coleta e guarda séries temporais</td><td>9090</td></tr><tr><td>node_exporter</td><td>Expõe métricas do Linux</td><td>9100</td></tr><tr><td>Grafana</td><td>Painéis e visualização</td><td>3000</td></tr><tr><td>Alertmanager</td><td>Agrupa e envia alertas</td><td>9093</td></tr></tbody></table></div>
+<div class="kv"><div><b>N3</b><span>nível</span></div><div><b>Pull</b><span>Prometheus busca as métricas</span></div><div><b>9090 · 3000 · 9100</b><span>portas principais</span></div><div><b>2 h</b><span>de laboratório</span></div></div><div class="tbl"><table><thead><tr><th>Componente</th><th>Função</th><th>Porta padrão</th></tr></thead><tbody><tr><td>Prometheus</td><td>Coleta e guarda séries temporais</td><td>9090</td></tr><tr><td>node_exporter</td><td>Expõe métricas do Linux</td><td>9100</td></tr><tr><td>Grafana</td><td>Painéis e visualização</td><td>3000</td></tr><tr><td>Alertmanager</td><td>Agrupa e envia alertas</td><td>9093</td></tr></tbody></table></div>
 <h2 id="compose"><span class="n">01</span>Subir a stack com Docker Compose</h2>
 <p><code>compose.yaml</code>:</p><pre class="cli">services:
   prometheus:

@@ -92,7 +92,7 @@ pre.cli .c{color:#cfe8d4}
 </style>
 <div class="ph" style="padding-bottom:12px">
 <p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#storage-backup">Storage e backup</a> / Backup imutável</p>
-<span class="chip">Storage e backup</span> <span class="chip m">Nível Pleno</span>
+<span class="chip">Storage e backup</span> <span class="chip m">Nível Sênior</span>
 <h1 style="margin-top:12px">Backup imutável contra ransomware</h1>
 <p class="sub">Como garantir que, mesmo com o domínio comprometido, o atacante não consiga apagar ou criptografar a última cópia boa.</p>
 <div class="intro-meta"><span class="chip m">Backup</span><span class="chip m">Ransomware</span><span class="chip m">Imutabilidade</span><span class="chip m">Object Lock</span><span class="chip m">Air gap</span></div>
@@ -103,7 +103,7 @@ pre.cli .c{color:#cfe8d4}
 <article class="gbody">
 
 <h2 id="antes"><span class="n">00</span>Antes de começar</h2>
-<div class="kv"><div><b>Pleno</b><span>nível</span></div><div><b>3 opções</b><span>de imutabilidade</span></div><div><b>Credenciais</b><span>separadas do domínio</span></div><div><b>MFA</b><span>no console de backup</span></div></div><p>Grupos de ransomware procuram o servidor de backup antes de criptografar a produção: apagam repositórios, snapshots e cópias em nuvem. Por isso a última linha de defesa precisa ser <b>imutável</b>: nem um administrador consegue apagar antes do prazo.</p>
+<div class="kv"><div><b>Sênior</b><span>nível</span></div><div><b>3 opções</b><span>de imutabilidade</span></div><div><b>Credenciais</b><span>separadas do domínio</span></div><div><b>MFA</b><span>no console de backup</span></div></div><p>Grupos de ransomware procuram o servidor de backup antes de criptografar a produção: apagam repositórios, snapshots e cópias em nuvem. Por isso a última linha de defesa precisa ser <b>imutável</b>: nem um administrador consegue apagar antes do prazo.</p>
 <h2 id="opcoes"><span class="n">01</span>Opções de imutabilidade</h2>
 <div class="tbl"><table><thead><tr><th>Opção</th><th>Como funciona</th><th>Atenção</th></tr></thead><tbody><tr><td>Object storage com bloqueio (WORM)</td><td>S3 Object Lock, armazenamento imutável do Azure Blob, regras de retenção do Object Storage da OCI</td><td>O modo conformidade não pode ser desfeito nem pela conta raiz; teste o prazo antes</td></tr><tr><td>Repositório Linux endurecido</td><td>Servidor Linux dedicado em que o software de backup grava com bloqueio de imutabilidade, sem SSH aberto e com credencial de uso único</td><td>Proteja também o acesso físico e o console de gerenciamento do hardware</td></tr><tr><td>Offline ou air gap</td><td>Fita ou disco removível desconectado e guardado fora</td><td>Processo manual: precisa de disciplina e registro</td></tr></tbody></table></div><h3>S3 Object Lock: governança × conformidade</h3><div class="tbl"><table><thead><tr><th>Modo</th><th>Quem pode remover o bloqueio</th></tr></thead><tbody><tr><td>Governança</td><td>Usuários com permissão especial podem contornar</td></tr><tr><td>Conformidade</td><td>Ninguém, até o fim do prazo</td></tr></tbody></table></div>
 <h2 id="isolamento"><span class="n">02</span>Isolar o ambiente de backup</h2>

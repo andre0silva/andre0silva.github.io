@@ -92,7 +92,7 @@ pre.cli .c{color:#cfe8d4}
 </style>
 <div class="ph" style="padding-bottom:12px">
 <p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#observabilidade">Observabilidade</a> / Zabbix</p>
-<span class="chip">Observabilidade</span> <span class="chip m">Nível Júnior</span>
+<span class="chip">Observabilidade</span> <span class="chip m">Nível N2</span>
 <h1 style="margin-top:12px">Zabbix do zero: monitorando servidores</h1>
 <p class="sub">Do servidor instalado ao primeiro alerta no Teams ou Telegram, usando templates prontos em vez de configurar item por item.</p>
 <div class="intro-meta"><span class="chip m">Zabbix</span><span class="chip m">Monitoramento</span><span class="chip m">Agent 2</span><span class="chip m">Templates</span><span class="chip m">Alertas</span></div>
@@ -103,7 +103,7 @@ pre.cli .c{color:#cfe8d4}
 <article class="gbody">
 
 <h2 id="antes"><span class="n">00</span>Antes de começar</h2>
-<div class="kv"><div><b>Júnior</b><span>nível</span></div><div><b>Versão LTS</b><span>recomendada</span></div><div><b>10050/10051</b><span>portas TCP</span></div><div><b>1 dia</b><span>até o primeiro alerta</span></div></div><div class="tbl"><table><thead><tr><th>Componente</th><th>Função</th></tr></thead><tbody><tr><td>Zabbix server</td><td>Coleta, avalia triggers e dispara ações</td></tr><tr><td>Banco de dados</td><td>MySQL/MariaDB ou PostgreSQL</td></tr><tr><td>Frontend web</td><td>Interface de configuração e painéis</td></tr><tr><td>Zabbix agent 2</td><td>Instalado nos servidores monitorados</td></tr><tr><td>Zabbix proxy</td><td>Coleta em filiais ou redes isoladas e envia ao server</td></tr></tbody></table></div>
+<div class="kv"><div><b>N2</b><span>nível</span></div><div><b>Versão LTS</b><span>recomendada</span></div><div><b>10050/10051</b><span>portas TCP</span></div><div><b>1 dia</b><span>até o primeiro alerta</span></div></div><div class="tbl"><table><thead><tr><th>Componente</th><th>Função</th></tr></thead><tbody><tr><td>Zabbix server</td><td>Coleta, avalia triggers e dispara ações</td></tr><tr><td>Banco de dados</td><td>MySQL/MariaDB ou PostgreSQL</td></tr><tr><td>Frontend web</td><td>Interface de configuração e painéis</td></tr><tr><td>Zabbix agent 2</td><td>Instalado nos servidores monitorados</td></tr><tr><td>Zabbix proxy</td><td>Coleta em filiais ou redes isoladas e envia ao server</td></tr></tbody></table></div>
 <h2 id="instalar"><span class="n">01</span>Instalação</h2>
 <ol class="steps"><li><b>Escolha a versão LTS</b>Na página de download do Zabbix, selecione a versão LTS mais recente, o sistema operacional, o banco e o servidor web: a página gera os comandos exatos.</li><li><b>Instale server, frontend e banco</b>Siga os comandos gerados e conclua o assistente web do frontend.</li><li><b>Troque a senha padrão</b>O usuário inicial é <code>Admin</code>; troque a senha e crie usuários nominais.</li><li><b>Libere as portas</b>TCP 10050 do server para os agentes (checagem passiva) e TCP 10051 dos agentes para o server (checagem ativa).</li></ol>
 <h2 id="agente"><span class="n">02</span>Configurar o Zabbix agent 2</h2>

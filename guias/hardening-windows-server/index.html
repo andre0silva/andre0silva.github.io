@@ -92,7 +92,7 @@ pre.cli .c{color:#cfe8d4}
 </style>
 <div class="ph" style="padding-bottom:12px">
 <p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#seguranca">Segurança</a> / Hardening Windows Server</p>
-<span class="chip">Segurança</span> <span class="chip m">Nível Júnior</span>
+<span class="chip">Segurança</span> <span class="chip m">Nível N3</span>
 <h1 style="margin-top:12px">Hardening de Windows Server</h1>
 <p class="sub">Os ajustes que mais reduzem risco num servidor Windows, em ordem de prioridade, com comandos PowerShell para verificar e corrigir.</p>
 <div class="intro-meta"><span class="chip m">Windows Server</span><span class="chip m">PowerShell</span><span class="chip m">LAPS</span><span class="chip m">Linha de base</span></div>
@@ -103,7 +103,7 @@ pre.cli .c{color:#cfe8d4}
 <article class="gbody">
 
 <h2 id="antes"><span class="n">00</span>Antes de começar</h2>
-<div class="kv"><div><b>Júnior</b><span>nível</span></div><div><b>2 a 4 h</b><span>por servidor modelo</span></div><div><b>PowerShell</b><span>como administrador</span></div><div><b>GPO</b><span>para escalar</span></div></div>
+<div class="kv"><div><b>N3</b><span>nível</span></div><div><b>2 a 4 h</b><span>por servidor modelo</span></div><div><b>PowerShell</b><span>como administrador</span></div><div><b>GPO</b><span>para escalar</span></div></div>
 <p>Hardening é reduzir a superfície de ataque: menos serviços, menos contas com privilégio, protocolos antigos desligados e tudo registrado. Faça primeiro num servidor modelo e depois leve as configurações para GPO.</p>
 <h2 id="prioridades"><span class="n">01</span>Prioridades em ordem</h2>
 <div class="tbl"><table><thead><tr><th>#</th><th>Ação</th><th>Por quê</th></tr></thead><tbody><tr><td>1</td><td>Atualizações mensais</td><td>A maioria dos ataques usa falhas já corrigidas</td></tr><tr><td>2</td><td>Senha única por servidor com Windows LAPS</td><td>Evita que a senha do administrador local abra todos os servidores</td></tr><tr><td>3</td><td>Contas administrativas separadas</td><td>O dia a dia não roda com privilégio</td></tr><tr><td>4</td><td>Desligar SMBv1 e exigir assinatura SMB</td><td>Fecha caminhos clássicos de movimentação lateral</td></tr><tr><td>5</td><td>RDP só com NLA e só a partir de servidores de salto</td><td>RDP exposto é porta de entrada de ransomware</td></tr><tr><td>6</td><td>Firewall ligado nos três perfis</td><td>Bloqueia o que não foi explicitamente liberado</td></tr><tr><td>7</td><td>Defender com EDR e regras de redução de superfície de ataque</td><td>Detecta e bloqueia comportamento malicioso</td></tr><tr><td>8</td><td>Auditoria e envio de logs ao SIEM</td><td>Sem log não há investigação</td></tr></tbody></table></div>

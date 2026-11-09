@@ -92,7 +92,7 @@ pre.cli .c{color:#cfe8d4}
 </style>
 <div class="ph" style="padding-bottom:12px">
 <p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#infraestrutura">Infraestrutura</a> / Ansible</p>
-<span class="chip">Infraestrutura</span> <span class="chip m">Nível Júnior</span>
+<span class="chip">Infraestrutura</span> <span class="chip m">Nível N2</span>
 <h1 style="margin-top:12px">Ansible: automação para administradores</h1>
 <p class="sub">Do primeiro ping ao primeiro playbook que padroniza servidores, sem agente instalado e com execução segura em modo de verificação.</p>
 <div class="intro-meta"><span class="chip m">Ansible</span><span class="chip m">Automação</span><span class="chip m">YAML</span><span class="chip m">Linux</span><span class="chip m">IaC</span></div>
@@ -103,7 +103,7 @@ pre.cli .c{color:#cfe8d4}
 <article class="gbody">
 
 <h2 id="antes"><span class="n">00</span>Antes de começar</h2>
-<div class="kv"><div><b>Júnior</b><span>nível</span></div><div><b>Sem agente</b><span>usa SSH ou WinRM</span></div><div><b>YAML</b><span>linguagem dos playbooks</span></div><div><b>2 h</b><span>até o primeiro playbook</span></div></div><div class="tbl"><table><thead><tr><th>Conceito</th><th>O que é</th></tr></thead><tbody><tr><td>Nó de controle</td><td>Máquina Linux (ou WSL no Windows) onde o Ansible roda</td></tr><tr><td>Inventário</td><td>Lista de servidores e grupos</td></tr><tr><td>Módulo</td><td>Unidade de trabalho: instalar pacote, copiar arquivo, reiniciar serviço</td></tr><tr><td>Playbook</td><td>Arquivo YAML com a sequência de tarefas</td></tr><tr><td>Idempotência</td><td>Rodar de novo não muda nada se já está no estado desejado</td></tr><tr><td>Role</td><td>Pacote reutilizável de tarefas, arquivos e variáveis</td></tr></tbody></table></div>
+<div class="kv"><div><b>N2</b><span>nível</span></div><div><b>Sem agente</b><span>usa SSH ou WinRM</span></div><div><b>YAML</b><span>linguagem dos playbooks</span></div><div><b>2 h</b><span>até o primeiro playbook</span></div></div><div class="tbl"><table><thead><tr><th>Conceito</th><th>O que é</th></tr></thead><tbody><tr><td>Nó de controle</td><td>Máquina Linux (ou WSL no Windows) onde o Ansible roda</td></tr><tr><td>Inventário</td><td>Lista de servidores e grupos</td></tr><tr><td>Módulo</td><td>Unidade de trabalho: instalar pacote, copiar arquivo, reiniciar serviço</td></tr><tr><td>Playbook</td><td>Arquivo YAML com a sequência de tarefas</td></tr><tr><td>Idempotência</td><td>Rodar de novo não muda nada se já está no estado desejado</td></tr><tr><td>Role</td><td>Pacote reutilizável de tarefas, arquivos e variáveis</td></tr></tbody></table></div>
 <h2 id="instalar"><span class="n">01</span>Instalação e inventário</h2>
 <pre class="cli">python3 -m pip install --user ansible
 ansible --version</pre><p>Arquivo <code>inventory.ini</code>:</p><pre class="cli">[web]

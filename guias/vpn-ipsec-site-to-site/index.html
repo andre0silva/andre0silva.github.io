@@ -92,7 +92,7 @@ pre.cli .c{color:#cfe8d4}
 </style>
 <div class="ph" style="padding-bottom:12px">
 <p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#rede-firewall">Rede e firewall</a> / VPN IPsec</p>
-<span class="chip">Rede e firewall</span> <span class="chip m">Nível Pleno</span>
+<span class="chip">Rede e firewall</span> <span class="chip m">Nível N3</span>
 <h1 style="margin-top:12px">VPN IPsec site-to-site</h1>
 <p class="sub">Os parâmetros que precisam bater dos dois lados, uma planilha pronta para trocar com o parceiro e o roteiro para descobrir por que o túnel não sobe.</p>
 <div class="intro-meta"><span class="chip m">IPsec</span><span class="chip m">IKEv2</span><span class="chip m">VPN</span><span class="chip m">Troubleshooting</span></div>
@@ -103,7 +103,7 @@ pre.cli .c{color:#cfe8d4}
 <article class="gbody">
 
 <h2 id="antes"><span class="n">00</span>Antes de começar</h2>
-<div class="kv"><div><b>Pleno</b><span>nível</span></div><div><b>2 fases</b><span>IKE e IPsec</span></div><div><b>UDP 500/4500</b><span>e protocolo ESP</span></div><div><b>1 planilha</b><span>por túnel</span></div></div>
+<div class="kv"><div><b>N3</b><span>nível</span></div><div><b>2 fases</b><span>IKE e IPsec</span></div><div><b>UDP 500/4500</b><span>e protocolo ESP</span></div><div><b>1 planilha</b><span>por túnel</span></div></div>
 <p>A maioria dos túneis que não sobem tem um único motivo: algum parâmetro diferente entre os lados. Por isso o trabalho começa numa planilha acordada com quem cuida do outro lado.</p>
 <h2 id="fases"><span class="n">01</span>Como o túnel se forma</h2>
 <div class="tbl"><table><thead><tr><th>Fase</th><th>Nome no IKEv2</th><th>O que negocia</th></tr></thead><tbody><tr><td>1</td><td>IKE SA</td><td>Autenticação dos pares (chave pré-compartilhada ou certificado) e um canal seguro de controle</td></tr><tr><td>2</td><td>Child SA (IPsec SA)</td><td>As chaves que criptografam o tráfego e quais redes passam pelo túnel</td></tr></tbody></table></div><div class="tbl"><table><thead><tr><th>Tráfego</th><th>Porta ou protocolo</th></tr></thead><tbody><tr><td>IKE</td><td>UDP 500</td></tr><tr><td>IKE e ESP com NAT no caminho (NAT-T)</td><td>UDP 4500</td></tr><tr><td>ESP sem NAT</td><td>Protocolo IP 50</td></tr></tbody></table></div>

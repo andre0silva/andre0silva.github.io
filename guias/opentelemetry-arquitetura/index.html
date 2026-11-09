@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arquitetura de observabilidade com OpenTelemetry · Guias · André Ferreira</title>
+<meta name="description" content="Guia em português de arquitetura de observabilidade com OpenTelemetry: sinais, instrumentação, Collector em agente e gateway, convenções semânticas, amostragem, backends, governança e custo.">
+<meta property="og:title" content="Arquitetura de observabilidade com OpenTelemetry · Guias · André Ferreira">
+<meta property="og:description" content="Guia em português de arquitetura de observabilidade com OpenTelemetry: sinais, instrumentação, Collector em agente e gateway, convenções semânticas, amostragem, backends, governança e custo.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/opentelemetry-arquitetura/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/opentelemetry-arquitetura/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#observabilidade">Observabilidade</a> / OpenTelemetry</p>
+<span class="chip">Observabilidade</span> <span class="chip m">Nível Especialista</span>
+<h1 style="margin-top:12px">Arquitetura de observabilidade com OpenTelemetry</h1>
+<p class="sub">Como padronizar métricas, logs e traces em toda a empresa com OpenTelemetry, sem amarrar a um fornecedor e sem explodir o custo de armazenamento.</p>
+<div class="intro-meta"><span class="chip m">OpenTelemetry</span><span class="chip m">Traces</span><span class="chip m">Métricas</span><span class="chip m">Logs</span><span class="chip m">Arquitetura</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<div class="kv"><div><b>Especialista</b><span>nível</span></div><div><b>3 sinais</b><span>métricas, logs e traces</span></div><div><b>2 camadas</b><span>agente e gateway</span></div><div><b>1 padrão</b><span>de nomes e atributos</span></div></div>
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<p>Cada ferramenta de monitoramento tem o seu agente, o seu formato e o seu preço. OpenTelemetry (OTel) separa a coleta do destino: você instrumenta uma vez e envia para o backend que quiser. A decisão de arquitetura mais importante é o pipeline entre as aplicações e o armazenamento.</p>
+<h2 id="sinais"><span class="n">01</span>Sinais</h2>
+<div class="tbl"><table><thead><tr><th>Sinal</th><th>Responde</th><th>Exemplo</th></tr></thead><tbody><tr><td>Métricas</td><td>O que está acontecendo, em números</td><td>Latência p95, taxa de erro, uso de CPU</td></tr><tr><td>Logs</td><td>O que exatamente aconteceu</td><td>Erro com stack trace e ID de pedido</td></tr><tr><td>Traces</td><td>Onde o tempo foi gasto em uma requisição</td><td>Front → API → fila → banco</td></tr></tbody></table></div>
+<ul><li>O que une os três é o <b>contexto</b>: <code>trace_id</code> nos logs, atributos iguais (<code>service.name</code>, <code>deployment.environment</code>) em todos os sinais.</li></ul>
+<h2 id="instrumentacao"><span class="n">02</span>Instrumentação</h2>
+<ol class="steps"><li><b>Automática primeiro</b>Agentes de autoinstrumentação para Java, .NET, Node.js e Python capturam HTTP, banco e filas sem mudar código.</li><li><b>Manual onde importa</b>Spans e métricas de negócio (pedido criado, pagamento aprovado) via SDK.</li><li><b>Infraestrutura</b>Receivers do Collector para host, Kubernetes, Prometheus, syslog e bancos.</li><li><b>Propagação</b>W3C Trace Context em todos os serviços, inclusive em filas e chamadas para terceiros.</li></ol>
+<h2 id="collector"><span class="n">03</span>Collector: agente e gateway</h2>
+<div class="tbl"><table><thead><tr><th>Camada</th><th>Onde roda</th><th>Função</th></tr></thead><tbody><tr><td>Agente</td><td>Em cada host ou como DaemonSet no Kubernetes</td><td>Recebe da aplicação, coleta do host, adiciona metadados (k8s, nuvem)</td></tr><tr><td>Gateway</td><td>Cluster central escalável</td><td>Amostragem de cauda, filtragem, mascaramento de dados pessoais, roteamento para backends</td></tr></tbody></table></div>
+<ul><li>Processadores essenciais: <code>memory_limiter</code>, <code>batch</code>, <code>resource</code>, <code>attributes</code> (remover PII), <code>tail_sampling</code> no gateway.</li><li>Gateway em alta disponibilidade atrás de balanceador; amostragem de cauda exige que todos os spans de um trace caiam no mesmo nó (load balancing exporter por trace_id).</li></ul>
+<h2 id="convencoes"><span class="n">04</span>Convenções e governança</h2>
+<ul><li>Adote as convenções semânticas do OTel para nomes de atributos e métricas.</li><li>Atributos obrigatórios em todo serviço: <code>service.name</code>, <code>service.version</code>, <code>deployment.environment</code>, <code>team</code>.</li><li>Catálogo de serviços com dono e SLO, ligado ao <code>service.name</code>.</li><li>Revisão de cardinalidade: atributos com valores únicos (ID de usuário, URL completa) não entram em métricas.</li></ul>
+<h2 id="custo"><span class="n">05</span>Amostragem e custo</h2>
+<div class="tbl"><table><thead><tr><th>Técnica</th><th>Efeito</th></tr></thead><tbody><tr><td>Amostragem de cauda</td><td>Guarda 100% dos traces com erro ou lentos e uma fração dos normais</td></tr><tr><td>Filtrar health checks</td><td>Remove ruído de alto volume</td></tr><tr><td>Retenção por nível</td><td>Traces 7 a 15 dias; métricas agregadas por 13 meses; logs conforme exigência</td></tr><tr><td>Rótulos de equipe</td><td>Custo de observabilidade por equipe (showback)</td></tr></tbody></table></div>
+<h2 id="backends"><span class="n">06</span>Backends</h2>
+<ul><li>Abertos: Prometheus/Mimir (métricas), Loki ou OpenSearch (logs), Tempo ou Jaeger (traces), Grafana para visualização.</li><li>Comerciais e de nuvem com suporte a OTLP: Azure Monitor, Datadog, Dynatrace, New Relic, Elastic, Splunk.</li></ul>
+<div class="call ok"><b class="t">Troca de backend sem reinstrumentar</b><p>Com o gateway, mudar ou duplicar o destino é alteração de configuração do Collector, não de código.</p></div>
+<h2 id="checklist"><span class="n">07</span>Checklist</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Padrões</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Atributos obrigatórios definidos</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Convenções semânticas adotadas</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Catálogo de serviços com dono</span></label></li></ul>
+<h3>Pipeline</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c4"><span>Agente em hosts e clusters</span></label></li><li><label><input type="checkbox" data-k="c5"><span>Gateway em HA</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Mascaramento de dados pessoais</span></label></li><li><label><input type="checkbox" data-k="c7"><span>Amostragem de cauda</span></label></li></ul>
+<h3>Governança</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c8"><span>Controle de cardinalidade</span></label></li><li><label><input type="checkbox" data-k="c9"><span>Retenção por sinal</span></label></li><li><label><input type="checkbox" data-k="c10"><span>Custo por equipe</span></label></li><li><label><input type="checkbox" data-k="c11"><span>Revisão trimestral</span></label></li></ul>
+<h2 id="fontes"><span class="n">08</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://opentelemetry.io/docs/" target="_blank" rel="noopener">Documentação do OpenTelemetry</a></li><li><a href="https://opentelemetry.io/docs/collector/" target="_blank" rel="noopener">OpenTelemetry Collector</a></li><li><a href="https://opentelemetry.io/docs/specs/semconv/" target="_blank" rel="noopener">Convenções semânticas</a></li><li><a href="https://www.w3.org/TR/trace-context/" target="_blank" rel="noopener">W3C Trace Context</a></li></ul>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública e experiência de campo. Marcas citadas pertencem aos seus donos. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#sinais">01 · Sinais</a></li><li><a href="#instrumentacao">02 · Instrumentação</a></li><li><a href="#collector">03 · Collector: agente e gateway</a></li><li><a href="#convencoes">04 · Convenções e governança</a></li><li><a href="#custo">05 · Amostragem e custo</a></li><li><a href="#backends">06 · Backends</a></li><li><a href="#checklist">07 · Checklist</a></li><li><a href="#fontes">08 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='opentelemetry-arquitetura-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

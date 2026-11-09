@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Orçamento de infraestrutura e business case · Guias · André Ferreira</title>
+<meta name="description" content="Guia em português de orçamento de TI e business case: base de custos, run versus change, CAPEX e OPEX, ciclo de renovação, business case com VPL e payback, priorização, acompanhamento mensal e showback.">
+<meta property="og:title" content="Orçamento de infraestrutura e business case · Guias · André Ferreira">
+<meta property="og:description" content="Guia em português de orçamento de TI e business case: base de custos, run versus change, CAPEX e OPEX, ciclo de renovação, business case com VPL e payback, priorização, acompanhamento mensal e showback.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/orcamento-ti-business-case/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/orcamento-ti-business-case/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#governanca-processos">Governança e processos</a> / Orçamento e business case</p>
+<span class="chip">Governança e processos</span> <span class="chip m">Nível Sênior</span>
+<h1 style="margin-top:12px">Orçamento de infraestrutura e business case</h1>
+<p class="sub">Como montar o orçamento anual de infraestrutura, separar CAPEX e OPEX, justificar investimentos com business case e acompanhar a execução durante o ano.</p>
+<div class="intro-meta"><span class="chip m">Orçamento</span><span class="chip m">CAPEX</span><span class="chip m">OPEX</span><span class="chip m">Business case</span><span class="chip m">Custos</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<div class="kv"><div><b>Sênior</b><span>nível</span></div><div><b>Run x Change</b><span>divisão do orçamento</span></div><div><b>3 a 5 anos</b><span>ciclo de renovação</span></div><div><b>Mensal</b><span>realizado x orçado</span></div></div>
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<p>Quem conhece os números do próprio ambiente ganha a discussão de orçamento. A base é um inventário de custos completo e ligado a serviços, não uma lista de notas fiscais.</p>
+<h2 id="base"><span class="n">01</span>Base de custos</h2>
+<div class="tbl"><table><thead><tr><th>Categoria</th><th>Exemplos</th><th>Natureza típica</th></tr></thead><tbody><tr><td>Hardware</td><td>Servidores, storage, rede</td><td>CAPEX (depreciação)</td></tr><tr><td>Software</td><td>Licenças perpétuas, suporte e assinaturas</td><td>CAPEX ou OPEX</td></tr><tr><td>Nuvem</td><td>Consumo IaaS/PaaS/SaaS</td><td>OPEX</td></tr><tr><td>Serviços</td><td>Sustentação, NOC/SOC terceirizado, consultoria</td><td>OPEX</td></tr><tr><td>Telecom</td><td>Links, MPLS, SD-WAN, telefonia</td><td>OPEX</td></tr><tr><td>Data center</td><td>Colocation, energia, manutenção</td><td>OPEX</td></tr><tr><td>Pessoas</td><td>Equipe interna</td><td>OPEX</td></tr></tbody></table></div>
+<ul><li>Separe <b>run</b> (manter o que existe) de <b>change</b> (projetos). Ter o run sob controle libera verba para change.</li><li>Confirme com controladoria a regra de capitalização da empresa (o que pode virar CAPEX).</li></ul>
+<h2 id="renovacao"><span class="n">02</span>Ciclo de renovação</h2>
+<ul><li>Inventário com data de compra, fim de garantia e fim de suporte do fabricante.</li><li>Ciclos típicos: servidores e storage 5 anos, rede 5 a 7 anos, notebooks 3 a 4 anos.</li><li>Plano plurianual de renovação para evitar "ano da bolha" com tudo vencendo junto.</li></ul>
+<h2 id="businesscase"><span class="n">03</span>Business case</h2>
+<ol class="steps"><li><b>Problema e opções</b>Situação atual, risco de não fazer nada e pelo menos três alternativas (incluindo não fazer).</li><li><b>Custos</b>Investimento inicial, custos recorrentes por 3 a 5 anos, custos de transição e de pessoas.</li><li><b>Benefícios</b>Economia direta (licença, energia, contrato), custo evitado (renovação, multa, incidente), ganho de produtividade estimado com premissa explícita.</li><li><b>Indicadores financeiros</b>Payback, VPL com taxa definida pela controladoria e TIR.</li><li><b>Riscos e premissas</b>O que pode mudar o resultado e sensibilidade (cenário pessimista).</li></ol>
+<div class="tbl"><table><thead><tr><th>Ano</th><th>Investimento</th><th>Custo recorrente</th><th>Economia</th><th>Fluxo líquido</th></tr></thead><tbody><tr><td>0</td><td>R$ 1.200.000</td><td>—</td><td>—</td><td>− R$ 1.200.000</td></tr><tr><td>1</td><td>—</td><td>R$ 180.000</td><td>R$ 650.000</td><td>R$ 470.000</td></tr><tr><td>2</td><td>—</td><td>R$ 185.000</td><td>R$ 700.000</td><td>R$ 515.000</td></tr><tr><td>3</td><td>—</td><td>R$ 190.000</td><td>R$ 720.000</td><td>R$ 530.000</td></tr></tbody></table></div>
+<p>No exemplo, o payback ocorre no início do terceiro ano.</p>
+<h2 id="priorizacao"><span class="n">04</span>Priorização</h2>
+<ul><li>Critérios ponderados: obrigação legal, risco reduzido, alinhamento estratégico, retorno financeiro, urgência por fim de suporte.</li><li>Itens obrigatórios (compliance, fim de suporte crítico) entram primeiro; o restante compete pelo saldo.</li></ul>
+<h2 id="acompanhamento"><span class="n">05</span>Acompanhamento</h2>
+<ul><li>Realizado × orçado mensal por centro de custo e por projeto, com explicação de desvios acima de 10%.</li><li>Revisão de previsão (forecast) trimestral.</li><li>Showback ou chargeback por área para dar visibilidade do consumo, especialmente em nuvem.</li></ul>
+<div class="call ok"><b class="t">Uma página para a diretoria</b><p>Total, run × change, top 5 investimentos com benefício esperado, riscos de não aprovar e economia já capturada.</p></div>
+<h2 id="checklist"><span class="n">06</span>Checklist</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Base</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Inventário de custos por serviço</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Run e change separados</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Regra de capitalização confirmada</span></label></li></ul>
+<h3>Planejamento</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c4"><span>Plano plurianual de renovação</span></label></li><li><label><input type="checkbox" data-k="c5"><span>Business case dos investimentos relevantes</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Priorização com critérios</span></label></li></ul>
+<h3>Execução</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c7"><span>Realizado x orçado mensal</span></label></li><li><label><input type="checkbox" data-k="c8"><span>Forecast trimestral</span></label></li><li><label><input type="checkbox" data-k="c9"><span>Showback por área</span></label></li></ul>
+<h2 id="fontes"><span class="n">07</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://www.finops.org/framework/" target="_blank" rel="noopener">FinOps Foundation: framework</a></li><li><a href="https://www.tbmcouncil.org/" target="_blank" rel="noopener">TBM Council: Technology Business Management</a></li><li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/strategy/financial-considerations/" target="_blank" rel="noopener">Microsoft CAF: considerações financeiras</a></li></ul>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública e experiência de campo. Marcas citadas pertencem aos seus donos. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#base">01 · Base de custos</a></li><li><a href="#renovacao">02 · Ciclo de renovação</a></li><li><a href="#businesscase">03 · Business case</a></li><li><a href="#priorizacao">04 · Priorização</a></li><li><a href="#acompanhamento">05 · Acompanhamento</a></li><li><a href="#checklist">06 · Checklist</a></li><li><a href="#fontes">07 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='orcamento-ti-business-case-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

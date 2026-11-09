@@ -92,7 +92,7 @@ pre.cli .c{color:#cfe8d4}
 </style>
 <div class="ph" style="padding-bottom:12px">
 <p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#storage-backup">Storage e backup</a> / RAID e storage</p>
-<span class="chip">Storage e backup</span> <span class="chip m">Nível Júnior</span>
+<span class="chip">Storage e backup</span> <span class="chip m">Nível N1</span>
 <h1 style="margin-top:12px">RAID e storage: fundamentos</h1>
 <p class="sub">O que todo administrador precisa saber para escolher discos, RAID e protocolo, com o cálculo de capacidade de cada nível.</p>
 <div class="intro-meta"><span class="chip m">RAID</span><span class="chip m">Storage</span><span class="chip m">IOPS</span><span class="chip m">SAN</span><span class="chip m">NAS</span></div>
@@ -103,7 +103,7 @@ pre.cli .c{color:#cfe8d4}
 <article class="gbody">
 
 <h2 id="antes"><span class="n">00</span>Antes de começar</h2>
-<div class="kv"><div><b>Júnior</b><span>nível</span></div><div><b>5 níveis</b><span>de RAID comuns</span></div><div><b>IOPS</b><span>latência e vazão</span></div><div><b>RAID ≠ backup</b><span>regra de ouro</span></div></div>
+<div class="kv"><div><b>N1</b><span>nível</span></div><div><b>5 níveis</b><span>de RAID comuns</span></div><div><b>IOPS</b><span>latência e vazão</span></div><div><b>RAID ≠ backup</b><span>regra de ouro</span></div></div>
 <h2 id="raid"><span class="n">01</span>Níveis de RAID</h2>
 <div class="tbl"><table><thead><tr><th>Nível</th><th>Como funciona</th><th>Discos mín.</th><th>Falhas toleradas</th><th>Capacidade útil</th><th>Uso típico</th></tr></thead><tbody><tr><td>0</td><td>Distribui sem proteção</td><td>2</td><td>Nenhuma</td><td>100%</td><td>Dados temporários</td></tr><tr><td>1</td><td>Espelho</td><td>2</td><td>1 disco</td><td>50%</td><td>Sistema operacional</td></tr><tr><td>5</td><td>Paridade distribuída</td><td>3</td><td>1 disco</td><td>(n−1) discos</td><td>Leitura intensa, discos pequenos</td></tr><tr><td>6</td><td>Paridade dupla</td><td>4</td><td>2 discos</td><td>(n−2) discos</td><td>Arquivos e backup com discos grandes</td></tr><tr><td>10</td><td>Espelhos distribuídos</td><td>4</td><td>1 por espelho</td><td>50%</td><td>Bancos de dados e VMs</td></tr></tbody></table></div><h3>Exemplo: 6 discos de 4 TB</h3><div class="tbl"><table><thead><tr><th>Nível</th><th>Capacidade útil</th></tr></thead><tbody><tr><td>RAID 5</td><td>20 TB</td></tr><tr><td>RAID 6</td><td>16 TB</td></tr><tr><td>RAID 10</td><td>12 TB</td></tr></tbody></table></div><div class="call warn"><b class="t">RAID 5 com discos grandes</b><p>A reconstrução de um disco de muitos terabytes leva horas ou dias, e uma segunda falha nesse período perde tudo. Com discos grandes, prefira RAID 6 ou RAID 10.</p></div>
 <h2 id="discos"><span class="n">02</span>Discos e desempenho</h2>

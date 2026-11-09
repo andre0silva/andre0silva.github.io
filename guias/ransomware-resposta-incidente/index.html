@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Resposta a incidente de ransomware: playbook das primeiras 72 horas · Guias · André Ferreira</title>
+<meta name="description" content="Playbook em português de resposta a incidente de ransomware: detecção, contenção, preservação de evidências, comunicação, decisão de recuperação, restauração limpa e lições aprendidas.">
+<meta property="og:title" content="Resposta a incidente de ransomware: playbook das primeiras 72 horas · Guias · André Ferreira">
+<meta property="og:description" content="Playbook em português de resposta a incidente de ransomware: detecção, contenção, preservação de evidências, comunicação, decisão de recuperação, restauração limpa e lições aprendidas.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/ransomware-resposta-incidente/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/ransomware-resposta-incidente/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#seguranca">Segurança</a> / Resposta a ransomware</p>
+<span class="chip">Segurança</span> <span class="chip m">Nível Sênior</span>
+<h1 style="margin-top:12px">Resposta a incidente de ransomware: playbook das primeiras 72 horas</h1>
+<p class="sub">O que fazer, em que ordem e com quem, desde o primeiro alerta até a volta controlada dos sistemas, sem destruir evidência nem reinfectar o ambiente.</p>
+<div class="intro-meta"><span class="chip m">Ransomware</span><span class="chip m">Resposta a incidentes</span><span class="chip m">NIST 800-61</span><span class="chip m">Forense</span><span class="chip m">Crise</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<div class="kv"><div><b>Sênior</b><span>nível</span></div><div><b>72 h</b><span>janela do playbook</span></div><div><b>6 fases</b><span>da detecção ao pós-incidente</span></div><div><b>1 líder</b><span>comando do incidente</span></div></div>
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<p>Quando o ransomware aparece na tela, o atacante normalmente já está dentro há dias ou semanas, já roubou dados e já tentou apagar o backup. O playbook tem que estar pronto, impresso e ensaiado antes disso.</p>
+<ul><li>Contatos fora do ambiente atacado: telefone e e-mail pessoal da equipe, seguradora, jurídico, empresa de resposta a incidentes (retainer).</li><li>Credenciais de emergência e documentação do ambiente guardadas fora do domínio.</li><li>Backup imutável ou offline comprovadamente restaurável.</li></ul>
+<h2 id="papeis"><span class="n">01</span>Papéis na crise</h2>
+<div class="tbl"><table><thead><tr><th>Papel</th><th>Responsabilidade</th></tr></thead><tbody><tr><td>Líder do incidente</td><td>Decide, prioriza e mantém a linha do tempo. Não executa tarefas técnicas.</td></tr><tr><td>Líder técnico</td><td>Coordena contenção, investigação e recuperação.</td></tr><tr><td>Comunicação</td><td>Mensagens internas, clientes, imprensa. Só fala o que foi aprovado.</td></tr><tr><td>Jurídico e privacidade</td><td>LGPD (comunicação à ANPD e titulares), contratos, polícia, seguradora.</td></tr><tr><td>Negócio</td><td>Define quais processos voltam primeiro e aceita riscos.</td></tr><tr><td>Escriba</td><td>Registra cada decisão e ação com horário.</td></tr></tbody></table></div>
+<h2 id="fases"><span class="n">02</span>Roteiro por fase</h2>
+<ol class="steps"><li><b>Detectar e declarar (hora 0)</b>Confirme o incidente, declare crise, abra a sala de guerra fora dos canais da empresa (Teams e e-mail podem estar comprometidos) e comece o registro.</li><li><b>Conter (horas 0 a 4)</b>Isole a rede dos sistemas afetados no switch ou pelo EDR, <b>sem desligar</b> as máquinas: memória tem evidência. Corte VPN e acessos de terceiros, bloqueie internet de saída nos segmentos afetados, desative contas suspeitas.</li><li><b>Proteger o que sobrou (horas 0 a 6)</b>Isole o backup da rede, troque credenciais do console de backup, verifique se as cópias imutáveis estão íntegras. Proteja os DCs ainda limpos.</li><li><b>Investigar (horas 4 a 48)</b>Descubra o acesso inicial, contas usadas, persistência (tarefas agendadas, GPOs, serviços, contas novas) e se houve exfiltração. Colete memória, logs de EDR, firewall, VPN, Entra ID e DCs.</li><li><b>Erradicar (horas 24 a 72)</b>Remova persistência, troque <b>duas vezes</b> a senha da conta KRBTGT (com intervalo para replicação), redefina todas as contas privilegiadas e de serviço, revogue sessões e tokens na nuvem, corrija a vulnerabilidade de entrada.</li><li><b>Recuperar (a partir de 48 h)</b>Restaure em rede isolada (sala limpa), verifique com EDR antes de reconectar, volte por ordem de prioridade do negócio: identidade, rede, sistemas críticos, demais.</li></ol>
+<div class="call warn"><b class="t">Não desligue tudo no impulso</b><p>Desligar apaga memória e pode corromper volumes em criptografia. Isolar na rede é quase sempre melhor. A exceção é criptografia ativa em servidor crítico sem outra forma de parar.</p></div>
+<h2 id="decisao"><span class="n">03</span>Decisões difíceis</h2>
+<div class="tbl"><table><thead><tr><th>Pergunta</th><th>O que considerar</th></tr></thead><tbody><tr><td>Pagar o resgate?</td><td>Decisão da diretoria com jurídico e seguradora. Não garante chave funcional nem exclusão dos dados roubados; pode violar sanções. Prepare a recuperação como se não houvesse pagamento.</td></tr><tr><td>Reconstruir ou limpar o AD?</td><td>Se Domain Admin foi comprometido e a persistência não é totalmente conhecida, reconstruir a floresta a partir de backup anterior ao comprometimento é o caminho seguro.</td></tr><tr><td>Quando religar a internet?</td><td>Só depois de erradicar a persistência e com monitoramento reforçado.</td></tr><tr><td>Comunicar a ANPD?</td><td>Se houver risco ou dano relevante a titulares, comunicação em prazo razoável, conforme regulamento da ANPD. Envolva o encarregado (DPO) desde a hora 0.</td></tr></tbody></table></div>
+<h2 id="pos"><span class="n">04</span>Pós-incidente</h2>
+<ul><li>Relatório com linha do tempo, causa raiz, dados afetados e custo.</li><li>Plano de ação com donos e prazos: MFA, segmentação, acesso privilegiado, backup imutável.</li><li>Atualize o playbook e faça um exercício de mesa (tabletop) em até 90 dias.</li></ul>
+<h2 id="checklist"><span class="n">05</span>Checklist de prontidão</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Antes</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Playbook impresso e fora do domínio</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Contatos de crise atualizados</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Retainer de resposta a incidentes</span></label></li><li><label><input type="checkbox" data-k="c4"><span>Backup imutável testado</span></label></li><li><label><input type="checkbox" data-k="c5"><span>Exercício de mesa no último ano</span></label></li></ul>
+<h3>Durante</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c6"><span>Crise declarada e registro iniciado</span></label></li><li><label><input type="checkbox" data-k="c7"><span>Isolamento de rede sem desligar</span></label></li><li><label><input type="checkbox" data-k="c8"><span>Backup isolado e credenciais trocadas</span></label></li><li><label><input type="checkbox" data-k="c9"><span>Evidências coletadas</span></label></li></ul>
+<h3>Depois</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c10"><span>KRBTGT trocada duas vezes</span></label></li><li><label><input type="checkbox" data-k="c11"><span>Contas privilegiadas redefinidas</span></label></li><li><label><input type="checkbox" data-k="c12"><span>Restauração em sala limpa</span></label></li><li><label><input type="checkbox" data-k="c13"><span>Relatório e plano de ação</span></label></li></ul>
+<h2 id="fontes"><span class="n">06</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://csrc.nist.gov/pubs/sp/800/61/r3/final" target="_blank" rel="noopener">NIST SP 800-61 Rev. 3: resposta a incidentes</a></li><li><a href="https://www.cisa.gov/stopransomware/ransomware-guide" target="_blank" rel="noopener">CISA #StopRansomware Guide</a></li><li><a href="https://csrc.nist.gov/pubs/ir/8374/final" target="_blank" rel="noopener">NIST IR 8374: perfil de gestão de risco de ransomware</a></li><li><a href="https://www.gov.br/anpd/pt-br" target="_blank" rel="noopener">ANPD: comunicação de incidente de segurança</a></li></ul>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública e experiência de campo. Marcas citadas pertencem aos seus donos. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#papeis">01 · Papéis na crise</a></li><li><a href="#fases">02 · Roteiro por fase</a></li><li><a href="#decisao">03 · Decisões difíceis</a></li><li><a href="#pos">04 · Pós-incidente</a></li><li><a href="#checklist">05 · Checklist de prontidão</a></li><li><a href="#fontes">06 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='ransomware-resposta-incidente-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

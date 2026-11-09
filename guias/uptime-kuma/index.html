@@ -92,7 +92,7 @@ pre.cli .c{color:#cfe8d4}
 </style>
 <div class="ph" style="padding-bottom:12px">
 <p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#observabilidade">Observabilidade</a> / Uptime Kuma</p>
-<span class="chip">Observabilidade</span> <span class="chip m">Nível Júnior</span>
+<span class="chip">Observabilidade</span> <span class="chip m">Nível N1</span>
 <h1 style="margin-top:12px">Uptime Kuma: disponibilidade e página de status</h1>
 <p class="sub">Monitoramento de disponibilidade simples e gratuito: sites, portas, certificados e uma página de status para os usuários.</p>
 <div class="intro-meta"><span class="chip m">Uptime Kuma</span><span class="chip m">Disponibilidade</span><span class="chip m">Docker</span><span class="chip m">Página de status</span></div>
@@ -103,7 +103,7 @@ pre.cli .c{color:#cfe8d4}
 <article class="gbody">
 
 <h2 id="antes"><span class="n">00</span>Antes de começar</h2>
-<div class="kv"><div><b>Júnior</b><span>nível</span></div><div><b>15 min</b><span>para instalar</span></div><div><b>Porta 3001</b><span>interface web</span></div><div><b>Gratuito</b><span>código aberto</span></div></div><p>Ferramentas como Zabbix e Prometheus olham para dentro dos servidores. O Uptime Kuma olha como o usuário: o site abre? A porta responde? O certificado está para vencer?</p>
+<div class="kv"><div><b>N1</b><span>nível</span></div><div><b>15 min</b><span>para instalar</span></div><div><b>Porta 3001</b><span>interface web</span></div><div><b>Gratuito</b><span>código aberto</span></div></div><p>Ferramentas como Zabbix e Prometheus olham para dentro dos servidores. O Uptime Kuma olha como o usuário: o site abre? A porta responde? O certificado está para vencer?</p>
 <h2 id="instalar"><span class="n">01</span>Instalação com Docker</h2>
 <pre class="cli">docker run -d --restart=unless-stopped -p 3001:3001 \
   -v uptime-kuma:/app/data --name uptime-kuma louislam/uptime-kuma:2</pre><p>Acesse <code>http://servidor:3001</code> e crie o usuário administrador. Use um volume local: sistemas de arquivos de rede como NFS não são suportados para os dados. Para acesso externo, publique por trás de um proxy reverso com HTTPS.</p>

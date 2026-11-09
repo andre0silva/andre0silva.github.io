@@ -92,7 +92,7 @@ pre.cli .c{color:#cfe8d4}
 </style>
 <div class="ph" style="padding-bottom:12px">
 <p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#governanca-processos">Governança e processos</a> / Inventário e CMDB</p>
-<span class="chip">Governança e processos</span> <span class="chip m">Nível Pleno</span>
+<span class="chip">Governança e processos</span> <span class="chip m">Nível N3</span>
 <h1 style="margin-top:12px">Inventário de ativos e CMDB</h1>
 <p class="sub">Um inventário que se mantém atualizado sozinho e uma CMDB que responde "se este servidor cair, o que para?".</p>
 <div class="intro-meta"><span class="chip m">CMDB</span><span class="chip m">Inventário</span><span class="chip m">ITAM</span><span class="chip m">GLPI</span><span class="chip m">CIS Controls</span></div>
@@ -103,7 +103,7 @@ pre.cli .c{color:#cfe8d4}
 <article class="gbody">
 
 <h2 id="antes"><span class="n">00</span>Antes de começar</h2>
-<div class="kv"><div><b>Pleno</b><span>nível</span></div><div><b>Automação</b><span>acima de planilha</span></div><div><b>Dono</b><span>para cada ativo</span></div><div><b>CIS 1 e 2</b><span>controles relacionados</span></div></div><div class="tbl"><table><thead><tr><th>Conceito</th><th>Foco</th></tr></thead><tbody><tr><td>Inventário de ativos (ITAM)</td><td>O que a empresa tem, custo, contrato, garantia, ciclo de vida</td></tr><tr><td>CMDB</td><td>Como os itens se relacionam para entregar serviços</td></tr><tr><td>IC (item de configuração)</td><td>Qualquer coisa que precisa ser gerenciada para entregar um serviço</td></tr></tbody></table></div>
+<div class="kv"><div><b>N3</b><span>nível</span></div><div><b>Automação</b><span>acima de planilha</span></div><div><b>Dono</b><span>para cada ativo</span></div><div><b>CIS 1 e 2</b><span>controles relacionados</span></div></div><div class="tbl"><table><thead><tr><th>Conceito</th><th>Foco</th></tr></thead><tbody><tr><td>Inventário de ativos (ITAM)</td><td>O que a empresa tem, custo, contrato, garantia, ciclo de vida</td></tr><tr><td>CMDB</td><td>Como os itens se relacionam para entregar serviços</td></tr><tr><td>IC (item de configuração)</td><td>Qualquer coisa que precisa ser gerenciada para entregar um serviço</td></tr></tbody></table></div>
 <h2 id="o-que"><span class="n">01</span>O que registrar</h2>
 <div class="tbl"><table><thead><tr><th>Classe</th><th>Exemplos</th><th>Fonte automática</th></tr></thead><tbody><tr><td>Estações e celulares</td><td>Notebooks, desktops, smartphones</td><td>Intune, Configuration Manager, agente do inventário</td></tr><tr><td>Servidores e VMs</td><td>Físicos, VMware, Hyper-V</td><td>vCenter, SCVMM, varredura de rede</td></tr><tr><td>Cloud</td><td>VMs, bancos, storage, assinaturas</td><td>APIs do Azure, AWS e OCI</td></tr><tr><td>Rede</td><td>Switches, firewalls, APs</td><td>SNMP, controladora, NetBox</td></tr><tr><td>Software e licenças</td><td>Instalados e contratados</td><td>Agente de inventário, portais dos fornecedores</td></tr><tr><td>SaaS</td><td>Microsoft 365, CRM, ferramentas por cartão de crédito</td><td>Logs do proxy, SSO, financeiro</td></tr><tr><td>Contas de serviço e certificados</td><td>Contas técnicas, certificados TLS</td><td>AD, Entra ID, varredura de certificados</td></tr></tbody></table></div>
 <h2 id="atributos"><span class="n">02</span>Atributos mínimos</h2>

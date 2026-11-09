@@ -92,7 +92,7 @@ pre.cli .c{color:#cfe8d4}
 </style>
 <div class="ph" style="padding-bottom:12px">
 <p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#storage-backup">Storage e backup</a> / Estratégia de backup</p>
-<span class="chip">Storage e backup</span> <span class="chip m">Nível Júnior</span>
+<span class="chip">Storage e backup</span> <span class="chip m">Nível N2</span>
 <h1 style="margin-top:12px">Estratégia de backup 3-2-1-1-0</h1>
 <p class="sub">Uma política de backup que sobrevive a falha de disco, erro humano e ransomware, com exemplo de níveis, frequências e retenção.</p>
 <div class="intro-meta"><span class="chip m">Backup</span><span class="chip m">3-2-1-1-0</span><span class="chip m">RPO</span><span class="chip m">RTO</span><span class="chip m">Retenção</span></div>
@@ -103,7 +103,7 @@ pre.cli .c{color:#cfe8d4}
 <article class="gbody">
 
 <h2 id="antes"><span class="n">00</span>Antes de começar</h2>
-<div class="kv"><div><b>Júnior</b><span>nível</span></div><div><b>3-2-1-1-0</b><span>regra</span></div><div><b>3 níveis</b><span>de criticidade</span></div><div><b>GFS</b><span>modelo de retenção</span></div></div>
+<div class="kv"><div><b>N2</b><span>nível</span></div><div><b>3-2-1-1-0</b><span>regra</span></div><div><b>3 níveis</b><span>de criticidade</span></div><div><b>GFS</b><span>modelo de retenção</span></div></div>
 <h2 id="regra"><span class="n">01</span>A regra 3-2-1-1-0</h2>
 <div class="tbl"><table><thead><tr><th>Número</th><th>Significado</th><th>Exemplo</th></tr></thead><tbody><tr><td>3</td><td>Três cópias dos dados (produção + 2 backups)</td><td>Servidor + repositório local + cópia em nuvem</td></tr><tr><td>2</td><td>Em dois tipos de mídia ou sistema diferentes</td><td>Disco local e armazenamento de objetos</td></tr><tr><td>1</td><td>Uma cópia fora do local</td><td>Nuvem ou outro datacenter</td></tr><tr><td>1</td><td>Uma cópia offline ou imutável</td><td>Object Lock, repositório imutável ou fita fora do ar</td></tr><tr><td>0</td><td>Zero erros na verificação de restauração</td><td>Teste automático ou manual de restore</td></tr></tbody></table></div>
 <h2 id="niveis"><span class="n">02</span>Níveis por criticidade (exemplo)</h2>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Auditoria e controles gerais de TI (ITGC) · Guias · André Ferreira</title>
+<meta name="description" content="Guia em português de controles gerais de TI (ITGC) e auditoria: domínios de controle, desenho de controles, matriz de controles, coleta contínua de evidências, testes internos, deficiências e plano de remediação.">
+<meta property="og:title" content="Auditoria e controles gerais de TI (ITGC) · Guias · André Ferreira">
+<meta property="og:description" content="Guia em português de controles gerais de TI (ITGC) e auditoria: domínios de controle, desenho de controles, matriz de controles, coleta contínua de evidências, testes internos, deficiências e plano de remediação.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/auditoria-controles-ti/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/auditoria-controles-ti/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#governanca-processos">Governança e processos</a> / Auditoria de TI</p>
+<span class="chip">Governança e processos</span> <span class="chip m">Nível Especialista</span>
+<h1 style="margin-top:12px">Auditoria e controles gerais de TI (ITGC)</h1>
+<p class="sub">Como preparar a TI para auditorias (SOX, ISO 27001, PCI, auditoria externa) com controles desenhados, evidências contínuas e menos correria no fim do ano.</p>
+<div class="intro-meta"><span class="chip m">Auditoria</span><span class="chip m">ITGC</span><span class="chip m">SOX</span><span class="chip m">ISO 27001</span><span class="chip m">Compliance</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<div class="kv"><div><b>Especialista</b><span>nível</span></div><div><b>4 domínios</b><span>ITGC clássicos</span></div><div><b>Contínua</b><span>coleta de evidências</span></div><div><b>Antes</b><span>teste interno à auditoria</span></div></div>
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<p>Auditoria não avalia se a TI é boa: avalia se os controles existem, foram desenhados para tratar o risco e operaram durante todo o período, com evidência. Controle que funciona sem evidência, para o auditor, não existe.</p>
+<h2 id="dominios"><span class="n">01</span>Domínios de ITGC</h2>
+<div class="tbl"><table><thead><tr><th>Domínio</th><th>Objetivo</th><th>Controles típicos</th></tr></thead><tbody><tr><td>Acesso a programas e dados</td><td>Só pessoas autorizadas acessam sistemas relevantes</td><td>Aprovação de acesso, revisão periódica, desligamento tempestivo, contas privilegiadas</td></tr><tr><td>Gestão de mudanças</td><td>Mudanças são autorizadas, testadas e aprovadas</td><td>GMUD, segregação entre desenvolvimento e produção, mudanças emergenciais</td></tr><tr><td>Operações de TI</td><td>Processamento e backup confiáveis</td><td>Monitoramento de jobs, backup e restauração, gestão de incidentes</td></tr><tr><td>Desenvolvimento e aquisição</td><td>Sistemas novos implantados com controle</td><td>Requisitos, testes, aceite, migração de dados</td></tr></tbody></table></div>
+<h2 id="desenho"><span class="n">02</span>Desenho de controles</h2>
+<ol class="steps"><li><b>Escopo</b>Sistemas relevantes (ERP, folha, faturamento) e a infraestrutura que os suporta (banco, SO, AD).</li><li><b>Risco</b>Para cada sistema, o que pode dar errado (ex.: acesso indevido altera pagamento).</li><li><b>Controle</b>Quem faz, o quê, com que frequência, com qual evidência. Preventivo é melhor que detectivo; automático é melhor que manual.</li><li><b>Dono</b>Pessoa responsável por executar e por guardar a evidência.</li></ol>
+<h2 id="matriz"><span class="n">03</span>Matriz de controles (exemplo)</h2>
+<div class="tbl"><table><thead><tr><th>ID</th><th>Controle</th><th>Frequência</th><th>Evidência</th></tr></thead><tbody><tr><td>AC-01</td><td>Acesso ao ERP concedido somente com aprovação do gestor no ITSM</td><td>Por evento</td><td>Chamado com aprovação</td></tr><tr><td>AC-02</td><td>Revisão de acessos do ERP pelos donos</td><td>Trimestral</td><td>Relatório da revisão de acesso com decisões</td></tr><tr><td>AC-03</td><td>Contas de desligados desativadas em até 1 dia útil</td><td>Diária</td><td>Relatório do RH × AD/Entra</td></tr><tr><td>AC-04</td><td>Contas privilegiadas revisadas e com MFA</td><td>Trimestral</td><td>Lista de membros e configuração do PIM</td></tr><tr><td>CM-01</td><td>Mudanças em produção com GMUD aprovada e teste</td><td>Por evento</td><td>GMUD com evidência de teste</td></tr><tr><td>CM-02</td><td>Desenvolvedores sem acesso de escrita em produção</td><td>Semestral</td><td>Lista de permissões</td></tr><tr><td>OP-01</td><td>Falhas de backup tratadas</td><td>Diária</td><td>Relatório e chamados</td></tr><tr><td>OP-02</td><td>Teste de restauração</td><td>Trimestral</td><td>Relatório de restauração</td></tr></tbody></table></div>
+<h2 id="evidencias"><span class="n">04</span>Evidências contínuas</h2>
+<ul><li>Automatize: revisões de acesso no Entra ID Governance, relatórios agendados do ITSM, exportações do PIM e do backup guardadas em repositório com data.</li><li>População completa: o auditor sorteia amostras de todos os eventos do período; mantenha o relatório de todas as mudanças, acessos e desligamentos.</li><li>Padronize nomes e pastas por controle e período.</li></ul>
+<h2 id="testes"><span class="n">05</span>Testes internos e deficiências</h2>
+<ol class="steps"><li><b>Teste de desenho</b>O controle, como descrito, trata o risco?</li><li><b>Teste de efetividade</b>Amostra do período: o controle operou sempre?</li><li><b>Deficiência</b>Registre, classifique (deficiência, significativa, material) e defina plano com prazo.</li><li><b>Remediação</b>Corrija o processo e demonstre operação por um período antes da auditoria.</li></ol>
+<div class="call warn"><b class="t">Exceção não documentada</b><p>Uma mudança emergencial sem aprovação posterior ou um acesso concedido "por telefone" vira achado. Mesmo nas exceções, gere evidência.</p></div>
+<h2 id="checklist"><span class="n">06</span>Checklist</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Desenho</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Sistemas relevantes em escopo</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Riscos mapeados</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Matriz de controles com donos</span></label></li><li><label><input type="checkbox" data-k="c4"><span>Frequência e evidência definidas</span></label></li></ul>
+<h3>Operação</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c5"><span>Evidências automatizadas</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Populações completas guardadas</span></label></li><li><label><input type="checkbox" data-k="c7"><span>Repositório por controle e período</span></label></li></ul>
+<h3>Garantia</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c8"><span>Teste interno antes da auditoria</span></label></li><li><label><input type="checkbox" data-k="c9"><span>Deficiências com plano</span></label></li><li><label><input type="checkbox" data-k="c10"><span>Remediação demonstrada</span></label></li></ul>
+<h2 id="fontes"><span class="n">07</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://www.isaca.org/resources/itaf" target="_blank" rel="noopener">ISACA ITAF: framework de auditoria de TI</a></li><li><a href="https://www.isaca.org/resources/cobit" target="_blank" rel="noopener">ISACA COBIT</a></li><li><a href="https://www.coso.org/" target="_blank" rel="noopener">COSO: controle interno</a></li><li><a href="https://www.iso.org/standard/27001" target="_blank" rel="noopener">ISO/IEC 27001</a></li></ul>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública e experiência de campo. Marcas citadas pertencem aos seus donos. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#dominios">01 · Domínios de ITGC</a></li><li><a href="#desenho">02 · Desenho de controles</a></li><li><a href="#matriz">03 · Matriz de controles (exemplo)</a></li><li><a href="#evidencias">04 · Evidências contínuas</a></li><li><a href="#testes">05 · Testes internos e deficiências</a></li><li><a href="#checklist">06 · Checklist</a></li><li><a href="#fontes">07 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='auditoria-controles-ti-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

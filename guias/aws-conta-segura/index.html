@@ -92,7 +92,7 @@ pre.cli .c{color:#cfe8d4}
 </style>
 <div class="ph" style="padding-bottom:12px">
 <p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#cloud">Cloud</a> / AWS conta segura</p>
-<span class="chip">Cloud</span> <span class="chip m">Nível Júnior</span>
+<span class="chip">Cloud</span> <span class="chip m">Nível N3</span>
 <h1 style="margin-top:12px">AWS: conta segura desde o primeiro dia</h1>
 <p class="sub">As configurações que fecham os incidentes mais comuns em contas AWS: root exposto, chaves de acesso vazadas, bucket público e conta sem trilha de auditoria.</p>
 <div class="intro-meta"><span class="chip m">AWS</span><span class="chip m">IAM</span><span class="chip m">CloudTrail</span><span class="chip m">GuardDuty</span><span class="chip m">S3</span></div>
@@ -103,7 +103,7 @@ pre.cli .c{color:#cfe8d4}
 <article class="gbody">
 
 <h2 id="antes"><span class="n">00</span>Antes de começar</h2>
-<div class="kv"><div><b>Júnior</b><span>nível</span></div><div><b>10 itens</b><span>no checklist</span></div><div><b>AWS CLI</b><span>nos exemplos</span></div><div><b>1 h</b><span>por conta</span></div></div>
+<div class="kv"><div><b>N3</b><span>nível</span></div><div><b>10 itens</b><span>no checklist</span></div><div><b>AWS CLI</b><span>nos exemplos</span></div><div><b>1 h</b><span>por conta</span></div></div>
 <h2 id="root"><span class="n">01</span>Usuário root</h2>
 <ul><li>MFA no root, de preferência chave de segurança física.</li><li>Nenhuma chave de acesso no root.</li><li>E-mail do root numa caixa compartilhada da TI, não na de uma pessoa.</li><li>Root só para as poucas tarefas que exigem root; o dia a dia usa outras identidades.</li></ul><pre class="cli"># AccountMFAEnabled = 1 e AccountAccessKeysPresent = 0 é o esperado
 aws iam get-account-summary</pre>

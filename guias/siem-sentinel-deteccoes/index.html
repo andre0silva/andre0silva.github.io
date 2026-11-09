@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SIEM com Microsoft Sentinel: fontes, detecções e operação do SOC · Guias · André Ferreira</title>
+<meta name="description" content="Guia em português de SIEM com Microsoft Sentinel: arquitetura do workspace, priorização de fontes, regras analíticas mapeadas ao MITRE ATT&amp;CK, playbooks, ajuste de ruído e controle de custo.">
+<meta property="og:title" content="SIEM com Microsoft Sentinel: fontes, detecções e operação do SOC · Guias · André Ferreira">
+<meta property="og:description" content="Guia em português de SIEM com Microsoft Sentinel: arquitetura do workspace, priorização de fontes, regras analíticas mapeadas ao MITRE ATT&amp;CK, playbooks, ajuste de ruído e controle de custo.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/siem-sentinel-deteccoes/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/siem-sentinel-deteccoes/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#seguranca">Segurança</a> / SIEM com Sentinel</p>
+<span class="chip">Segurança</span> <span class="chip m">Nível Sênior</span>
+<h1 style="margin-top:12px">SIEM com Microsoft Sentinel: fontes, detecções e operação do SOC</h1>
+<p class="sub">Como sair de um SIEM que só guarda log para um SOC que detecta ataque: fontes certas, regras mapeadas ao MITRE ATT&amp;CK, automação e custo sob controle.</p>
+<div class="intro-meta"><span class="chip m">SIEM</span><span class="chip m">Microsoft Sentinel</span><span class="chip m">KQL</span><span class="chip m">MITRE ATT&amp;CK</span><span class="chip m">SOC</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<div class="kv"><div><b>Sênior</b><span>nível</span></div><div><b>1 workspace</b><span>por região e requisito</span></div><div><b>20 a 30</b><span>detecções iniciais</span></div><div><b>&lt; 30 min</b><span>meta de triagem</span></div></div>
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<p>O erro mais comum é ligar todos os conectores, pagar caro pela ingestão e não ter ninguém olhando. Comece pelos casos de uso: o que você quer detectar, com quais dados, e quem responde.</p>
+<h2 id="arquitetura"><span class="n">01</span>Arquitetura</h2>
+<ul><li>Um workspace Log Analytics por região de dados ou exigência legal; evite um por equipe.</li><li>Separe níveis de retenção: interativa (90 dias típicos) e arquivamento de longo prazo mais barato para auditoria.</li><li>Use as camadas de log de menor custo (Basic/Auxiliary) para fontes volumosas consultadas raramente, como fluxo de firewall.</li><li>RBAC por tabela ou recurso para equipes que só podem ver parte dos dados.</li></ul>
+<h2 id="fontes"><span class="n">02</span>Fontes por prioridade</h2>
+<div class="tbl"><table><thead><tr><th>Prioridade</th><th>Fonte</th><th>Por quê</th></tr></thead><tbody><tr><td>1</td><td>Entra ID (entradas, auditoria, risco)</td><td>Identidade é o principal vetor</td></tr><tr><td>1</td><td>Defender XDR (endpoint, e-mail, identidade)</td><td>Alertas com contexto e resposta</td></tr><tr><td>1</td><td>Logs de segurança dos DCs</td><td>Kerberos, mudanças em grupos privilegiados</td></tr><tr><td>2</td><td>Firewall e VPN</td><td>Entrada, saída e movimento lateral</td></tr><tr><td>2</td><td>Atividade do Azure, AWS, OCI</td><td>Mudanças no plano de controle da nuvem</td></tr><tr><td>3</td><td>Servidores Linux (syslog/auditd)</td><td>Acesso privilegiado e persistência</td></tr><tr><td>3</td><td>Aplicações críticas e proxies</td><td>Exfiltração e abuso de negócio</td></tr></tbody></table></div>
+<h2 id="deteccoes"><span class="n">03</span>Detecções</h2>
+<ol class="steps"><li><b>Ative as regras de fusão e as de Microsoft Security</b>Elas criam incidentes a partir dos alertas dos produtos Defender sem duplicar trabalho.</li><li><b>Escolha 20 a 30 regras analíticas</b>Comece pelos templates das soluções do Content Hub e mapeie cada uma a uma técnica do MITRE ATT&amp;CK.</li><li><b>Cubra o caminho do ataque</b>Acesso inicial (password spray, MFA fatigue), privilégio (adição a Domain Admins, ativação PIM fora do horário), movimento lateral (RDP incomum), exfiltração (volume anômalo de saída).</li><li><b>Escreva as próprias em KQL</b>Para riscos do seu negócio, por exemplo uso de contas de emergência ou alteração em modelos de certificado.</li><li><b>Teste cada regra</b>Simule o comportamento em laboratório e confirme que o incidente nasce com entidades (conta, host, IP) corretas.</li></ol>
+<p>Exemplo de regra para uso de conta de emergência:</p>
+<ul><li><code>SigninLogs | where UserPrincipalName in ("bg01@empresa.com","bg02@empresa.com") | project TimeGenerated, UserPrincipalName, IPAddress, ResultType</code></li></ul>
+<h2 id="operacao"><span class="n">04</span>Operação do SOC</h2>
+<ul><li>Playbooks (Logic Apps) para enriquecer e responder: bloquear usuário, isolar dispositivo, abrir chamado, avisar no Teams.</li><li>Regras de automação para atribuir, classificar e fechar falsos positivos conhecidos.</li><li>Revisão semanal do ruído: regras com mais de 80% de falso positivo são ajustadas ou desligadas.</li><li>Indicadores: tempo de triagem, tempo de contenção, cobertura do ATT&amp;CK, incidentes por fonte.</li></ul>
+<div class="call warn"><b class="t">Custo</b><p>Ingestão é cobrada por GB. Filtre na origem (DCR), mande dados verbosos para camadas baratas e acompanhe o consumo por tabela toda semana.</p></div>
+<h2 id="checklist"><span class="n">05</span>Checklist</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Base</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Workspace e retenção definidos</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Fontes prioridade 1 conectadas</span></label></li><li><label><input type="checkbox" data-k="c3"><span>RBAC do workspace configurado</span></label></li></ul>
+<h3>Detecção</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c4"><span>Regras mapeadas ao MITRE ATT&amp;CK</span></label></li><li><label><input type="checkbox" data-k="c5"><span>Regras próprias para riscos do negócio</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Testes de cada regra documentados</span></label></li></ul>
+<h3>Operação</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c7"><span>Playbooks de resposta</span></label></li><li><label><input type="checkbox" data-k="c8"><span>Escala de plantão do SOC</span></label></li><li><label><input type="checkbox" data-k="c9"><span>Revisão semanal de ruído</span></label></li><li><label><input type="checkbox" data-k="c10"><span>Painel de custo por tabela</span></label></li></ul>
+<h2 id="fontes"><span class="n">06</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://learn.microsoft.com/en-us/azure/sentinel/" target="_blank" rel="noopener">Documentação do Microsoft Sentinel</a></li><li><a href="https://attack.mitre.org/" target="_blank" rel="noopener">MITRE ATT&amp;CK</a></li><li><a href="https://learn.microsoft.com/en-us/kusto/query/" target="_blank" rel="noopener">Linguagem KQL</a></li></ul>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública e experiência de campo. Marcas citadas pertencem aos seus donos. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#arquitetura">01 · Arquitetura</a></li><li><a href="#fontes">02 · Fontes por prioridade</a></li><li><a href="#deteccoes">03 · Detecções</a></li><li><a href="#operacao">04 · Operação do SOC</a></li><li><a href="#checklist">05 · Checklist</a></li><li><a href="#fontes">06 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='siem-sentinel-deteccoes-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

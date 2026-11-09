@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alta disponibilidade e DR em cloud · Guias · André Ferreira</title>
+<meta name="description" content="Guia em português de alta disponibilidade e recuperação de desastres em cloud: zonas e regiões, padrões de DR (backup, pilot light, warm standby, ativo-ativo), dados, DNS, automação e testes.">
+<meta property="og:title" content="Alta disponibilidade e DR em cloud · Guias · André Ferreira">
+<meta property="og:description" content="Guia em português de alta disponibilidade e recuperação de desastres em cloud: zonas e regiões, padrões de DR (backup, pilot light, warm standby, ativo-ativo), dados, DNS, automação e testes.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/alta-disponibilidade-dr-cloud/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/alta-disponibilidade-dr-cloud/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#cloud">Cloud</a> / HA e DR em cloud</p>
+<span class="chip">Cloud</span> <span class="chip m">Nível Sênior</span>
+<h1 style="margin-top:12px">Alta disponibilidade e DR em cloud</h1>
+<p class="sub">Como escolher entre zona e região, desenhar cada camada para falhar sem parar e provar o RTO e o RPO com testes, não com slide.</p>
+<div class="intro-meta"><span class="chip m">Alta disponibilidade</span><span class="chip m">DR</span><span class="chip m">Zonas</span><span class="chip m">Regiões</span><span class="chip m">RTO e RPO</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<div class="kv"><div><b>Sênior</b><span>nível</span></div><div><b>3 zonas</b><span>por região típica</span></div><div><b>4 padrões</b><span>de DR</span></div><div><b>Semestral</b><span>teste de failover</span></div></div>
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<p>A nuvem não é automaticamente resiliente. Uma VM em uma zona é tão frágil quanto um servidor físico. Comece pelo requisito do negócio: quanto tempo o processo pode ficar parado (RTO) e quanto dado pode perder (RPO).</p>
+<h2 id="zonas"><span class="n">01</span>Zona ou região</h2>
+<div class="tbl"><table><thead><tr><th>Falha</th><th>Proteção</th><th>Custo</th></tr></thead><tbody><tr><td>Host ou rack</td><td>Conjuntos de disponibilidade, grupos de posicionamento</td><td>Baixo</td></tr><tr><td>Data center (zona)</td><td>Distribuir em 2 ou 3 zonas da mesma região</td><td>Médio</td></tr><tr><td>Região inteira</td><td>Ambiente em segunda região</td><td>Alto</td></tr><tr><td>Conta/assinatura comprometida</td><td>Backup em conta separada e imutável</td><td>Médio</td></tr></tbody></table></div>
+<h2 id="padroes"><span class="n">02</span>Padrões de DR</h2>
+<div class="tbl"><table><thead><tr><th>Padrão</th><th>RTO</th><th>RPO</th><th>Como funciona</th></tr></thead><tbody><tr><td>Backup e restauração</td><td>Horas a dias</td><td>Horas</td><td>Backups replicados para outra região; ambiente recriado por IaC</td></tr><tr><td>Pilot light</td><td>Horas</td><td>Minutos</td><td>Dados replicados; computação mínima ou desligada no DR</td></tr><tr><td>Warm standby</td><td>Minutos a 1 h</td><td>Segundos a minutos</td><td>Ambiente reduzido rodando no DR, escala no failover</td></tr><tr><td>Ativo-ativo</td><td>Próximo de zero</td><td>Próximo de zero</td><td>Duas regiões atendendo; exige aplicação preparada</td></tr></tbody></table></div>
+<h2 id="camadas"><span class="n">03</span>Por camada</h2>
+<ol class="steps"><li><b>Entrada</b>Balanceador global (Front Door, CloudFront/Route 53, OCI Traffic Management) com health check e failover por DNS ou anycast.</li><li><b>Aplicação</b>Sem estado na instância; escala automática distribuída em zonas; imagens e configuração por IaC para recriar em outra região.</li><li><b>Dados</b>Bancos gerenciados com réplica zonal síncrona e réplica regional assíncrona (geo-replicação, Data Guard, réplicas entre regiões).</li><li><b>Storage</b>Replicação zonal (ZRS) e geográfica (GRS) conforme RPO; versionamento e imutabilidade contra exclusão.</li><li><b>Dependências</b>Identidade, DNS, segredos, filas e serviços de terceiros também precisam existir no DR.</li></ol>
+<h2 id="automacao"><span class="n">04</span>Automação do failover</h2>
+<ul><li>Runbook automatizado (pipeline ou automação) para promover réplicas, escalar e trocar DNS.</li><li>TTL de DNS baixo nos nomes de failover.</li><li>Decisão de failover com critério escrito: quem autoriza, em que condição.</li><li>Failback planejado: como voltar sem perder o que foi gravado no DR.</li></ul>
+<h2 id="testes"><span class="n">05</span>Testes</h2>
+<div class="tbl"><table><thead><tr><th>Teste</th><th>Frequência</th><th>Evidência</th></tr></thead><tbody><tr><td>Falha de zona simulada (desligar instâncias de uma zona)</td><td>Trimestral</td><td>Aplicação continua respondendo</td></tr><tr><td>Restauração de backup em outra região</td><td>Semestral</td><td>Tempo e integridade dos dados</td></tr><tr><td>Failover regional completo</td><td>Anual</td><td>RTO e RPO medidos vs. aprovados</td></tr></tbody></table></div>
+<div class="call warn"><b class="t">Cota no DR</b><p>Na hora do desastre regional, todos tentam subir na mesma região secundária. Reserve capacidade ou garanta cotas de vCPU no DR antes.</p></div>
+<h2 id="checklist"><span class="n">06</span>Checklist</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Requisitos</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>RTO e RPO por aplicação aprovados</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Padrão de DR escolhido por aplicação</span></label></li></ul>
+<h3>Desenho</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c3"><span>Distribuição em zonas</span></label></li><li><label><input type="checkbox" data-k="c4"><span>Replicação de dados para o DR</span></label></li><li><label><input type="checkbox" data-k="c5"><span>Dependências presentes no DR</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Capacidade ou cotas reservadas</span></label></li></ul>
+<h3>Operação</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c7"><span>Runbook de failover automatizado</span></label></li><li><label><input type="checkbox" data-k="c8"><span>Teste de zona trimestral</span></label></li><li><label><input type="checkbox" data-k="c9"><span>Failover regional anual</span></label></li><li><label><input type="checkbox" data-k="c10"><span>Failback documentado</span></label></li></ul>
+<h2 id="fontes"><span class="n">07</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://learn.microsoft.com/en-us/azure/reliability/" target="_blank" rel="noopener">Azure: confiabilidade</a></li><li><a href="https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html" target="_blank" rel="noopener">AWS: opções de DR na nuvem</a></li><li><a href="https://csrc.nist.gov/pubs/sp/800/34/r1/upd1/final" target="_blank" rel="noopener">NIST SP 800-34: planejamento de contingência</a></li></ul>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública e experiência de campo. Marcas citadas pertencem aos seus donos. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#zonas">01 · Zona ou região</a></li><li><a href="#padroes">02 · Padrões de DR</a></li><li><a href="#camadas">03 · Por camada</a></li><li><a href="#automacao">04 · Automação do failover</a></li><li><a href="#testes">05 · Testes</a></li><li><a href="#checklist">06 · Checklist</a></li><li><a href="#fontes">07 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='alta-disponibilidade-dr-cloud-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

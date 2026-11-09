@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Monitoramento de experiência: sintético e RUM · Guias · André Ferreira</title>
+<meta name="description" content="Guia em português de monitoramento de experiência digital: testes sintéticos de API e de navegador, jornadas críticas, localidades, RUM, Core Web Vitals, privacidade e alertas.">
+<meta property="og:title" content="Monitoramento de experiência: sintético e RUM · Guias · André Ferreira">
+<meta property="og:description" content="Guia em português de monitoramento de experiência digital: testes sintéticos de API e de navegador, jornadas críticas, localidades, RUM, Core Web Vitals, privacidade e alertas.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/monitoramento-sintetico-rum/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/monitoramento-sintetico-rum/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#observabilidade">Observabilidade</a> / Sintético e RUM</p>
+<span class="chip">Observabilidade</span> <span class="chip m">Nível Sênior</span>
+<h1 style="margin-top:12px">Monitoramento de experiência: sintético e RUM</h1>
+<p class="sub">Como medir o que o usuário realmente vê: testes sintéticos de jornadas críticas e monitoramento de usuário real, com metas ligadas ao negócio.</p>
+<div class="intro-meta"><span class="chip m">Sintético</span><span class="chip m">RUM</span><span class="chip m">Core Web Vitals</span><span class="chip m">Experiência digital</span><span class="chip m">Jornadas</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<div class="kv"><div><b>Sênior</b><span>nível</span></div><div><b>5 min</b><span>intervalo típico do sintético</span></div><div><b>3 locais</b><span>mínimo de origem</span></div><div><b>p75</b><span>base dos Web Vitals</span></div></div>
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<p>Servidor verde e cliente reclamando é a situação clássica. Monitoramento sintético responde "funciona agora, de fora?"; RUM responde "como foi para os usuários reais?". Os dois juntos fecham a lacuna.</p>
+<h2 id="sintetico"><span class="n">01</span>Monitoramento sintético</h2>
+<div class="tbl"><table><thead><tr><th>Tipo</th><th>Testa</th><th>Exemplo</th></tr></thead><tbody><tr><td>Disponibilidade (ping/HTTP)</td><td>O serviço responde</td><td>Página inicial retorna 200 em &lt; 2 s</td></tr><tr><td>API</td><td>Contrato e tempo de resposta</td><td>Autenticar e consultar pedido</td></tr><tr><td>Navegador (scripted)</td><td>Jornada completa</td><td>Login, busca, carrinho, pagamento em sandbox</td></tr><tr><td>Certificado e DNS</td><td>Vencimento e resolução</td><td>Alerta 30 dias antes do vencimento</td></tr></tbody></table></div>
+<ol class="steps"><li><b>Escolha as jornadas</b>As 5 a 10 que geram receita ou atendem obrigação legal.</li><li><b>Escreva scripts robustos</b>Seletores estáveis, dados de teste dedicados, limpeza após o teste.</li><li><b>Origens</b>Pelo menos três locais externos (regiões e operadoras diferentes) e um interno.</li><li><b>Alertas</b>Falha em 2 de 3 locais por 2 rodadas seguidas, para evitar alarme por problema local.</li><li><b>Ferramentas</b>Grafana k6/Synthetic Monitoring, Playwright, Azure Application Insights, Datadog, Uptime Kuma para o básico.</li></ol>
+<h2 id="rum"><span class="n">02</span>RUM (usuário real)</h2>
+<ul><li>Script leve no front-end ou SDK mobile coleta tempo de carregamento, erros de JavaScript, chamadas de API e dispositivo.</li><li><b>Core Web Vitals</b> no percentil 75: LCP ≤ 2,5 s, INP ≤ 200 ms, CLS ≤ 0,1.</li><li>Segmentar por página, dispositivo, navegador, região e versão de deploy.</li><li>Ligar a sessão do usuário ao trace do back-end (propagação de contexto) para achar a causa.</li></ul>
+<h2 id="privacidade"><span class="n">03</span>Privacidade</h2>
+<ul><li>Não coletar conteúdo de campos de formulário, CPF, cartão ou dados de saúde.</li><li>Mascaramento padrão em gravação de sessão, se usada.</li><li>Base legal e aviso no banner de cookies conforme LGPD; amostragem quando possível.</li></ul>
+<h2 id="metas"><span class="n">04</span>Metas e painéis</h2>
+<div class="tbl"><table><thead><tr><th>Jornada</th><th>SLO de disponibilidade (sintético)</th><th>Meta de experiência (RUM)</th></tr></thead><tbody><tr><td>Login</td><td>99,9%</td><td>LCP p75 ≤ 2,5 s</td></tr><tr><td>Checkout</td><td>99,95%</td><td>INP p75 ≤ 200 ms; erro JS &lt; 0,5%</td></tr><tr><td>Consulta de pedido</td><td>99,5%</td><td>Tempo de API p95 ≤ 800 ms</td></tr></tbody></table></div>
+<ul><li>Painel executivo por jornada com tendência e comparação por deploy.</li></ul>
+<div class="call warn"><b class="t">Sintético em produção com dado real</b><p>Use contas e produtos de teste identificados e exclua esse tráfego de métricas de negócio e de antifraude.</p></div>
+<h2 id="checklist"><span class="n">05</span>Checklist</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Sintético</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Jornadas críticas escolhidas</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Scripts com dados de teste</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Três ou mais origens</span></label></li><li><label><input type="checkbox" data-k="c4"><span>Alerta por múltiplos locais</span></label></li></ul>
+<h3>RUM</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c5"><span>Script de RUM nas páginas críticas</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Core Web Vitals em p75</span></label></li><li><label><input type="checkbox" data-k="c7"><span>Ligação com traces</span></label></li></ul>
+<h3>Governança</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c8"><span>Mascaramento e LGPD</span></label></li><li><label><input type="checkbox" data-k="c9"><span>Metas por jornada</span></label></li><li><label><input type="checkbox" data-k="c10"><span>Painel executivo</span></label></li></ul>
+<h2 id="fontes"><span class="n">06</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://web.dev/articles/vitals" target="_blank" rel="noopener">Core Web Vitals</a></li><li><a href="https://grafana.com/docs/k6/latest/" target="_blank" rel="noopener">Grafana k6</a></li><li><a href="https://playwright.dev/docs/intro" target="_blank" rel="noopener">Playwright</a></li></ul>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública e experiência de campo. Marcas citadas pertencem aos seus donos. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#sintetico">01 · Monitoramento sintético</a></li><li><a href="#rum">02 · RUM (usuário real)</a></li><li><a href="#privacidade">03 · Privacidade</a></li><li><a href="#metas">04 · Metas e painéis</a></li><li><a href="#checklist">05 · Checklist</a></li><li><a href="#fontes">06 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='monitoramento-sintetico-rum-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

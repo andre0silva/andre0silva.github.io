@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zero Trust: roadmap de implantação para empresas · Guias · André Ferreira</title>
+<meta name="description" content="Guia em português para planejar Zero Trust: princípios do NIST SP 800-207, pilares do modelo de maturidade da CISA, avaliação, roadmap em ondas e indicadores.">
+<meta property="og:title" content="Zero Trust: roadmap de implantação para empresas · Guias · André Ferreira">
+<meta property="og:description" content="Guia em português para planejar Zero Trust: princípios do NIST SP 800-207, pilares do modelo de maturidade da CISA, avaliação, roadmap em ondas e indicadores.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/zero-trust-roadmap/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/zero-trust-roadmap/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#seguranca">Segurança</a> / Zero Trust</p>
+<span class="chip">Segurança</span> <span class="chip m">Nível Especialista</span>
+<h1 style="margin-top:12px">Zero Trust: roadmap de implantação para empresas</h1>
+<p class="sub">Como transformar Zero Trust de slogan em programa: pilares, avaliação de maturidade, priorização e indicadores para a diretoria.</p>
+<div class="intro-meta"><span class="chip m">Zero Trust</span><span class="chip m">NIST 800-207</span><span class="chip m">CISA ZTMM</span><span class="chip m">Estratégia</span><span class="chip m">Arquitetura</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<div class="kv"><div><b>Especialista</b><span>nível</span></div><div><b>5 pilares</b><span>modelo CISA</span></div><div><b>4 estágios</b><span>de tradicional a ótimo</span></div><div><b>18 a 36 meses</b><span>horizonte típico</span></div></div>
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<p>Zero Trust não é um produto. É a decisão de que nenhum acesso é confiável só por vir da rede interna: cada pedido é verificado pela identidade, pelo estado do dispositivo e pelo contexto, com o menor privilégio possível e assumindo que a violação já aconteceu.</p>
+<h2 id="principios"><span class="n">01</span>Princípios</h2>
+<ul><li><b>Verificar explicitamente:</b> autenticar e autorizar com todos os sinais disponíveis (usuário, dispositivo, local, risco, dado).</li><li><b>Menor privilégio:</b> acesso just-in-time e just-enough, por sessão.</li><li><b>Assumir violação:</b> segmentar, criptografar e monitorar como se o atacante já estivesse dentro.</li></ul>
+<h2 id="pilares"><span class="n">02</span>Pilares e estágios de maturidade</h2>
+<p>O modelo de maturidade da CISA organiza a jornada em cinco pilares e quatro estágios (Tradicional, Inicial, Avançado, Ótimo), com visibilidade, automação e governança atravessando todos.</p>
+<div class="tbl"><table><thead><tr><th>Pilar</th><th>Tradicional</th><th>Avançado</th><th>Exemplo de controle</th></tr></thead><tbody><tr><td>Identidade</td><td>Senha, MFA parcial</td><td>MFA resistente a phishing, risco em tempo real</td><td>Entra ID + Acesso Condicional + PIM</td></tr><tr><td>Dispositivos</td><td>Inventário manual</td><td>Conformidade exigida para acessar</td><td>Intune + Defender for Endpoint</td></tr><tr><td>Redes</td><td>Perímetro plano</td><td>Microssegmentação, acesso por aplicação</td><td>ZTNA, segmentação de data center</td></tr><tr><td>Aplicações e cargas</td><td>Acesso por VPN</td><td>Acesso por app com autorização contínua</td><td>Proxy de aplicação, SSE</td></tr><tr><td>Dados</td><td>Sem classificação</td><td>Rotulagem e DLP automáticos</td><td>Purview, criptografia por rótulo</td></tr></tbody></table></div>
+<h2 id="avaliacao"><span class="n">03</span>Avaliação inicial</h2>
+<ol class="steps"><li><b>Inventário</b>Identidades (pessoas, serviços, agentes), dispositivos, aplicações e dados críticos. Sem inventário não há política.</li><li><b>Mapear fluxos críticos</b>Para os 10 processos de negócio mais importantes, quem acessa o quê, de onde e por qual caminho.</li><li><b>Pontuar cada pilar</b>Use os estágios da CISA. Registre evidência, não opinião.</li><li><b>Definir estado-alvo</b>Para cada pilar, onde a empresa precisa estar em 12 e 24 meses, alinhado a risco e orçamento.</li><li><b>Lacunas e dependências</b>Ex.: exigir dispositivo conforme depende de Intune implantado; microssegmentação depende de inventário de fluxos.</li></ol>
+<h2 id="roadmap"><span class="n">04</span>Roadmap em ondas</h2>
+<div class="tbl"><table><thead><tr><th>Onda</th><th>Foco</th><th>Entregas típicas</th></tr></thead><tbody><tr><td>1 · Identidade (0 a 6 meses)</td><td>Maior retorno, menor custo</td><td>MFA para todos, bloquear autenticação legada, Acesso Condicional base, PIM, contas de emergência</td></tr><tr><td>2 · Dispositivos (3 a 12 meses)</td><td>Saber de onde vem o acesso</td><td>MDM, conformidade no Acesso Condicional, EDR em 100% dos endpoints</td></tr><tr><td>3 · Acesso a aplicações (6 a 18 meses)</td><td>Reduzir dependência de VPN</td><td>SSO para todos os apps, ZTNA para apps internos, remoção de VPN ampla</td></tr><tr><td>4 · Rede e cargas (12 a 24 meses)</td><td>Limitar movimento lateral</td><td>Segmentação de servidores, microssegmentação de críticos, acesso administrativo isolado</td></tr><tr><td>5 · Dados (12 a 36 meses)</td><td>Proteger o que importa</td><td>Classificação, rotulagem, DLP, monitoramento de exfiltração</td></tr></tbody></table></div>
+<div class="call ok"><b class="t">Quick wins para os primeiros 90 dias</b><p>Bloquear autenticação legada, MFA para administradores, contas de emergência, LAPS, desativar SMBv1, remover administração local de usuários.</p></div>
+<h2 id="indicadores"><span class="n">05</span>Indicadores para a diretoria</h2>
+<div class="tbl"><table><thead><tr><th>Indicador</th><th>Meta exemplo</th></tr></thead><tbody><tr><td>Usuários com MFA resistente a phishing</td><td>&gt; 95%</td></tr><tr><td>Acessos vindos de dispositivos conformes</td><td>&gt; 90%</td></tr><tr><td>Aplicações com SSO no Entra ID</td><td>100% dos críticos</td></tr><tr><td>Funções privilegiadas permanentes</td><td>&lt; 5 (só emergência)</td></tr><tr><td>Servidores em segmento com política de negação padrão</td><td>&gt; 80%</td></tr><tr><td>Tempo médio para revogar acesso no desligamento</td><td>&lt; 1 hora</td></tr></tbody></table></div>
+<h2 id="checklist"><span class="n">06</span>Checklist</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Planejamento</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Patrocinador executivo definido</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Inventário de identidades, dispositivos, apps e dados</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Avaliação de maturidade por pilar</span></label></li><li><label><input type="checkbox" data-k="c4"><span>Estado-alvo de 12 e 24 meses</span></label></li></ul>
+<h3>Execução</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c5"><span>Onda de identidade concluída</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Conformidade de dispositivo no Acesso Condicional</span></label></li><li><label><input type="checkbox" data-k="c7"><span>Plano de redução da VPN</span></label></li><li><label><input type="checkbox" data-k="c8"><span>Segmentação dos servidores críticos</span></label></li></ul>
+<h3>Governança</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c9"><span>Indicadores publicados trimestralmente</span></label></li><li><label><input type="checkbox" data-k="c10"><span>Exceções com prazo e dono</span></label></li><li><label><input type="checkbox" data-k="c11"><span>Reavaliação anual de maturidade</span></label></li></ul>
+<h2 id="fontes"><span class="n">07</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://csrc.nist.gov/pubs/sp/800/207/final" target="_blank" rel="noopener">NIST SP 800-207: Zero Trust Architecture</a></li><li><a href="https://www.cisa.gov/zero-trust-maturity-model" target="_blank" rel="noopener">CISA Zero Trust Maturity Model</a></li><li><a href="https://learn.microsoft.com/en-us/security/zero-trust/" target="_blank" rel="noopener">Microsoft: orientação de Zero Trust</a></li><li><a href="https://www.cisecurity.org/controls" target="_blank" rel="noopener">CIS Critical Security Controls</a></li></ul>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública e experiência de campo. Marcas citadas pertencem aos seus donos. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#principios">01 · Princípios</a></li><li><a href="#pilares">02 · Pilares e estágios de maturidade</a></li><li><a href="#avaliacao">03 · Avaliação inicial</a></li><li><a href="#roadmap">04 · Roadmap em ondas</a></li><li><a href="#indicadores">05 · Indicadores para a diretoria</a></li><li><a href="#checklist">06 · Checklist</a></li><li><a href="#fontes">07 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='zero-trust-roadmap-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

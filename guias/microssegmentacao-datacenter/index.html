@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Segmentação e microssegmentação de data center · Guias · André Ferreira</title>
+<meta name="description" content="Guia em português de microssegmentação de data center: descoberta de fluxos, modelo de zonas e rótulos, tecnologias (firewall interno, NSX, agentes, Kubernetes), implantação gradual e operação.">
+<meta property="og:title" content="Segmentação e microssegmentação de data center · Guias · André Ferreira">
+<meta property="og:description" content="Guia em português de microssegmentação de data center: descoberta de fluxos, modelo de zonas e rótulos, tecnologias (firewall interno, NSX, agentes, Kubernetes), implantação gradual e operação.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/microssegmentacao-datacenter/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/microssegmentacao-datacenter/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#rede-firewall">Rede e firewall</a> / Microssegmentação</p>
+<span class="chip">Rede e firewall</span> <span class="chip m">Nível Especialista</span>
+<h1 style="margin-top:12px">Segmentação e microssegmentação de data center</h1>
+<p class="sub">Como limitar o movimento lateral entre servidores sem parar a operação: mapa de fluxos, zonas por criticidade, política de negação padrão e implantação em modo observação.</p>
+<div class="intro-meta"><span class="chip m">Microssegmentação</span><span class="chip m">Data center</span><span class="chip m">NSX</span><span class="chip m">Zero Trust</span><span class="chip m">Movimento lateral</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<div class="kv"><div><b>Especialista</b><span>nível</span></div><div><b>4 rótulos</b><span>ambiente, app, camada, criticidade</span></div><div><b>30 dias</b><span>observação mínima</span></div><div><b>Negar</b><span>política padrão final</span></div></div>
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<p>Em uma rede de servidores plana, um único servidor comprometido alcança o resto do data center. Microssegmentação aplica política entre cargas individuais, não só entre VLANs. Ela falha quando começa pela ferramenta; funciona quando começa pelo mapa de fluxos e por um modelo de rótulos aceito pelos donos das aplicações.</p>
+<h2 id="niveis"><span class="n">01</span>Níveis de segmentação</h2>
+<div class="tbl"><table><thead><tr><th>Nível</th><th>Granularidade</th><th>Ferramenta típica</th><th>Quando basta</th></tr></thead><tbody><tr><td>Macro</td><td>Ambientes (produção, homologação, DMZ, usuários)</td><td>Firewall de perímetro interno, VRFs</td><td>Sempre: é o mínimo</td></tr><tr><td>Aplicação</td><td>Cada aplicação isolada das outras</td><td>Firewall distribuído, NSX, grupos de segurança na nuvem</td><td>Ambientes com dados sensíveis</td></tr><tr><td>Micro</td><td>Cada camada e carga (web, app, banco)</td><td>Agentes no host, NSX, NetworkPolicy no Kubernetes</td><td>Sistemas críticos e regulados</td></tr></tbody></table></div>
+<h2 id="descoberta"><span class="n">02</span>Descoberta de fluxos</h2>
+<ol class="steps"><li><b>Coletar</b>Use NetFlow/IPFIX, logs do firewall interno, ferramenta de mapeamento (NSX Intelligence, Illumio, Guardicore) ou eBPF nos hosts. Mínimo de 30 dias para pegar fechamentos mensais.</li><li><b>Agrupar por aplicação</b>Associe IPs a aplicações usando CMDB, nomes de VM e tags do hypervisor.</li><li><b>Validar com os donos</b>Para cada aplicação, quem fala com ela, em que porta, e o que é esperado. Fluxos sem explicação viram investigação.</li><li><b>Identificar serviços compartilhados</b>DNS, NTP, AD, backup, monitoramento, antivírus, atualização. Eles viram regras globais.</li></ol>
+<h2 id="rotulos"><span class="n">03</span>Modelo de rótulos</h2>
+<p>Políticas escritas por IP não sobrevivem a migrações. Escreva por rótulo:</p>
+<div class="tbl"><table><thead><tr><th>Rótulo</th><th>Valores exemplo</th></tr></thead><tbody><tr><td>Ambiente</td><td>prd, hml, dev</td></tr><tr><td>Aplicação</td><td>erp, rh, portal</td></tr><tr><td>Camada</td><td>web, app, db</td></tr><tr><td>Criticidade</td><td>alta, média, baixa</td></tr></tbody></table></div>
+<ul><li>Exemplo de regra: <code>app=erp, camada=app</code> pode acessar <code>app=erp, camada=db</code> em TCP 1433; nada mais acessa <code>camada=db</code>.</li><li>Rótulos aplicados automaticamente pelo provisionamento (tags de VM, labels de Kubernetes), nunca à mão.</li></ul>
+<h2 id="implantacao"><span class="n">04</span>Implantação gradual</h2>
+<ol class="steps"><li><b>Serviços compartilhados</b>Crie primeiro as regras globais (DNS, AD, backup, monitoramento).</li><li><b>Modo observação</b>Aplique a política da aplicação em modo de log ou alerta. Nada é bloqueado; tudo que seria bloqueado é registrado.</li><li><b>Ajuste</b>Revise os bloqueios simulados com o dono da aplicação por duas a quatro semanas.</li><li><b>Aplicar</b>Ative a negação, começando por homologação, depois pela aplicação menos crítica em produção, em janela de mudança e com rollback pronto.</li><li><b>Repetir</b>Aplicação por aplicação. Comece pelas joias da coroa: AD, backup, banco de dados com dado pessoal.</li></ol>
+<div class="call warn"><b class="t">Não quebre a recuperação</b><p>Backup, monitoramento e acesso de administração precisam continuar funcionando. Teste uma restauração depois de aplicar a política.</p></div>
+<h2 id="operacao"><span class="n">05</span>Operação</h2>
+<ul><li>Toda nova aplicação já nasce com rótulos e política, como parte do pedido de servidor.</li><li>Mudança de fluxo passa por GMUD com o dono da aplicação.</li><li>Alerta para tráfego negado em volume incomum: pode ser falha ou ataque.</li><li>Revisão semestral das políticas e das exceções.</li></ul>
+<h2 id="checklist"><span class="n">06</span>Checklist</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Planejamento</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Macrossegmentação por ambiente pronta</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Fluxos coletados por 30 dias</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Serviços compartilhados mapeados</span></label></li><li><label><input type="checkbox" data-k="c4"><span>Modelo de rótulos aprovado</span></label></li></ul>
+<h3>Implantação</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c5"><span>Rótulos automáticos no provisionamento</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Política em modo observação</span></label></li><li><label><input type="checkbox" data-k="c7"><span>Ajuste validado com donos</span></label></li><li><label><input type="checkbox" data-k="c8"><span>Negação aplicada nas joias da coroa</span></label></li></ul>
+<h3>Operação</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c9"><span>Restauração testada após a política</span></label></li><li><label><input type="checkbox" data-k="c10"><span>Alertas de negação</span></label></li><li><label><input type="checkbox" data-k="c11"><span>Revisão semestral</span></label></li></ul>
+<h2 id="fontes"><span class="n">07</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://csrc.nist.gov/pubs/sp/800/207/final" target="_blank" rel="noopener">NIST SP 800-207: Zero Trust Architecture</a></li><li><a href="https://csrc.nist.gov/pubs/sp/800/125/b/final" target="_blank" rel="noopener">NIST SP 800-125B: proteção de redes virtuais</a></li><li><a href="https://kubernetes.io/docs/concepts/services-networking/network-policies/" target="_blank" rel="noopener">Kubernetes: Network Policies</a></li></ul>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública e experiência de campo. Marcas citadas pertencem aos seus donos. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#niveis">01 · Níveis de segmentação</a></li><li><a href="#descoberta">02 · Descoberta de fluxos</a></li><li><a href="#rotulos">03 · Modelo de rótulos</a></li><li><a href="#implantacao">04 · Implantação gradual</a></li><li><a href="#operacao">05 · Operação</a></li><li><a href="#checklist">06 · Checklist</a></li><li><a href="#fontes">07 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='microssegmentacao-datacenter-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

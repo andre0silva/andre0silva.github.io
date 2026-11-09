@@ -92,7 +92,7 @@ pre.cli .c{color:#cfe8d4}
 </style>
 <div class="ph" style="padding-bottom:12px">
 <p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#cloud">Cloud</a> / OCI tenancy</p>
-<span class="chip">Cloud</span> <span class="chip m">Nível Júnior</span>
+<span class="chip">Cloud</span> <span class="chip m">Nível N3</span>
 <h1 style="margin-top:12px">OCI: organizando o primeiro tenancy</h1>
 <p class="sub">Compartimentos, políticas IAM em linguagem quase natural e a primeira VCN, para começar a usar a OCI sem abrir mão de controle.</p>
 <div class="intro-meta"><span class="chip m">OCI</span><span class="chip m">Compartimentos</span><span class="chip m">IAM</span><span class="chip m">VCN</span><span class="chip m">Always Free</span></div>
@@ -103,7 +103,7 @@ pre.cli .c{color:#cfe8d4}
 <article class="gbody">
 
 <h2 id="antes"><span class="n">00</span>Antes de começar</h2>
-<div class="kv"><div><b>Júnior</b><span>nível</span></div><div><b>Always Free</b><span>para o laboratório</span></div><div><b>Compartimentos</b><span>como pastas</span></div><div><b>Políticas</b><span>em texto</span></div></div><div class="tbl"><table><thead><tr><th>Conceito</th><th>O que é</th></tr></thead><tbody><tr><td>Tenancy</td><td>A conta da empresa na OCI</td></tr><tr><td>Região e domínio de disponibilidade</td><td>Localização física; algumas regiões têm mais de um domínio de disponibilidade</td></tr><tr><td>Compartimento</td><td>Pasta lógica que agrupa recursos e recebe permissões e orçamentos</td></tr><tr><td>Domínio de identidade</td><td>Onde ficam usuários e grupos; pode federar com o Entra ID</td></tr><tr><td>Política</td><td>Frase que diz qual grupo pode fazer o quê e onde</td></tr></tbody></table></div>
+<div class="kv"><div><b>N3</b><span>nível</span></div><div><b>Always Free</b><span>para o laboratório</span></div><div><b>Compartimentos</b><span>como pastas</span></div><div><b>Políticas</b><span>em texto</span></div></div><div class="tbl"><table><thead><tr><th>Conceito</th><th>O que é</th></tr></thead><tbody><tr><td>Tenancy</td><td>A conta da empresa na OCI</td></tr><tr><td>Região e domínio de disponibilidade</td><td>Localização física; algumas regiões têm mais de um domínio de disponibilidade</td></tr><tr><td>Compartimento</td><td>Pasta lógica que agrupa recursos e recebe permissões e orçamentos</td></tr><tr><td>Domínio de identidade</td><td>Onde ficam usuários e grupos; pode federar com o Entra ID</td></tr><tr><td>Política</td><td>Frase que diz qual grupo pode fazer o quê e onde</td></tr></tbody></table></div>
 <h2 id="compartimentos"><span class="n">01</span>Estrutura de compartimentos</h2>
 <pre class="cli">tenancy (raiz: só administração)
 ├── cmp-rede          (VCNs, DRG, gateways)

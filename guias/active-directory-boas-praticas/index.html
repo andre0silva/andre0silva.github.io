@@ -92,7 +92,7 @@ pre.cli .c{color:#cfe8d4}
 </style>
 <div class="ph" style="padding-bottom:12px">
 <p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#infraestrutura">Infraestrutura</a> / Active Directory</p>
-<span class="chip">Infraestrutura</span> <span class="chip m">Nível Pleno</span>
+<span class="chip">Infraestrutura</span> <span class="chip m">Nível Sênior</span>
 <h1 style="margin-top:12px">Active Directory: implantação e boas práticas</h1>
 <p class="sub">O que um AD saudável precisa ter, da criação do domínio à rotina de verificação, com os comandos que todo administrador deveria saber de cor.</p>
 <div class="intro-meta"><span class="chip m">Active Directory</span><span class="chip m">DNS</span><span class="chip m">GPO</span><span class="chip m">FSMO</span><span class="chip m">Tiering</span></div>
@@ -103,7 +103,7 @@ pre.cli .c{color:#cfe8d4}
 <article class="gbody">
 
 <h2 id="antes"><span class="n">00</span>Antes de começar</h2>
-<div class="kv"><div><b>Pleno</b><span>nível</span></div><div><b>2 DCs</b><span>mínimo por domínio</span></div><div><b>3 camadas</b><span>de administração</span></div><div><b>Semanal</b><span>verificação de saúde</span></div></div>
+<div class="kv"><div><b>Sênior</b><span>nível</span></div><div><b>2 DCs</b><span>mínimo por domínio</span></div><div><b>3 camadas</b><span>de administração</span></div><div><b>Semanal</b><span>verificação de saúde</span></div></div>
 <h2 id="desenho"><span class="n">01</span>Desenho do domínio</h2>
 <div class="tbl"><table><thead><tr><th>Decisão</th><th>Recomendação</th></tr></thead><tbody><tr><td>Florestas e domínios</td><td>Uma floresta com um domínio atende a maioria das empresas; mais domínios só com motivo forte</td></tr><tr><td>Nome do domínio</td><td>Subdomínio de um domínio público seu, como <code>ad.empresa.com.br</code>; evite <code>.local</code></td></tr><tr><td>Controladores de domínio</td><td>Pelo menos 2 por domínio, de preferência Server Core, sem outras funções além de AD e DNS</td></tr><tr><td>Catálogo global</td><td>Em todos os DCs</td></tr><tr><td>Sites e sub-redes</td><td>Cada sub-rede cadastrada no site certo para que os clientes achem o DC mais próximo</td></tr></tbody></table></div>
 <h2 id="dns-tempo"><span class="n">02</span>DNS e horário</h2>
