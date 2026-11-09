@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Microsoft Identity and Access Administrator (SC-300): trilha de preparação · Guias · André Ferreira</title>
+<meta name="description" content="Trilha de preparação em português para o exame SC-300 Microsoft Identity and Access Administrator: domínios e pesos de outubro de 2026, plano de 6 semanas, conteúdo, laboratórios, armadilhas e autoavaliação.">
+<meta property="og:title" content="Microsoft Identity and Access Administrator (SC-300): trilha de preparação · Guias · André Ferreira">
+<meta property="og:description" content="Trilha de preparação em português para o exame SC-300 Microsoft Identity and Access Administrator: domínios e pesos de outubro de 2026, plano de 6 semanas, conteúdo, laboratórios, armadilhas e autoavaliação.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/cert-azure-sc-300/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/cert-azure-sc-300/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#certificacoes">Certificações</a> / Azure SC-300</p>
+<span class="chip">Certificações</span> <span class="chip m">Nível Pleno</span>
+<h1 style="margin-top:12px">Microsoft Identity and Access Administrator (SC-300): trilha de preparação</h1>
+<p class="sub">A certificação de identidade da Microsoft: Entra ID, autenticação e Acesso Condicional, identidades de carga de trabalho e governança, com plano de 6 semanas e autoavaliação.</p>
+<div class="intro-meta"><span class="chip m">Entra ID</span><span class="chip m">SC-300</span><span class="chip m">Identidade</span><span class="chip m">IAM</span><span class="chip m">Certificação</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<div class="kv"><div><b>Pleno</b><span>nível</span></div><div><b>700</b><span>nota mínima (1 a 1000)</span></div><div><b>Anual</b><span>renovação gratuita online</span></div><div><b>6 semanas</b><span>plano sugerido</span></div></div>
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<p>A SC-300 é a prova de quem trabalha com identidade no dia a dia. A lista de habilidades foi atualizada em 28 de outubro de 2026 com ajustes em autenticação, Global Secure Access e acesso privilegiado. Laboratório com tenant de desenvolvedor e licença P2/Governance de avaliação faz toda a diferença.</p>
+<div class="tbl"><table><thead><tr><th>Item</th><th>Detalhe</th></tr></thead><tbody><tr><td>Código</td><td>SC-300</td></tr><tr><td>Formato</td><td>Entre 40 e 60 questões, podendo incluir estudo de caso</td></tr><tr><td>Aprovação</td><td>700 em uma escala de 1 a 1000</td></tr><tr><td>Validade</td><td>1 ano, renovável por avaliação online gratuita</td></tr><tr><td>Pré-requisitos sugeridos</td><td>Azure, Microsoft 365, AD DS, PowerShell e KQL</td></tr></tbody></table></div>
+<h2 id="dominios"><span class="n">01</span>Domínios e pesos</h2>
+<div class="tbl"><table><thead><tr><th>Domínio</th><th>Peso</th><th>O que dominar</th></tr></thead><tbody><tr><td>1 · Identidades de usuários</td><td>20–25%</td><td>Funções e unidades administrativas, domínios, branding, usuários, grupos, atributos de segurança, dispositivos, licenças, externos, acesso entre tenants, identidade híbrida (Connect Sync, Cloud Sync, PHS, PTA, SSO contínuo, migração do AD FS)</td></tr><tr><td>2 · Autenticação e acesso</td><td>25–30%</td><td>Métodos (CBA, TAP, Authenticator, passkeys), MFA, SSPR, Windows Hello, revogação de sessão, proteção de senha, Kerberos no Entra, Acesso Condicional completo, ID Protection, Global Secure Access</td></tr><tr><td>3 · Identidades de carga de trabalho</td><td>20–25%</td><td>Managed identities, service principals, aplicações empresariais, Application Proxy, SaaS, consentimento, registros de app, permissões de API, app roles, Defender for Cloud Apps</td></tr><tr><td>4 · Governança de identidade</td><td>20–25%</td><td>Entitlement management, termos de uso, organizações conectadas, revisões de acesso, PIM (funções, recursos Azure e grupos), contas de emergência, logs, KQL, workbooks, Identity Secure Score</td></tr></tbody></table></div>
+<h2 id="plano"><span class="n">02</span>Plano de 6 semanas</h2>
+<ol class="steps"><li><b>Semana 1 · Tenant e identidades</b>Funções, unidades administrativas, usuários, grupos dinâmicos, atributos, externos e B2B.</li><li><b>Semana 2 · Identidade híbrida</b>Connect Sync x Cloud Sync, PHS, PTA, SSO contínuo, filtros, atributos, Connect Health.</li><li><b>Semana 3 · Autenticação</b>Métodos e política de métodos, MFA, SSPR, passkeys, TAP, Windows Hello, proteção de senha.</li><li><b>Semana 4 · Acesso Condicional e risco</b>Políticas, sessão, CAE, contexto de autenticação, ações protegidas, ID Protection, Global Secure Access.</li><li><b>Semana 5 · Aplicações</b>Apps empresariais, SSO SAML/OIDC, consentimento, registros de app, managed identities, Defender for Cloud Apps.</li><li><b>Semana 6 · Governança e simulados</b>Pacotes de acesso, revisões, PIM, logs com KQL, avaliação prática oficial e simulados.</li></ol>
+<h2 id="conteudo"><span class="n">03</span>Pontos que mais pegam</h2>
+<h3>Identidade híbrida</h3>
+<div class="tbl"><table><thead><tr><th>Opção</th><th>Onde a senha é validada</th><th>Observação</th></tr></thead><tbody><tr><td>Password hash sync</td><td>No Entra ID</td><td>Mais simples e resiliente; permite detecção de credenciais vazadas</td></tr><tr><td>Pass-through authentication</td><td>No AD local, via agente</td><td>Depende do AD e dos agentes estarem disponíveis</td></tr><tr><td>Federação (AD FS)</td><td>No AD FS</td><td>Caminho de migração para PHS ou CBA é cobrado</td></tr></tbody></table></div>
+<ul><li>Cloud Sync usa agentes leves e suporta florestas desconectadas; Connect Sync tem mais opções de personalização.</li></ul>
+<h3>Acesso Condicional</h3>
+<ul><li>Política = atribuições (usuários, apps, condições) + controles (conceder ou bloquear, sessão).</li><li>Use o modo somente relatório e a ferramenta What If antes de ativar.</li><li>Contexto de autenticação exige requisito mais forte para ações específicas (ex.: ativação no PIM).</li><li>Avaliação contínua de acesso (CAE) revoga sessões quase em tempo real em eventos críticos.</li></ul>
+<h3>Aplicações</h3>
+<ul><li>Registro de app (objeto de aplicação, global) x aplicação empresarial (service principal, no tenant).</li><li>Permissão delegada (age em nome do usuário) x permissão de aplicação (age como o próprio app, exige consentimento de admin).</li><li>Managed identity atribuída pelo sistema (vive e morre com o recurso) x atribuída pelo usuário (reutilizável).</li></ul>
+<h3>Governança</h3>
+<ul><li>PIM: atribuição elegível exige ativação; ativa é permanente ou com prazo. Configurações por função: duração, MFA, justificativa, aprovação.</li><li>Pacote de acesso: catálogo + recursos + políticas (quem pede, aprovação, expiração, revisão).</li><li>Revisão de acesso: escopo, revisores, frequência, ação automática e recomendações.</li></ul>
+<h2 id="labs"><span class="n">04</span>Laboratórios</h2>
+<ol class="steps"><li><b>Tenant de laboratório</b>Tenant de desenvolvedor com licenças de avaliação P2/Governance e duas contas de emergência.</li><li><b>Autenticação</b>Política de métodos com passkey e TAP para um grupo piloto; SSPR com dois métodos.</li><li><b>Acesso Condicional</b>MFA para administradores, bloqueio de autenticação legada e política de risco de entrada, todas em somente relatório; analise com What If.</li><li><b>Aplicação</b>Integre um app SAML da galeria e um app OIDC próprio com app roles; teste consentimento.</li><li><b>Governança</b>Pacote de acesso com aprovação do gestor e expiração de 30 dias; revisão de acesso de um grupo; PIM para Global Reader com aprovação.</li><li><b>Monitoramento</b>Logs de entrada no Log Analytics e uma consulta KQL de falhas de MFA.</li></ol>
+<h2 id="armadilhas"><span class="n">05</span>Armadilhas comuns</h2>
+<ul><li>Confundir funções do Entra ID com funções RBAC do Azure, especialmente no PIM.</li><li>Achar que unidade administrativa restringe o que o usuário vê; ela restringe o escopo do administrador.</li><li>Questões de "menor esforço administrativo" costumam apontar para grupos dinâmicos, licenciamento por grupo e políticas de atribuição automática.</li></ul>
+<h2 id="pratica"><span class="n">06</span>Prática com simulados</h2>
+<div class="call ok"><b class="t">Clouding Academy</b><p>Simulado gratuito como diagnóstico, flashcards de recursos e licenças, simulados completos na última semana. Some a avaliação prática oficial gratuita do Microsoft Learn. Material independente da Microsoft.</p></div>
+<ul><li>Veja também os guias deste site: <a href="https://andre0silva.github.io/guias/iga-entra-id-governance/" target="_blank" rel="noopener">IGA com Entra ID Governance</a> e <a href="https://andre0silva.github.io/guias/acesso-condicional-base/" target="_blank" rel="noopener">Acesso Condicional</a>.</li></ul>
+<h2 id="autoavaliacao"><span class="n">07</span>Autoavaliação</h2>
+<p>Questões autorais. Clique na alternativa para ver a resposta.</p>
+<p class="qscore" id="qscore"></p>
+<div class="quiz"><p class="qq"><b>1.</b> Qual método de autenticação híbrida mantém o login funcionando mesmo com o AD local indisponível?</p><ol class="opts" type="A"><li><button type="button">Pass-through authentication</button></li><li><button type="button" data-ok="1">Password hash synchronization</button></li><li><button type="button">Federação com AD FS</button></li><li><button type="button">SSO contínuo sozinho</button></li></ol><p class="exp" hidden>Com PHS a validação acontece no Entra ID.</p></div>
+<div class="quiz"><p class="qq"><b>2.</b> Um administrador deve gerenciar só os usuários da filial de Recife. O que usar?</p><ol class="opts" type="A"><li><button type="button">Grupo dinâmico</button></li><li><button type="button" data-ok="1">Unidade administrativa com função atribuída no escopo dela</button></li><li><button type="button">Acesso Condicional</button></li><li><button type="button">Pacote de acesso</button></li></ol><p class="exp" hidden>Unidades administrativas limitam o escopo de funções do Entra.</p></div>
+<div class="quiz"><p class="qq"><b>3.</b> Antes de ativar uma política de Acesso Condicional, como medir o impacto sem bloquear ninguém?</p><ol class="opts" type="A"><li><button type="button">Ativar para todos e monitorar</button></li><li><button type="button" data-ok="1">Modo somente relatório e What If</button></li><li><button type="button">Desativar a MFA</button></li><li><button type="button">Revisão de acesso</button></li></ol><p class="exp" hidden>Somente relatório registra o resultado sem aplicar.</p></div>
+<div class="quiz"><p class="qq"><b>4.</b> Uma Function precisa ler segredos no Key Vault sem armazenar credenciais. O que usar?</p><ol class="opts" type="A"><li><button type="button">Service principal com segredo</button></li><li><button type="button" data-ok="1">Managed identity</button></li><li><button type="button">Conta de usuário de serviço</button></li><li><button type="button">SAS token</button></li></ol><p class="exp" hidden>Managed identity elimina credenciais no código.</p></div>
+<div class="quiz"><p class="qq"><b>5.</b> Qual configuração exige aprovação de outro administrador para ativar Global Administrator?</p><ol class="opts" type="A"><li><button type="button">Revisão de acesso</button></li><li><button type="button" data-ok="1">Configuração da função no PIM com aprovação</button></li><li><button type="button">Pacote de acesso</button></li><li><button type="button">Unidade administrativa</button></li></ol><p class="exp" hidden>O PIM permite exigir aprovação na ativação.</p></div>
+<div class="quiz"><p class="qq"><b>6.</b> Uma permissão de API do tipo aplicação no Microsoft Graph exige o quê?</p><ol class="opts" type="A"><li><button type="button">Consentimento do usuário</button></li><li><button type="button" data-ok="1">Consentimento de administrador</button></li><li><button type="button">Nenhum consentimento</button></li><li><button type="button">Licença P2 do usuário</button></li></ol><p class="exp" hidden>Permissões de aplicação sempre exigem consentimento de admin.</p></div>
+<div class="quiz"><p class="qq"><b>7.</b> Como dar acesso temporário de 30 dias a um consultor externo, com aprovação e remoção automática?</p><ol class="opts" type="A"><li><button type="button">Convite B2B manual</button></li><li><button type="button" data-ok="1">Pacote de acesso com política para organização conectada e expiração</button></li><li><button type="button">Grupo dinâmico</button></li><li><button type="button">Acesso Condicional</button></li></ol><p class="exp" hidden>Entitlement management cria e remove o convidado conforme a política.</p></div>
+<h2 id="checklist"><span class="n">08</span>Checklist de prontidão</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Conteúdo</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Quatro domínios revisados</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Identidade híbrida e Acesso Condicional dominados</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Apps e permissões claros</span></label></li><li><label><input type="checkbox" data-k="c4"><span>PIM e governança praticados</span></label></li></ul>
+<h3>Prática</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c5"><span>Seis laboratórios feitos</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Avaliação prática oficial acima de 80%</span></label></li><li><label><input type="checkbox" data-k="c7"><span>Simulados revisados</span></label></li></ul>
+<h2 id="fontes"><span class="n">09</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/sc-300" target="_blank" rel="noopener">Guia de estudo oficial SC-300</a></li><li><a href="https://learn.microsoft.com/en-us/credentials/certifications/identity-and-access-administrator/" target="_blank" rel="noopener">Microsoft Certified: Identity and Access Administrator Associate</a></li><li><a href="https://clouding.academy/" target="_blank" rel="noopener">Clouding Academy: simulados e flashcards</a></li></ul>
+<style>
+.quiz{background:var(--panel);border-radius:10px;padding:14px 16px;margin:0 0 14px}
+.quiz .qq{margin:0 0 10px}
+.quiz .opts{margin:0;padding-left:22px;display:grid;gap:6px}
+.quiz .opts button{font:inherit;text-align:left;width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 10px;cursor:pointer;color:var(--fg)}
+.quiz .opts button:hover{border-color:var(--accent)}
+.quiz .opts button.ok{border-color:var(--sage);background:var(--accent-soft)}
+.quiz .opts button.no{border-color:var(--mark);background:#fff0e6}
+.quiz .exp{margin:10px 0 0;font-size:.93rem}
+.qscore{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded',function(){var qs=document.querySelectorAll('.quiz'),hit=0,done=0,sc=document.getElementById('qscore');
+function upd(){if(sc)sc.textContent=done?('Acertos: '+hit+' de '+done+' respondidas ('+qs.length+' no total)'):('0 de '+qs.length+' respondidas');}
+qs.forEach(function(q){var bs=q.querySelectorAll('button');bs.forEach(function(b){b.addEventListener('click',function(){if(q.dataset.d)return;q.dataset.d=1;done++;if(b.dataset.ok){hit++;b.classList.add('ok');}else{b.classList.add('no');bs.forEach(function(x){if(x.dataset.ok)x.classList.add('ok')});}q.querySelector('.exp').hidden=false;upd();});});});upd();});
+</script>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública e experiência de campo. Marcas citadas pertencem aos seus donos. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#dominios">01 · Domínios e pesos</a></li><li><a href="#plano">02 · Plano de 6 semanas</a></li><li><a href="#conteudo">03 · Pontos que mais pegam</a></li><li><a href="#labs">04 · Laboratórios</a></li><li><a href="#armadilhas">05 · Armadilhas comuns</a></li><li><a href="#pratica">06 · Prática com simulados</a></li><li><a href="#autoavaliacao">07 · Autoavaliação</a></li><li><a href="#checklist">08 · Checklist de prontidão</a></li><li><a href="#fontes">09 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='cert-azure-sc-300-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

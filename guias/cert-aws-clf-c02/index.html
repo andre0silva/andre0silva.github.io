@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AWS Certified Cloud Practitioner (CLF-C02): trilha de preparação · Guias · André Ferreira</title>
+<meta name="description" content="Trilha de preparação em português para o exame AWS Certified Cloud Practitioner CLF-C02: domínios e pesos, plano de estudo de 4 semanas, conceitos por domínio, laboratórios, armadilhas comuns e autoavaliação.">
+<meta property="og:title" content="AWS Certified Cloud Practitioner (CLF-C02): trilha de preparação · Guias · André Ferreira">
+<meta property="og:description" content="Trilha de preparação em português para o exame AWS Certified Cloud Practitioner CLF-C02: domínios e pesos, plano de estudo de 4 semanas, conceitos por domínio, laboratórios, armadilhas comuns e autoavaliação.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/cert-aws-clf-c02/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/cert-aws-clf-c02/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#certificacoes">Certificações</a> / AWS CLF-C02</p>
+<span class="chip">Certificações</span> <span class="chip m">Nível N1</span>
+<h1 style="margin-top:12px">AWS Certified Cloud Practitioner (CLF-C02): trilha de preparação</h1>
+<p class="sub">Roteiro em português para a primeira certificação AWS: conceitos de nuvem, segurança, serviços essenciais e cobrança, com plano de 4 semanas, laboratórios no Free Tier e autoavaliação.</p>
+<div class="intro-meta"><span class="chip m">AWS</span><span class="chip m">CLF-C02</span><span class="chip m">Cloud Practitioner</span><span class="chip m">Fundamentos</span><span class="chip m">Certificação</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<div class="kv"><div><b>N1</b><span>nível</span></div><div><b>65 questões</b><span>90 minutos</span></div><div><b>700</b><span>nota mínima (100 a 1000)</span></div><div><b>4 semanas</b><span>plano sugerido</span></div></div>
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<p>Primeira prova da trilha AWS. Não exige experiência prática prévia, mas quem já trabalha com infraestrutura passa mais rápido se focar no vocabulário da AWS e em cobrança, que é onde o pessoal técnico mais erra.</p>
+<div class="tbl"><table><thead><tr><th>Item</th><th>Detalhe</th></tr></thead><tbody><tr><td>Código</td><td>CLF-C02</td></tr><tr><td>Formato</td><td>65 questões de múltipla escolha e múltipla resposta (50 pontuadas)</td></tr><tr><td>Duração</td><td>90 minutos</td></tr><tr><td>Aprovação</td><td>700 em uma escala de 100 a 1000</td></tr><tr><td>Validade</td><td>3 anos</td></tr><tr><td>Idiomas</td><td>Inclui português do Brasil</td></tr></tbody></table></div>
+<div class="call warn"><b class="t">Confira antes de agendar</b><p>Formato, preço e conteúdo mudam. Valide sempre na página oficial do exame antes de marcar a prova.</p></div>
+<h2 id="dominios"><span class="n">01</span>Domínios e pesos</h2>
+<div class="tbl"><table><thead><tr><th>Domínio</th><th>Peso</th><th>O que dominar</th></tr></thead><tbody><tr><td>1 · Conceitos de nuvem</td><td>24%</td><td>Benefícios da nuvem, princípios do Well-Architected, estratégias de migração (CAF), economia da nuvem</td></tr><tr><td>2 · Segurança e conformidade</td><td>30%</td><td>Modelo de responsabilidade compartilhada, IAM, MFA, conta root, serviços de segurança, conformidade (Artifact)</td></tr><tr><td>3 · Tecnologia e serviços</td><td>34%</td><td>Regiões e zonas, computação, banco de dados, rede, storage, IA/ML e analytics em nível conceitual</td></tr><tr><td>4 · Cobrança, preços e suporte</td><td>12%</td><td>Modelos de compra, ferramentas de custo, Organizations e faturamento consolidado, planos de suporte</td></tr></tbody></table></div>
+<h2 id="plano"><span class="n">02</span>Plano de 4 semanas</h2>
+<ol class="steps"><li><b>Semana 1 · Conceitos e segurança</b>Domínios 1 e 2. Crie a conta, proteja a root com MFA, crie um usuário administrador via IAM Identity Center. Faça o simulado gratuito como diagnóstico.</li><li><b>Semana 2 · Serviços essenciais</b>EC2, S3, VPC, RDS, DynamoDB, Lambda, CloudFront, Route 53. Para cada serviço: o que é, quando usar e com o que é confundido.</li><li><b>Semana 3 · Custos e suporte</b>Domínio 4 inteiro, mais revisão de serviços de gerenciamento (CloudWatch, CloudTrail, Config, Trusted Advisor).</li><li><b>Semana 4 · Simulados</b>Dois simulados completos cronometrados, revisão de cada erro por domínio e flashcards dos serviços confundidos.</li></ol>
+<h2 id="conteudo"><span class="n">03</span>O que precisa estar claro</h2>
+<h3>Conceitos de nuvem</h3>
+<ul><li>Seis vantagens clássicas: trocar CAPEX por OPEX, economia de escala, parar de adivinhar capacidade, agilidade, sem custo de data center, alcance global em minutos.</li><li>Seis pilares do Well-Architected: excelência operacional, segurança, confiabilidade, eficiência de desempenho, otimização de custos e sustentabilidade.</li><li>Estratégias de migração (os "7 Rs"): retire, retain, rehost, relocate, repurchase, replatform, refactor.</li></ul>
+<h3>Segurança</h3>
+<ul><li>Responsabilidade compartilhada: a AWS cuida da segurança <b>da</b> nuvem (hardware, instalações, hypervisor); o cliente cuida da segurança <b>na</b> nuvem (dados, IAM, sistema operacional da EC2, configuração de rede).</li><li>A responsabilidade muda com o serviço: em EC2 o cliente corrige o sistema operacional; em RDS e Lambda a AWS faz isso.</li><li>Serviços que costumam cair: GuardDuty (detecção de ameaças), Inspector (vulnerabilidades), Shield (DDoS), WAF (aplicação web), KMS (chaves), Secrets Manager, Security Hub, Macie (dados sensíveis no S3), Artifact (relatórios de conformidade).</li></ul>
+<h3>Tecnologia</h3>
+<ul><li>Região = área geográfica; zona de disponibilidade = um ou mais data centers isolados dentro da região; pontos de presença = cache do CloudFront.</li><li>Computação: EC2 (servidor), Lambda (função sem servidor), ECS/EKS (contêineres), Fargate (contêiner sem gerenciar servidor), Elastic Beanstalk (plataforma).</li><li>Storage: S3 (objeto), EBS (disco de uma EC2), EFS (arquivos compartilhados), Glacier (arquivamento), Storage Gateway (híbrido).</li><li>Banco: RDS e Aurora (relacional), DynamoDB (chave-valor), ElastiCache (cache), Redshift (data warehouse).</li></ul>
+<h3>Cobrança</h3>
+<div class="tbl"><table><thead><tr><th>Modelo</th><th>Quando usar</th></tr></thead><tbody><tr><td>Sob demanda</td><td>Carga imprevisível ou curta</td></tr><tr><td>Savings Plans / Instâncias reservadas</td><td>Uso estável por 1 ou 3 anos</td></tr><tr><td>Spot</td><td>Carga tolerante a interrupção, até cerca de 90% mais barata</td></tr><tr><td>Dedicated Hosts</td><td>Licenças por servidor físico e exigências de conformidade</td></tr></tbody></table></div>
+<ul><li>Ferramentas: Pricing Calculator (estimar antes), Cost Explorer (analisar o gasto), Budgets (alertar), Cost and Usage Report (detalhe), Compute Optimizer (redimensionar).</li><li>Planos de suporte: Basic, Developer, Business, Enterprise On-Ramp e Enterprise. TAM dedicado aparece no Enterprise.</li></ul>
+<h2 id="labs"><span class="n">04</span>Laboratórios no Free Tier</h2>
+<ol class="steps"><li><b>Conta segura</b>MFA na root, alerta de orçamento de US$ 5, usuário administrador sem chave de acesso.</li><li><b>Site estático no S3</b>Bucket com versionamento, bloqueio de acesso público e CloudFront na frente.</li><li><b>EC2 com acesso controlado</b>Instância t2/t3.micro, security group só com a porta necessária, acesso pelo Session Manager em vez de SSH aberto.</li><li><b>Custos</b>Abra o Cost Explorer e o Trusted Advisor e identifique as recomendações gratuitas.</li></ol>
+<div class="call warn"><b class="t">Desligue tudo no fim</b><p>Exclua instâncias, IPs elásticos e NAT gateways depois de cada laboratório. O alerta de orçamento é sua rede de proteção.</p></div>
+<h2 id="armadilhas"><span class="n">05</span>Armadilhas comuns</h2>
+<ul><li>Confundir <b>CloudTrail</b> (quem fez o quê na API) com <b>CloudWatch</b> (métricas, logs e alarmes) e com <b>Config</b> (histórico de configuração dos recursos).</li><li>Confundir <b>Shield</b> (DDoS) com <b>WAF</b> (regras de aplicação web) e com <b>GuardDuty</b> (detecção de ameaças).</li><li>Achar que zona de disponibilidade é um único data center.</li><li>Esquecer que transferência de dados de entrada é gratuita e a de saída para a internet é cobrada.</li></ul>
+<h2 id="pratica"><span class="n">06</span>Prática com simulados</h2>
+<div class="call ok"><b class="t">Clouding Academy</b><p>Use o simulado gratuito como diagnóstico na semana 1, os flashcards "Blitz" para os serviços confundidos e os simulados completos no modo exame na semana 4. Material independente da AWS; a prova oficial é feita na Pearson VUE.</p></div>
+<ul><li>Treinamento gratuito AWS Skill Builder e as questões de exemplo oficiais completam a preparação.</li><li>Meta antes de agendar: 80% ou mais em dois simulados seguidos, sem decorar respostas.</li></ul>
+<h2 id="autoavaliacao"><span class="n">07</span>Autoavaliação</h2>
+<p>Questões autorais para checar o entendimento. Clique na alternativa para ver a resposta.</p>
+<p class="qscore" id="qscore"></p>
+<div class="quiz"><p class="qq"><b>1.</b> Uma empresa roda um banco em EC2. Quem é responsável por aplicar patches do sistema operacional?</p><ol class="opts" type="A"><li><button type="button">A AWS</button></li><li><button type="button" data-ok="1">O cliente</button></li><li><button type="button">A AWS e o cliente em partes iguais</button></li><li><button type="button">O fornecedor do banco</button></li></ol><p class="exp" hidden>Em EC2 o sistema operacional convidado é do cliente. Em RDS, a AWS aplica os patches.</p></div>
+<div class="quiz"><p class="qq"><b>2.</b> Qual serviço registra as chamadas de API feitas na conta, para auditoria?</p><ol class="opts" type="A"><li><button type="button">CloudWatch</button></li><li><button type="button">AWS Config</button></li><li><button type="button" data-ok="1">CloudTrail</button></li><li><button type="button">Trusted Advisor</button></li></ol><p class="exp" hidden>CloudTrail grava quem fez o quê, quando e de onde nas APIs.</p></div>
+<div class="quiz"><p class="qq"><b>3.</b> Um processamento em lote pode ser interrompido e retomado. Qual opção de compra reduz mais o custo?</p><ol class="opts" type="A"><li><button type="button">Sob demanda</button></li><li><button type="button">Instâncias reservadas</button></li><li><button type="button" data-ok="1">Instâncias Spot</button></li><li><button type="button">Dedicated Hosts</button></li></ol><p class="exp" hidden>Spot usa capacidade ociosa com grande desconto, aceitando interrupção.</p></div>
+<div class="quiz"><p class="qq"><b>4.</b> O que é uma zona de disponibilidade?</p><ol class="opts" type="A"><li><button type="button">Um ponto de presença do CloudFront</button></li><li><button type="button" data-ok="1">Um ou mais data centers isolados dentro de uma região</button></li><li><button type="button">Um conjunto de regiões</button></li><li><button type="button">Uma rede privada virtual</button></li></ol><p class="exp" hidden>Cada região tem várias zonas isoladas, com energia e rede independentes.</p></div>
+<div class="quiz"><p class="qq"><b>5.</b> Qual serviço fornece relatórios de conformidade da AWS, como ISO e SOC?</p><ol class="opts" type="A"><li><button type="button">Security Hub</button></li><li><button type="button" data-ok="1">AWS Artifact</button></li><li><button type="button">Macie</button></li><li><button type="button">Inspector</button></li></ol><p class="exp" hidden>Artifact disponibiliza relatórios de auditoria e acordos sob demanda.</p></div>
+<div class="quiz"><p class="qq"><b>6.</b> Qual ferramenta estima o custo de uma arquitetura antes de criá-la?</p><ol class="opts" type="A"><li><button type="button">Cost Explorer</button></li><li><button type="button">Budgets</button></li><li><button type="button" data-ok="1">Pricing Calculator</button></li><li><button type="button">Cost and Usage Report</button></li></ol><p class="exp" hidden>O Cost Explorer analisa gasto já realizado; a calculadora estima antes.</p></div>
+<div class="quiz"><p class="qq"><b>7.</b> Uma aplicação precisa de proteção contra ataques de injeção de SQL e XSS. Qual serviço usar?</p><ol class="opts" type="A"><li><button type="button">Shield Standard</button></li><li><button type="button" data-ok="1">AWS WAF</button></li><li><button type="button">GuardDuty</button></li><li><button type="button">KMS</button></li></ol><p class="exp" hidden>WAF filtra requisições HTTP com regras de aplicação.</p></div>
+<div class="quiz"><p class="qq"><b>8.</b> Qual estratégia de migração move a aplicação para a nuvem sem alterações?</p><ol class="opts" type="A"><li><button type="button">Refactor</button></li><li><button type="button">Replatform</button></li><li><button type="button" data-ok="1">Rehost</button></li><li><button type="button">Repurchase</button></li></ol><p class="exp" hidden>Rehost é o "lift and shift".</p></div>
+<h2 id="checklist"><span class="n">08</span>Checklist de prontidão</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Conteúdo</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Os quatro domínios revisados</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Diferença entre CloudTrail, CloudWatch e Config clara</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Modelos de compra e planos de suporte dominados</span></label></li></ul>
+<h3>Prática</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c4"><span>Laboratórios concluídos</span></label></li><li><label><input type="checkbox" data-k="c5"><span>Dois simulados acima de 80%</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Erros revisados por domínio</span></label></li></ul>
+<h3>Prova</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c7"><span>Exame agendado</span></label></li><li><label><input type="checkbox" data-k="c8"><span>Documento e ambiente testados para prova online</span></label></li></ul>
+<h2 id="fontes"><span class="n">09</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://aws.amazon.com/certification/certified-cloud-practitioner/" target="_blank" rel="noopener">AWS Certified Cloud Practitioner (página oficial)</a></li><li><a href="https://docs.aws.amazon.com/aws-certification/latest/examguides/cloud-practitioner-02.html" target="_blank" rel="noopener">Guia do exame CLF-C02</a></li><li><a href="https://skillbuilder.aws/" target="_blank" rel="noopener">AWS Skill Builder</a></li><li><a href="https://clouding.academy/" target="_blank" rel="noopener">Clouding Academy: simulados e flashcards</a></li></ul>
+<style>
+.quiz{background:var(--panel);border-radius:10px;padding:14px 16px;margin:0 0 14px}
+.quiz .qq{margin:0 0 10px}
+.quiz .opts{margin:0;padding-left:22px;display:grid;gap:6px}
+.quiz .opts button{font:inherit;text-align:left;width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 10px;cursor:pointer;color:var(--fg)}
+.quiz .opts button:hover{border-color:var(--accent)}
+.quiz .opts button.ok{border-color:var(--sage);background:var(--accent-soft)}
+.quiz .opts button.no{border-color:var(--mark);background:#fff0e6}
+.quiz .exp{margin:10px 0 0;font-size:.93rem}
+.qscore{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded',function(){var qs=document.querySelectorAll('.quiz'),hit=0,done=0,sc=document.getElementById('qscore');
+function upd(){if(sc)sc.textContent=done?('Acertos: '+hit+' de '+done+' respondidas ('+qs.length+' no total)'):('0 de '+qs.length+' respondidas');}
+qs.forEach(function(q){var bs=q.querySelectorAll('button');bs.forEach(function(b){b.addEventListener('click',function(){if(q.dataset.d)return;q.dataset.d=1;done++;if(b.dataset.ok){hit++;b.classList.add('ok');}else{b.classList.add('no');bs.forEach(function(x){if(x.dataset.ok)x.classList.add('ok')});}q.querySelector('.exp').hidden=false;upd();});});});upd();});
+</script>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública e experiência de campo. Marcas citadas pertencem aos seus donos. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#dominios">01 · Domínios e pesos</a></li><li><a href="#plano">02 · Plano de 4 semanas</a></li><li><a href="#conteudo">03 · O que precisa estar claro</a></li><li><a href="#labs">04 · Laboratórios no Free Tier</a></li><li><a href="#armadilhas">05 · Armadilhas comuns</a></li><li><a href="#pratica">06 · Prática com simulados</a></li><li><a href="#autoavaliacao">07 · Autoavaliação</a></li><li><a href="#checklist">08 · Checklist de prontidão</a></li><li><a href="#fontes">09 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='cert-aws-clf-c02-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

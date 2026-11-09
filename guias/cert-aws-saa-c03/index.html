@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AWS Certified Solutions Architect – Associate (SAA-C03): trilha de preparação · Guias · André Ferreira</title>
+<meta name="description" content="Trilha de preparação em português para o exame AWS Certified Solutions Architect Associate SAA-C03: domínios e pesos, padrões de arquitetura, plano de 8 semanas, laboratórios, armadilhas e autoavaliação.">
+<meta property="og:title" content="AWS Certified Solutions Architect – Associate (SAA-C03): trilha de preparação · Guias · André Ferreira">
+<meta property="og:description" content="Trilha de preparação em português para o exame AWS Certified Solutions Architect Associate SAA-C03: domínios e pesos, padrões de arquitetura, plano de 8 semanas, laboratórios, armadilhas e autoavaliação.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/cert-aws-saa-c03/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/cert-aws-saa-c03/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#certificacoes">Certificações</a> / AWS SAA-C03</p>
+<span class="chip">Certificações</span> <span class="chip m">Nível Pleno</span>
+<h1 style="margin-top:12px">AWS Certified Solutions Architect – Associate (SAA-C03): trilha de preparação</h1>
+<p class="sub">Como se preparar para a prova de arquiteto AWS: os quatro domínios, decisões de arquitetura que mais caem, plano de 8 semanas, laboratórios e autoavaliação.</p>
+<div class="intro-meta"><span class="chip m">AWS</span><span class="chip m">SAA-C03</span><span class="chip m">Solutions Architect</span><span class="chip m">Arquitetura</span><span class="chip m">Certificação</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<div class="kv"><div><b>Pleno</b><span>nível</span></div><div><b>65 questões</b><span>130 minutos</span></div><div><b>720</b><span>nota mínima (100 a 1000)</span></div><div><b>8 semanas</b><span>plano sugerido</span></div></div>
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<p>A SAA-C03 é uma prova de decisão: quase toda questão descreve um cenário e pede a solução <b>mais</b> segura, resiliente, rápida ou barata. Saber o que cada serviço faz não basta; é preciso saber por que escolher um em vez do outro.</p>
+<div class="tbl"><table><thead><tr><th>Item</th><th>Detalhe</th></tr></thead><tbody><tr><td>Código</td><td>SAA-C03</td></tr><tr><td>Formato</td><td>65 questões de múltipla escolha e múltipla resposta</td></tr><tr><td>Duração</td><td>130 minutos</td></tr><tr><td>Aprovação</td><td>720 em uma escala de 100 a 1000</td></tr><tr><td>Validade</td><td>3 anos</td></tr><tr><td>Recomendado</td><td>Cerca de 1 ano de experiência projetando soluções na AWS</td></tr></tbody></table></div>
+<h2 id="dominios"><span class="n">01</span>Domínios e pesos</h2>
+<div class="tbl"><table><thead><tr><th>Domínio</th><th>Peso</th><th>O que dominar</th></tr></thead><tbody><tr><td>1 · Arquiteturas seguras</td><td>30%</td><td>IAM e políticas, contas e Organizations, proteção de dados (KMS, criptografia), rede segura (VPC, security groups, NACL, endpoints)</td></tr><tr><td>2 · Arquiteturas resilientes</td><td>26%</td><td>Multi-AZ, Auto Scaling, desacoplamento (SQS, SNS, EventBridge), DR e backup</td></tr><tr><td>3 · Arquiteturas de alto desempenho</td><td>24%</td><td>Storage e banco certos para a carga, cache, CloudFront, rede de alto desempenho, dados e analytics</td></tr><tr><td>4 · Arquiteturas com custo otimizado</td><td>20%</td><td>Modelos de compra, classes de storage, dimensionamento, custo de rede e transferência</td></tr></tbody></table></div>
+<h2 id="plano"><span class="n">02</span>Plano de 8 semanas</h2>
+<ol class="steps"><li><b>Semana 1 · Diagnóstico e IAM</b>Simulado gratuito sem estudar. Depois: políticas IAM, roles, STS, Organizations e SCPs, IAM Identity Center.</li><li><b>Semana 2 · Rede</b>VPC, sub-redes públicas e privadas, NAT, route tables, security groups x NACL, VPC endpoints, peering, Transit Gateway, VPN e Direct Connect.</li><li><b>Semana 3 · Computação e escala</b>EC2, ELB (ALB, NLB), Auto Scaling, Lambda, contêineres (ECS, EKS, Fargate).</li><li><b>Semana 4 · Storage</b>S3 (classes, lifecycle, replicação, criptografia, Object Lock), EBS (tipos), EFS, FSx, Storage Gateway, DataSync.</li><li><b>Semana 5 · Bancos e cache</b>RDS Multi-AZ x réplicas de leitura, Aurora (global, serverless), DynamoDB (DAX, global tables), ElastiCache.</li><li><b>Semana 6 · Desacoplamento e dados</b>SQS, SNS, EventBridge, Kinesis, Step Functions, API Gateway, Athena, Glue.</li><li><b>Semana 7 · Segurança, DR e custos</b>KMS, Secrets Manager, WAF, Shield, GuardDuty; estratégias de DR; Savings Plans, Spot, classes de storage.</li><li><b>Semana 8 · Simulados</b>Três simulados cronometrados, revisão detalhada de cada erro e de cada acerto por chute.</li></ol>
+<h2 id="decisoes"><span class="n">03</span>Decisões que mais caem</h2>
+<div class="tbl"><table><thead><tr><th>Pergunta do cenário</th><th>Resposta típica</th></tr></thead><tbody><tr><td>Alta disponibilidade do banco relacional</td><td>RDS Multi-AZ (failover), não réplica de leitura</td></tr><tr><td>Escalar leituras do banco</td><td>Réplicas de leitura ou cache (ElastiCache, DAX)</td></tr><tr><td>Desacoplar componentes e absorver picos</td><td>Fila SQS entre produtor e consumidor</td></tr><tr><td>Uma mensagem para vários destinos</td><td>SNS (fan-out) com filas SQS assinando</td></tr><tr><td>Acesso privado ao S3 a partir de sub-rede privada</td><td>Gateway VPC endpoint (sem NAT)</td></tr><tr><td>Conectar muitas VPCs e o data center</td><td>Transit Gateway</td></tr><tr><td>Arquivos compartilhados entre várias instâncias Linux</td><td>EFS</td></tr><tr><td>Arquivamento barato com recuperação em horas</td><td>S3 Glacier Flexible Retrieval ou Deep Archive</td></tr><tr><td>Padrão de acesso desconhecido no S3</td><td>S3 Intelligent-Tiering</td></tr><tr><td>Credenciais de banco com rotação automática</td><td>Secrets Manager</td></tr><tr><td>Conteúdo estático global com baixa latência</td><td>CloudFront com origem S3 (OAC)</td></tr><tr><td>Carga web com picos imprevisíveis</td><td>ALB + Auto Scaling em várias AZs</td></tr></tbody></table></div>
+<h2 id="dr"><span class="n">04</span>Estratégias de DR</h2>
+<div class="tbl"><table><thead><tr><th>Estratégia</th><th>RTO/RPO</th><th>Custo</th></tr></thead><tbody><tr><td>Backup e restauração</td><td>Horas</td><td>Mais baixo</td></tr><tr><td>Pilot light</td><td>Dezenas de minutos</td><td>Baixo</td></tr><tr><td>Warm standby</td><td>Minutos</td><td>Médio</td></tr><tr><td>Ativo-ativo multi-região</td><td>Quase zero</td><td>Mais alto</td></tr></tbody></table></div>
+<h2 id="labs"><span class="n">05</span>Laboratórios guiados</h2>
+<ol class="steps"><li><b>VPC de três camadas</b>Sub-redes públicas e privadas em duas AZs, NAT gateway, ALB na pública, EC2 em Auto Scaling na privada, RDS Multi-AZ.</li><li><b>Desacoplamento</b>API Gateway → Lambda → SQS → Lambda consumidora → DynamoDB, com fila de mensagens mortas.</li><li><b>S3 seguro</b>Bucket com criptografia KMS, bloqueio de acesso público, CloudFront com OAC, lifecycle para Glacier.</li><li><b>Acesso privado</b>Instância em sub-rede privada acessando o S3 por gateway endpoint e sendo administrada pelo Session Manager.</li></ol>
+<h2 id="armadilhas"><span class="n">06</span>Armadilhas comuns</h2>
+<ul><li>Palavras-chave mudam a resposta: "menor custo", "menor esforço operacional", "mais seguro". Leia a última frase da questão primeiro.</li><li>"Sem gerenciar servidores" aponta para serviços gerenciados ou serverless.</li><li>Multi-AZ é para disponibilidade; réplica de leitura é para desempenho (e pode ajudar em DR entre regiões).</li><li>Security group é stateful e só tem regras de permitir; NACL é stateless e tem permitir e negar.</li></ul>
+<h2 id="pratica"><span class="n">07</span>Prática com simulados</h2>
+<div class="call ok"><b class="t">Clouding Academy</b><p>Simulado gratuito como diagnóstico, Arch Builder para treinar escolha de arquitetura, labs na sandbox AWS para os temas fracos e simulados completos no modo exame na reta final. Material independente da AWS.</p></div>
+<ul><li>Leia também os whitepapers do Well-Architected e as questões de exemplo oficiais.</li><li>Meta antes de agendar: 80% ou mais em três simulados diferentes.</li></ul>
+<h2 id="autoavaliacao"><span class="n">08</span>Autoavaliação</h2>
+<p>Cenários autorais. Clique na alternativa para ver a resposta.</p>
+<p class="qscore" id="qscore"></p>
+<div class="quiz"><p class="qq"><b>1.</b> Uma aplicação precisa que o banco relacional continue disponível se uma zona de disponibilidade falhar, com menor esforço operacional.</p><ol class="opts" type="A"><li><button type="button">Réplica de leitura na mesma região</button></li><li><button type="button" data-ok="1">RDS Multi-AZ</button></li><li><button type="button">Snapshot diário</button></li><li><button type="button">Banco instalado em EC2 em duas AZs</button></li></ol><p class="exp" hidden>Multi-AZ mantém standby síncrono com failover automático.</p></div>
+<div class="quiz"><p class="qq"><b>2.</b> Instâncias em sub-redes privadas precisam ler objetos do S3 sem passar pela internet e sem custo de NAT.</p><ol class="opts" type="A"><li><button type="button">NAT gateway</button></li><li><button type="button" data-ok="1">Gateway VPC endpoint para S3</button></li><li><button type="button">VPC peering</button></li><li><button type="button">Internet gateway</button></li></ol><p class="exp" hidden>O gateway endpoint roteia o tráfego ao S3 pela rede da AWS, sem custo de processamento do NAT.</p></div>
+<div class="quiz"><p class="qq"><b>3.</b> Pedidos chegam em picos e o processamento não pode perder mensagens se o consumidor cair.</p><ol class="opts" type="A"><li><button type="button">SNS direto para EC2</button></li><li><button type="button" data-ok="1">Fila SQS entre a API e os consumidores</button></li><li><button type="button">Kinesis com uma única shard</button></li><li><button type="button">Chamada síncrona via API Gateway</button></li></ol><p class="exp" hidden>SQS desacopla e retém mensagens até o processamento.</p></div>
+<div class="quiz"><p class="qq"><b>4.</b> Logs precisam ficar 7 anos, raramente consultados, com o menor custo.</p><ol class="opts" type="A"><li><button type="button">S3 Standard</button></li><li><button type="button">S3 Standard-IA</button></li><li><button type="button" data-ok="1">S3 Glacier Deep Archive</button></li><li><button type="button">EBS gp3</button></li></ol><p class="exp" hidden>Deep Archive é a classe mais barata para retenção longa e acesso raro.</p></div>
+<div class="quiz"><p class="qq"><b>5.</b> Várias instâncias Linux precisam ler e gravar os mesmos arquivos ao mesmo tempo.</p><ol class="opts" type="A"><li><button type="button">EBS gp3 compartilhado</button></li><li><button type="button" data-ok="1">Amazon EFS</button></li><li><button type="button">S3 montado como disco local</button></li><li><button type="button">Instance store</button></li></ol><p class="exp" hidden>EFS é sistema de arquivos NFS compartilhado entre instâncias e AZs.</p></div>
+<div class="quiz"><p class="qq"><b>6.</b> Uma empresa quer impedir que qualquer conta da organização desative o CloudTrail.</p><ol class="opts" type="A"><li><button type="button">Política IAM em cada usuário</button></li><li><button type="button" data-ok="1">SCP no AWS Organizations</button></li><li><button type="button">Regra do AWS Config</button></li><li><button type="button">Alarme do CloudWatch</button></li></ol><p class="exp" hidden>SCPs limitam as permissões máximas de todas as contas da OU.</p></div>
+<div class="quiz"><p class="qq"><b>7.</b> O site tem usuários no mundo todo e conteúdo estático no S3. Como reduzir latência?</p><ol class="opts" type="A"><li><button type="button">Replicar o bucket para todas as regiões</button></li><li><button type="button" data-ok="1">CloudFront com origem no S3</button></li><li><button type="button">Instâncias EC2 maiores</button></li><li><button type="button">Global Accelerator para o S3</button></li></ol><p class="exp" hidden>CloudFront faz cache nos pontos de presença perto do usuário.</p></div>
+<div class="quiz"><p class="qq"><b>8.</b> Credenciais do banco precisam de rotação automática sem mudar o código a cada troca.</p><ol class="opts" type="A"><li><button type="button">Parameter Store sem criptografia</button></li><li><button type="button" data-ok="1">Secrets Manager com rotação</button></li><li><button type="button">Variável de ambiente na Lambda</button></li><li><button type="button">Arquivo no S3</button></li></ol><p class="exp" hidden>Secrets Manager integra rotação automática com RDS.</p></div>
+<h2 id="checklist"><span class="n">09</span>Checklist de prontidão</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Conteúdo</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Quatro domínios revisados</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Tabela de decisões dominada</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Estratégias de DR claras</span></label></li></ul>
+<h3>Prática</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c4"><span>Quatro laboratórios feitos</span></label></li><li><label><input type="checkbox" data-k="c5"><span>Três simulados acima de 80%</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Erros revisados</span></label></li></ul>
+<h3>Prova</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c7"><span>Exame agendado</span></label></li><li><label><input type="checkbox" data-k="c8"><span>Estratégia de tempo (2 min por questão, marcar e voltar)</span></label></li></ul>
+<h2 id="fontes"><span class="n">10</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://aws.amazon.com/certification/certified-solutions-architect-associate/" target="_blank" rel="noopener">AWS Certified Solutions Architect – Associate (página oficial)</a></li><li><a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html" target="_blank" rel="noopener">AWS Well-Architected Framework</a></li><li><a href="https://skillbuilder.aws/" target="_blank" rel="noopener">AWS Skill Builder</a></li><li><a href="https://clouding.academy/" target="_blank" rel="noopener">Clouding Academy: simulados, Arch Builder e labs</a></li></ul>
+<style>
+.quiz{background:var(--panel);border-radius:10px;padding:14px 16px;margin:0 0 14px}
+.quiz .qq{margin:0 0 10px}
+.quiz .opts{margin:0;padding-left:22px;display:grid;gap:6px}
+.quiz .opts button{font:inherit;text-align:left;width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 10px;cursor:pointer;color:var(--fg)}
+.quiz .opts button:hover{border-color:var(--accent)}
+.quiz .opts button.ok{border-color:var(--sage);background:var(--accent-soft)}
+.quiz .opts button.no{border-color:var(--mark);background:#fff0e6}
+.quiz .exp{margin:10px 0 0;font-size:.93rem}
+.qscore{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded',function(){var qs=document.querySelectorAll('.quiz'),hit=0,done=0,sc=document.getElementById('qscore');
+function upd(){if(sc)sc.textContent=done?('Acertos: '+hit+' de '+done+' respondidas ('+qs.length+' no total)'):('0 de '+qs.length+' respondidas');}
+qs.forEach(function(q){var bs=q.querySelectorAll('button');bs.forEach(function(b){b.addEventListener('click',function(){if(q.dataset.d)return;q.dataset.d=1;done++;if(b.dataset.ok){hit++;b.classList.add('ok');}else{b.classList.add('no');bs.forEach(function(x){if(x.dataset.ok)x.classList.add('ok')});}q.querySelector('.exp').hidden=false;upd();});});});upd();});
+</script>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública e experiência de campo. Marcas citadas pertencem aos seus donos. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#dominios">01 · Domínios e pesos</a></li><li><a href="#plano">02 · Plano de 8 semanas</a></li><li><a href="#decisoes">03 · Decisões que mais caem</a></li><li><a href="#dr">04 · Estratégias de DR</a></li><li><a href="#labs">05 · Laboratórios guiados</a></li><li><a href="#armadilhas">06 · Armadilhas comuns</a></li><li><a href="#pratica">07 · Prática com simulados</a></li><li><a href="#autoavaliacao">08 · Autoavaliação</a></li><li><a href="#checklist">09 · Checklist de prontidão</a></li><li><a href="#fontes">10 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='cert-aws-saa-c03-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>

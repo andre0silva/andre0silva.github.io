@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Microsoft Azure Administrator (AZ-104): trilha de preparação · Guias · André Ferreira</title>
+<meta name="description" content="Trilha de preparação em português para o exame Microsoft Azure Administrator AZ-104: domínios e pesos, plano de 6 semanas, conteúdo por domínio, laboratórios, armadilhas e autoavaliação.">
+<meta property="og:title" content="Microsoft Azure Administrator (AZ-104): trilha de preparação · Guias · André Ferreira">
+<meta property="og:description" content="Trilha de preparação em português para o exame Microsoft Azure Administrator AZ-104: domínios e pesos, plano de 6 semanas, conteúdo por domínio, laboratórios, armadilhas e autoavaliação.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/cert-azure-az-104/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/cert-azure-az-104/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#certificacoes">Certificações</a> / Azure AZ-104</p>
+<span class="chip">Certificações</span> <span class="chip m">Nível N3</span>
+<h1 style="margin-top:12px">Microsoft Azure Administrator (AZ-104): trilha de preparação</h1>
+<p class="sub">A certificação do administrador Azure: identidade e governança, storage, computação, rede e monitoramento, com plano de 6 semanas, laboratórios práticos e autoavaliação.</p>
+<div class="intro-meta"><span class="chip m">Azure</span><span class="chip m">AZ-104</span><span class="chip m">Administrator</span><span class="chip m">Microsoft</span><span class="chip m">Certificação</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<div class="kv"><div><b>N3</b><span>nível</span></div><div><b>700</b><span>nota mínima (1 a 1000)</span></div><div><b>Anual</b><span>renovação gratuita online</span></div><div><b>6 semanas</b><span>plano sugerido</span></div></div>
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<p>A AZ-104 cobra prática: CLI, PowerShell, Bicep/ARM e troubleshooting de rede. Quem só assiste vídeo costuma reprovar. Reserve pelo menos metade do tempo para laboratório.</p>
+<div class="tbl"><table><thead><tr><th>Item</th><th>Detalhe</th></tr></thead><tbody><tr><td>Código</td><td>AZ-104</td></tr><tr><td>Formato</td><td>Entre 40 e 60 questões, podendo incluir estudo de caso</td></tr><tr><td>Aprovação</td><td>700 em uma escala de 1 a 1000</td></tr><tr><td>Validade</td><td>1 ano, renovável por avaliação online gratuita</td></tr><tr><td>Pré-requisitos sugeridos</td><td>Sistemas operacionais, rede, servidores, virtualização, PowerShell, CLI, Entra ID</td></tr></tbody></table></div>
+<h2 id="dominios"><span class="n">01</span>Domínios e pesos</h2>
+<div class="tbl"><table><thead><tr><th>Domínio</th><th>Peso</th><th>O que dominar</th></tr></thead><tbody><tr><td>1 · Identidades e governança</td><td>20–25%</td><td>Usuários e grupos do Entra, licenças, externos, SSPR, RBAC por escopo, Policy, locks, tags, assinaturas, custos, management groups</td></tr><tr><td>2 · Storage</td><td>15–20%</td><td>Firewall de storage, SAS e políticas de acesso, chaves, identidade no Azure Files, redundância, replicação, criptografia, AzCopy, camadas, soft delete, lifecycle, versionamento</td></tr><tr><td>3 · Computação</td><td>20–25%</td><td>ARM e Bicep, VMs (discos, criptografia, tamanhos, mover, zonas e conjuntos), Scale Sets, ACR, ACI, Container Apps, App Service (planos, escala, TLS, DNS, backup, rede, slots)</td></tr><tr><td>4 · Rede virtual</td><td>15–20%</td><td>VNets, peering, IPs públicos, UDR, troubleshooting, NSG e ASG, regras efetivas, Bastion, service e private endpoints, Azure DNS, load balancer</td></tr><tr><td>5 · Monitoramento e manutenção</td><td>10–15%</td><td>Métricas e logs no Monitor, KQL, alertas e action groups, Insights, Network Watcher, Backup e Site Recovery</td></tr></tbody></table></div>
+<h2 id="plano"><span class="n">02</span>Plano de 6 semanas</h2>
+<ol class="steps"><li><b>Semana 1 · Identidade e governança</b>Entra ID, RBAC nos quatro escopos, Policy, locks, tags, budgets.</li><li><b>Semana 2 · Storage</b>Storage accounts, SAS, redundância, Blob e Files, lifecycle, AzCopy.</li><li><b>Semana 3 · Computação</b>VMs, discos, Scale Sets, Bicep, App Service com slots, contêineres.</li><li><b>Semana 4 · Rede</b>VNet, peering, NSG, UDR, Bastion, private endpoint, load balancer, DNS.</li><li><b>Semana 5 · Monitoramento e backup</b>Monitor, Log Analytics com KQL, alertas, Network Watcher, Backup, Site Recovery.</li><li><b>Semana 6 · Revisão e simulados</b>Avaliação prática oficial, simulados e laboratórios dos domínios fracos.</li></ol>
+<h2 id="conteudo"><span class="n">03</span>Pontos que mais pegam</h2>
+<h3>Identidade e governança</h3>
+<ul><li>RBAC: Owner (tudo, inclusive conceder acesso), Contributor (tudo, menos conceder acesso), Reader, User Access Administrator. Herança de cima para baixo.</li><li>Funções do Entra ID (administrar o diretório) são diferentes de funções RBAC do Azure (administrar recursos).</li><li>Lock <b>ReadOnly</b> pode quebrar operações que parecem leitura, como listar chaves de storage.</li></ul>
+<h3>Storage</h3>
+<ul><li>SAS de serviço/conta assinada com chave x SAS de delegação de usuário assinada com Entra ID (preferível).</li><li>Política de acesso armazenada permite revogar SAS sem trocar a chave.</li><li>Mudar redundância e camadas tem implicações de custo e tempo; archive exige reidratação.</li></ul>
+<h3>Computação</h3>
+<ul><li>Conjunto de disponibilidade (domínios de falha e atualização no mesmo data center) x zonas de disponibilidade (data centers diferentes).</li><li>Slots de deployment do App Service exigem plano Standard ou superior; swap troca as configurações marcadas como "slot setting" de forma diferente.</li></ul>
+<h3>Rede</h3>
+<ul><li>NSG avalia regras por prioridade (menor número primeiro). Regras efetivas mostram o resultado de NSG da sub-rede + NIC.</li><li>Peering não é transitivo: A↔B e B↔C não fazem A falar com C.</li><li>Service endpoint mantém IP público do serviço, restrito à VNet; private endpoint dá IP privado na VNet e exige DNS privado.</li></ul>
+<h3>Monitoramento e backup</h3>
+<ul><li>KQL básico: <code>where</code>, <code>summarize</code>, <code>project</code>, <code>render</code>.</li><li>Recovery Services vault (VMs, SQL em VM, Files) x Backup vault (discos, blobs, PostgreSQL); Site Recovery para replicar VMs entre regiões.</li></ul>
+<h2 id="labs"><span class="n">04</span>Laboratórios</h2>
+<ol class="steps"><li><b>Governança</b>Management group, Policy de tags obrigatórias com efeito de negar, lock em resource group, budget com alerta.</li><li><b>Storage</b>Storage account com firewall para uma VNet, SAS de delegação de usuário, lifecycle para cool após 30 dias.</li><li><b>Bicep</b>Arquivo Bicep que cria VNet com duas sub-redes e uma VM; implante com <code>az deployment group create</code>.</li><li><b>Rede</b>Duas VNets com peering, NSG bloqueando RDP da internet, acesso pelo Bastion, private endpoint para a storage.</li><li><b>Monitoramento</b>Alerta de CPU com action group por e-mail, consulta KQL em logs da VM, Connection Monitor.</li><li><b>Backup e DR</b>Backup de VM com restauração de arquivo e replicação com Site Recovery para outra região.</li></ol>
+<h2 id="armadilhas"><span class="n">05</span>Armadilhas comuns</h2>
+<ul><li>Confundir funções do Entra ID com RBAC do Azure.</li><li>Esquecer que mover VM entre regiões é diferente de mover entre resource groups.</li><li>Questões de rede com tabela de regras: calcule a ordem por prioridade, não pela ordem em que aparecem.</li></ul>
+<h2 id="pratica"><span class="n">06</span>Prática com simulados</h2>
+<div class="call ok"><b class="t">Clouding Academy</b><p>Simulado gratuito no início para medir o ponto de partida, flashcards de comandos e limites, e simulados completos nas duas últimas semanas. Use também a avaliação prática oficial gratuita. Material independente da Microsoft.</p></div>
+<h2 id="autoavaliacao"><span class="n">07</span>Autoavaliação</h2>
+<p>Questões autorais. Clique na alternativa para ver a resposta.</p>
+<p class="qscore" id="qscore"></p>
+<div class="quiz"><p class="qq"><b>1.</b> Um usuário precisa gerenciar VMs de um resource group, mas não pode conceder acesso a outras pessoas. Qual função?</p><ol class="opts" type="A"><li><button type="button">Owner</button></li><li><button type="button" data-ok="1">Contributor</button></li><li><button type="button">User Access Administrator</button></li><li><button type="button">Reader</button></li></ol><p class="exp" hidden>Contributor gerencia recursos sem atribuir funções.</p></div>
+<div class="quiz"><p class="qq"><b>2.</b> VNet A tem peering com B e B com C. A consegue falar com C?</p><ol class="opts" type="A"><li><button type="button">Sim, peering é transitivo</button></li><li><button type="button" data-ok="1">Não, é preciso peering A–C ou um hub com roteamento</button></li><li><button type="button">Sim, se estiverem na mesma região</button></li><li><button type="button">Só com service endpoint</button></li></ol><p class="exp" hidden>Peering não é transitivo.</p></div>
+<div class="quiz"><p class="qq"><b>3.</b> Qual opção dá à storage account um IP privado dentro da VNet?</p><ol class="opts" type="A"><li><button type="button">Service endpoint</button></li><li><button type="button" data-ok="1">Private endpoint</button></li><li><button type="button">Firewall da storage</button></li><li><button type="button">SAS token</button></li></ol><p class="exp" hidden>Private endpoint cria uma interface com IP privado.</p></div>
+<div class="quiz"><p class="qq"><b>4.</b> Como revogar várias SAS emitidas sem trocar a chave da conta?</p><ol class="opts" type="A"><li><button type="button">Excluir o container</button></li><li><button type="button" data-ok="1">Usar uma política de acesso armazenada e alterá-la</button></li><li><button type="button">Mudar a redundância</button></li><li><button type="button">Regenerar o token pelo portal</button></li></ol><p class="exp" hidden>SAS vinculadas a uma política armazenada são revogadas ao alterar ou remover a política.</p></div>
+<div class="quiz"><p class="qq"><b>5.</b> Um NSG tem regra 100 negando RDP e regra 200 permitindo RDP. O RDP passa?</p><ol class="opts" type="A"><li><button type="button">Sim, permitir prevalece</button></li><li><button type="button" data-ok="1">Não, a regra de menor número é avaliada primeiro</button></li><li><button type="button">Depende do NSG da NIC</button></li><li><button type="button">Só para IPs internos</button></li></ol><p class="exp" hidden>Menor prioridade numérica vence.</p></div>
+<div class="quiz"><p class="qq"><b>6.</b> Qual serviço replica VMs para outra região para DR?</p><ol class="opts" type="A"><li><button type="button">Azure Backup</button></li><li><button type="button" data-ok="1">Azure Site Recovery</button></li><li><button type="button">AzCopy</button></li><li><button type="button">Storage GRS</button></li></ol><p class="exp" hidden>Site Recovery orquestra replicação e failover.</p></div>
+<div class="quiz"><p class="qq"><b>7.</b> Qual lock impede excluir, mas permite alterar o recurso?</p><ol class="opts" type="A"><li><button type="button">ReadOnly</button></li><li><button type="button" data-ok="1">CanNotDelete</button></li><li><button type="button">Policy Deny</button></li><li><button type="button">Tag</button></li></ol><p class="exp" hidden>CanNotDelete bloqueia só exclusão.</p></div>
+<h2 id="checklist"><span class="n">08</span>Checklist de prontidão</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Conteúdo</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Cinco domínios revisados</span></label></li><li><label><input type="checkbox" data-k="c2"><span>RBAC x Entra roles claro</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Rede (peering, NSG, endpoints) dominada</span></label></li></ul>
+<h3>Prática</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c4"><span>Seis laboratórios feitos</span></label></li><li><label><input type="checkbox" data-k="c5"><span>Avaliação prática oficial acima de 80%</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Simulados revisados</span></label></li></ul>
+<h3>Prova</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c7"><span>Exame agendado</span></label></li><li><label><input type="checkbox" data-k="c8"><span>Ambiente de prova online testado</span></label></li></ul>
+<h2 id="fontes"><span class="n">09</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-104" target="_blank" rel="noopener">Guia de estudo oficial AZ-104</a></li><li><a href="https://learn.microsoft.com/en-us/credentials/certifications/azure-administrator/" target="_blank" rel="noopener">Microsoft Certified: Azure Administrator Associate</a></li><li><a href="https://clouding.academy/" target="_blank" rel="noopener">Clouding Academy: simulados e flashcards</a></li></ul>
+<style>
+.quiz{background:var(--panel);border-radius:10px;padding:14px 16px;margin:0 0 14px}
+.quiz .qq{margin:0 0 10px}
+.quiz .opts{margin:0;padding-left:22px;display:grid;gap:6px}
+.quiz .opts button{font:inherit;text-align:left;width:100%;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 10px;cursor:pointer;color:var(--fg)}
+.quiz .opts button:hover{border-color:var(--accent)}
+.quiz .opts button.ok{border-color:var(--sage);background:var(--accent-soft)}
+.quiz .opts button.no{border-color:var(--mark);background:#fff0e6}
+.quiz .exp{margin:10px 0 0;font-size:.93rem}
+.qscore{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded',function(){var qs=document.querySelectorAll('.quiz'),hit=0,done=0,sc=document.getElementById('qscore');
+function upd(){if(sc)sc.textContent=done?('Acertos: '+hit+' de '+done+' respondidas ('+qs.length+' no total)'):('0 de '+qs.length+' respondidas');}
+qs.forEach(function(q){var bs=q.querySelectorAll('button');bs.forEach(function(b){b.addEventListener('click',function(){if(q.dataset.d)return;q.dataset.d=1;done++;if(b.dataset.ok){hit++;b.classList.add('ok');}else{b.classList.add('no');bs.forEach(function(x){if(x.dataset.ok)x.classList.add('ok')});}q.querySelector('.exp').hidden=false;upd();});});});upd();});
+</script>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública e experiência de campo. Marcas citadas pertencem aos seus donos. Fornecido sem garantia; valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#dominios">01 · Domínios e pesos</a></li><li><a href="#plano">02 · Plano de 6 semanas</a></li><li><a href="#conteudo">03 · Pontos que mais pegam</a></li><li><a href="#labs">04 · Laboratórios</a></li><li><a href="#armadilhas">05 · Armadilhas comuns</a></li><li><a href="#pratica">06 · Prática com simulados</a></li><li><a href="#autoavaliacao">07 · Autoavaliação</a></li><li><a href="#checklist">08 · Checklist de prontidão</a></li><li><a href="#fontes">09 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='cert-azure-az-104-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>
