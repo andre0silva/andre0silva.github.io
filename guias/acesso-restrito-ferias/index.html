@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Acesso restrito em férias com Acesso Condicional e Lifecycle Workflows · Guias · André Ferreira</title>
+<meta name="description" content="Guia prático em português para manter o colaborador em férias com acesso a uma única aplicação no Microsoft Entra ID: por que a conta desabilitada não serve, grupo estático gerido por Lifecycle Workflows, política de bloqueio, reconciliação e testes.">
+<meta property="og:title" content="Acesso restrito em férias com Acesso Condicional e Lifecycle Workflows · Guias · André Ferreira">
+<meta property="og:description" content="Guia prático em português para manter o colaborador em férias com acesso a uma única aplicação no Microsoft Entra ID: por que a conta desabilitada não serve, grupo estático gerido por Lifecycle Workflows, política de bloqueio, reconciliação e testes.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/guias/acesso-restrito-ferias/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/guias/acesso-restrito-ferias/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../assets/site.css?v=20261030d">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../../#projetos">Projetos</a><a href="../../artigos/">Artigos</a><a href="../" aria-current="page">Guias</a><a href="../../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<style>
+.guide-wrap{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:48px;padding-bottom:clamp(48px,7vw,80px)}
+.gtoc{position:sticky;top:20px;align-self:start;font-size:.88rem;border-left:2px solid var(--line);padding-left:16px}
+.gtoc ol{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}
+.gtoc a{color:var(--muted);text-decoration:none}
+.gtoc a:hover,.gtoc a.on{color:var(--accent)}
+.gbody{min-width:0;max-width:78ch}
+.gbody h2{font-size:clamp(1.45rem,2.8vw,1.85rem);font-weight:800;margin:56px 0 14px;display:flex;gap:12px;align-items:baseline}
+.gbody h2 .n{font-family:var(--mono);font-size:.8rem;color:var(--mark);font-weight:500;letter-spacing:.06em}
+.gbody h3{font-size:1.12rem;font-weight:700;margin:28px 0 10px}
+.gbody p{margin:0 0 14px}
+.gbody ul,.gbody ol{margin:0 0 16px;padding-left:22px}
+.gbody li{margin-bottom:7px}
+.gbody li::marker{color:var(--mark)}
+.mpath{display:inline-flex;flex-wrap:wrap;align-items:center;gap:4px;font-family:var(--mono);font-size:.82rem;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 8px;vertical-align:1px}
+.mpath b{font-weight:500}
+.mpath i{font-style:normal;color:var(--mark)}
+code{font-family:var(--mono);font-size:.86em;background:var(--panel);border-radius:4px;padding:1px 5px}
+.call{border-left:3px solid var(--accent);background:var(--mark-soft);border-radius:0 8px 8px 0;padding:14px 18px;margin:18px 0}
+.call.warn{border-color:var(--mark);background:#fff0e6}
+.call.ok{border-color:var(--sage);background:var(--accent-soft)}
+.call b.t{display:block;margin-bottom:4px}
+.call p:last-child,.call ul:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin:12px 0 22px}
+.tbl table{border-collapse:collapse;width:100%;font-size:.93rem}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.steps{list-style:none;padding:0!important;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding-left:46px;margin-bottom:18px}
+.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.9rem}
+.steps>li>b:first-child{display:block}
+.led{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px;vertical-align:-1px;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+.diagram{background:var(--panel);border-radius:12px;padding:18px;margin:16px 0 22px}
+.diagram svg{display:block;width:100%;height:auto}
+.intro-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.checklist{list-style:none;padding:0!important;display:grid;gap:6px}
+.checklist li{margin:0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border-radius:8px;padding:9px 12px;cursor:pointer}
+.checklist input{margin-top:5px;accent-color:var(--mark)}
+.checklist input:checked+span{color:var(--muted);text-decoration:line-through}
+.ck-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 14px;font-size:.92rem;color:var(--muted)}
+.ck-bar button{font:inherit;font-size:.86rem;border:1px solid var(--line);background:var(--card);border-radius:6px;padding:4px 10px;cursor:pointer}
+@media (max-width:900px){.guide-wrap{grid-template-columns:minmax(0,1fr)}.gtoc{display:none}}
+@media print{.gtoc,.ck-bar button{display:none}.guide-wrap{grid-template-columns:1fr}.gbody h2{break-after:avoid}.tbl,.call{break-inside:avoid}}
+
+
+.diagram{background:#fff;border:1px solid var(--line)}
+.diagram figcaption{font-size:.82rem;color:var(--muted);margin-top:8px}
+.qa{border:1px solid var(--line);border-radius:8px;margin:0 0 8px;background:var(--card)}
+.qa summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::before{content:"+";font-family:var(--mono);color:var(--mark);width:12px;flex:none}
+.qa[open] summary::before{content:"\2212"}
+.qa div{padding:0 14px 12px 36px}
+.qa div p:last-child{margin-bottom:0}
+pre.cli{font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:12px 0 20px}
+pre.cli .c{color:#cfe8d4}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.kv div{background:var(--panel);border-radius:10px;padding:12px 14px}
+.kv b{display:block;font-family:var(--display);font-stretch:112%;font-size:1.25rem}
+.kv span{font-size:.84rem;color:var(--muted)}
+
+</style>
+<div class="ph" style="padding-bottom:12px">
+<p class="crumb"><a href="../../">Início</a> / <a href="../">Guias</a> / <a href="../#seguranca">Segurança</a> / Acesso restrito em férias</p>
+<span class="chip">Segurança</span> <span class="chip m">Nível Sênior</span>
+<h1 style="margin-top:12px">Acesso restrito em férias: Acesso Condicional + Lifecycle Workflows</h1>
+<p class="sub">Como deixar o colaborador em férias entrar em uma única aplicação e bloquear todo o resto, sem grupo dinâmico, com associação automática pelo atributo que vem do RH.</p>
+<div class="intro-meta"><span class="chip m">Microsoft Entra ID</span><span class="chip m">Acesso Condicional</span><span class="chip m">Lifecycle Workflows</span><span class="chip m">Joiner-Mover-Leaver</span></div>
+<span class="bar"></span>
+</div>
+
+<div class="guide-wrap">
+<article class="gbody">
+
+<h2 id="antes"><span class="n">00</span>Antes de começar</h2>
+<div class="kv"><div><b>Sênior</b><span>nível</span></div><div><b>1 a 2 dias</b><span>de laboratório</span></div><div><b>ID Governance</b><span>+ Entra ID P1</span></div><div><b>2 workflows</b><span>+ 2 políticas</span></div></div>
+<p>Pedido comum do negócio: "a conta de quem está de férias fica bloqueada, mas essa pessoa precisa continuar acessando o app X (holerite, benefícios, escala)". A primeira ideia é liberar uma exceção no Acesso Condicional para a conta bloqueada. Não funciona, e entender o porquê define todo o desenho.</p>
+<h2 id="problema"><span class="n">01</span>Por que não dá para liberar uma conta desabilitada</h2>
+<ul><li>Conta com <code>accountEnabled = false</code> não recebe token para nenhuma aplicação integrada ao Entra ID. O login falha com <code>AADSTS50057 – UserDisabled</code>.</li><li>Em contas sincronizadas, esse estado vem do Active Directory: desabilitou no AD, desabilita no Entra no próximo ciclo do Connect Sync.</li><li>O Acesso Condicional é avaliado <b>depois</b> do primeiro fator. A conta desabilitada nem chega lá.</li><li>O Acesso Condicional só <b>restringe</b> (bloqueia ou exige controles). Não existe controle que conceda acesso negado pelo diretório.</li></ul>
+<div class="call warn"><b class="t">Conclusão</b><p>Para liberar um app nas férias, a conta precisa ficar <b>habilitada</b>. O controle passa a ser: conta ativa + bloqueio de todos os recursos, exceto o app autorizado.</p></div>
+
+<h2 id="desenho"><span class="n">02</span>Desenho da solução</h2>
+<pre class="cli">RH (situação = férias)
+  → provisionamento RH → AD: conta HABILITADA + atributo de situação com o código de férias
+  → Entra Connect Sync: atributo publicado como extensão de diretório
+  → LCW "Entrada em férias" (Attribute changes) → Add user to groups → GRUPO_FERIAS
+  → Acesso Condicional: GRUPO_FERIAS → bloqueia tudo, exceto o app autorizado
+Retorno:
+  → atributo muda → LCW "Retorno de férias" → Remove user from selected groups</pre>
+<p>Os demais afastamentos (licença, suspensão etc.) continuam desabilitando a conta normalmente. Só a férias muda de tratamento.</p>
+<div class="call"><b class="t">Por que Lifecycle Workflows e não grupo dinâmico</b><p>O grupo dinâmico resolveria a associação, mas há ambientes que não podem ou não querem usá-lo (cota de licença, política interna, rastreabilidade). Com workflows, cada entrada e saída do grupo fica registrada no histórico do workflow, com usuário, horário e tarefa.</p></div>
+
+<h2 id="prereq"><span class="n">03</span>Pré-requisitos</h2>
+<div class="tbl"><table><thead><tr><th>Item</th><th>Detalhe</th></tr></thead><tbody>
+<tr><td>Licenças</td><td>Microsoft Entra ID Governance (ou Entra Suite) para os usuários em escopo; Entra ID P1 para o Acesso Condicional</td></tr>
+<tr><td>Funções</td><td>Lifecycle Workflows Administrator, Attribute Assignment Administrator (trigger em atributo personalizado), Conditional Access Administrator, Groups Administrator</td></tr>
+<tr><td>Atributo de situação</td><td>Campo do RH que indica férias, gravado em um atributo do AD. <i>Exemplo:</i> <code>msDS-cloudExtensionAttribute4</code> ou <code>extensionAttribute1-15</code></td></tr>
+<tr><td>Código de férias</td><td>Valor exato que o RH grava para férias (a regra é sensível a maiúsculas)</td></tr>
+<tr><td>App autorizado</td><td>Integrado ao Entra ID por SAML ou OIDC. App que autentica direto no AD (LDAP/Kerberos) não é coberto</td></tr>
+<tr><td>Contas de emergência</td><td>Duas contas break-glass para excluir das políticas de bloqueio</td></tr>
+</tbody></table></div>
+
+<h2 id="passo"><span class="n">04</span>Passo a passo</h2>
+<ol class="steps">
+<li><b>Ajuste a regra de bloqueio do provisionamento</b>Na expressão de <code>accountDisabled</code> do app de provisionamento RH → AD, retire o código de férias da lista de situações que desabilitam a conta. Teste com <b>Provision on demand</b> e confirme no AD que a conta continua habilitada e o atributo tem o código de férias.</li>
+<li><b>Publique o atributo no Entra ID</b>Se for um <code>msDS-cloudExtensionAttribute*</code> ou outro atributo não sincronizado, habilite-o como <b>Directory extension</b> no assistente do Entra Connect (Personalizar opções de sincronização › Recursos opcionais). Ele aparece no Graph como <code>extension_&lt;appId&gt;_&lt;atributo&gt;</code>. Se usar <code>extensionAttribute1-15</code>, ele já sincroniza por padrão.</li>
+<li><b>Crie o grupo estático</b>Grupo de segurança, associação <b>Atribuída</b>, criado direto no Entra ID (cloud-only), sem membros. As tarefas de grupo do LCW não aceitam grupos dinâmicos, sincronizados do AD, habilitados para e-mail ou atribuíveis a funções.</li>
+<li><b>Crie o workflow de entrada</b>Modelo <b>Employee job profile change</b>, trigger <b>Attribute changes</b> no atributo de situação, escopo pelo código de férias, tarefa única <b>Add user to groups</b>. Detalhes na seção 05.</li>
+<li><b>Crie o workflow de retorno</b>Mesmo trigger, escopo "diferente do código de férias", tarefa única <b>Remove user from selected groups</b>.</li>
+<li><b>Habilite o agendamento</b>Workflow e agendamento (<code>isSchedulingEnabled</code>) habilitados. Mudança de atributo só é detectada em workflow agendado: habilitado sem agendamento não roda para ninguém.</li>
+<li><b>Crie as políticas de Acesso Condicional</b>Em modo somente relatório. Detalhes na seção 06.</li>
+<li><b>Faça a carga inicial</b>Quem já está de férias no dia da ativação não gera "mudança". Inclua essas pessoas por execução sob demanda ou pelo script da seção 07.</li>
+<li><b>Teste e ative</b>Valide a matriz da seção 08 e só então mude as políticas para <b>Ativado</b>.</li>
+</ol>
+
+<h2 id="workflows"><span class="n">05</span>Os dois workflows</h2>
+<div class="tbl"><table><thead><tr><th>Campo</th><th>Entrada em férias</th><th>Retorno de férias</th></tr></thead><tbody>
+<tr><td>Categoria / modelo</td><td>Mover · Employee job profile change</td><td>Mover · Employee job profile change</td></tr>
+<tr><td>Trigger</td><td>Attribute changes · atributo de situação</td><td>Attribute changes · atributo de situação</td></tr>
+<tr><td>Escopo (regra)</td><td><code>(atributo eq 'FERIAS')</code></td><td><code>(atributo ne 'FERIAS')</code></td></tr>
+<tr><td>Tarefa</td><td>Add user to groups → GRUPO_FERIAS</td><td>Remove user from selected groups → GRUPO_FERIAS</td></tr>
+<tr><td>taskDefinitionId</td><td><code>22085229-5809-45e8-97fd-270d28d66910</code></td><td><code>1953a66c-751c-45e5-8bfe-01462c70da3c</code></td></tr>
+</tbody></table></div>
+<p>Remova as tarefas que o modelo traz por padrão (e-mail ao gestor, remoção de pacotes de acesso). O workflow de retorno também dispara quando a pessoa sai de férias para outro afastamento: ela sai do grupo e a conta é desabilitada pela regra do provisionamento, que é o comportamento esperado.</p>
+<h3>Workflow de entrada via Microsoft Graph</h3>
+<pre class="cli">POST https://graph.microsoft.com/v1.0/identityGovernance/lifecycleWorkflows/workflows
+{
+  "category": "mover",
+  "displayName": "Mover - Entrada em Ferias - Acesso Restrito",
+  "isEnabled": true,
+  "isSchedulingEnabled": true,
+  "executionConditions": {
+    "@odata.type": "#microsoft.graph.identityGovernance.triggerAndScopeBasedConditions",
+    "scope": {
+      "@odata.type": "#microsoft.graph.identityGovernance.ruleBasedSubjectSet",
+      "rule": "(extension_&lt;appId&gt;_situacao eq 'FERIAS')"
+    },
+    "trigger": {
+      "@odata.type": "#microsoft.graph.identityGovernance.attributeChangeTrigger",
+      "triggerAttributes": [ { "name": "extension_&lt;appId&gt;_situacao" } ]
+    }
+  },
+  "tasks": [{
+    "taskDefinitionId": "22085229-5809-45e8-97fd-270d28d66910",
+    "displayName": "Add user to GRUPO_FERIAS",
+    "isEnabled": true,
+    "arguments": [ { "name": "groupID", "value": "&lt;objectId do grupo&gt;" } ]
+  }]
+}</pre>
+<p>Para o retorno, troque a regra para <code>ne</code>, o <code>taskDefinitionId</code> para <code>1953a66c-…</code> e o nome da tarefa.</p>
+
+<h2 id="ca"><span class="n">06</span>As políticas de Acesso Condicional</h2>
+<div class="tbl"><table><thead><tr><th>Campo</th><th>Política principal</th><th>Política complementar</th></tr></thead><tbody>
+<tr><td>Nome</td><td><code>CA-BLOCK-Ferias-ExcetoAppAutorizado</code></td><td><code>CA-MFA-Ferias-AppAutorizado</code></td></tr>
+<tr><td>Usuários</td><td>Incluir GRUPO_FERIAS · Excluir break-glass</td><td>Incluir GRUPO_FERIAS · Excluir break-glass</td></tr>
+<tr><td>Recursos</td><td>Incluir <b>All resources</b> · Excluir o app autorizado</td><td>Incluir o app autorizado</td></tr>
+<tr><td>Controle</td><td>Bloquear acesso</td><td>Exigir MFA (ou força de autenticação)</td></tr>
+<tr><td>Estado inicial</td><td>Somente relatório</td><td>Somente relatório</td></tr>
+</tbody></table></div>
+<div class="call warn"><b class="t">Bloqueio + All resources pede cuidado</b><p>O app autorizado pode depender de outros recursos (Microsoft Graph <code>User.Read</code>, APIs próprias). Teste o login completo em modo somente relatório e veja nos logs de entrada qual recurso foi avaliado antes de ativar.</p></div>
+<p>A política de MFA existe porque a conta fica habilitada com o dono ausente: é exatamente o tipo de conta que um atacante usaria sem ninguém perceber.</p>
+
+<h2 id="reconciliacao"><span class="n">07</span>Carga inicial e reconciliação</h2>
+<p>Script que compara quem está de férias com quem está no grupo. Sem <code>-Aplicar</code>, só mostra a diferença.</p>
+<pre class="cli">param(
+  [Parameter(Mandatory)] [string]$GroupId,
+  [Parameter(Mandatory)] [string]$CodigoFerias,
+  [Parameter(Mandatory)] [string]$ExtAttr,   <span class="c"># extension_&lt;appIdSemHifen&gt;_situacao</span>
+  [switch]$Aplicar
+)
+Connect-MgGraph -Scopes "User.Read.All","GroupMember.ReadWrite.All" -NoWelcome
+
+$emFerias = Get-MgUser -All -Filter "$ExtAttr eq '$CodigoFerias' and accountEnabled eq true" `
+  -ConsistencyLevel eventual -CountVariable total -Property Id,UserPrincipalName
+$membros  = Get-MgGroupMember -GroupId $GroupId -All
+
+$idsF = @($emFerias.Id); $idsM = @($membros.Id)
+$incluir = $idsF | Where-Object { $_ -notin $idsM }
+$remover = $idsM | Where-Object { $_ -notin $idsF }
+"Em férias: {0} | Membros: {1} | Incluir: {2} | Remover: {3}" -f $idsF.Count,$idsM.Count,@($incluir).Count,@($remover).Count
+
+if ($Aplicar) {
+  $incluir | ForEach-Object { New-MgGroupMember -GroupId $GroupId -DirectoryObjectId $_ }
+  $remover | ForEach-Object { Remove-MgGroupMemberDirectoryObjectByRef -GroupId $GroupId -DirectoryObjectId $_ }
+}</pre>
+<p>Rode antes da ativação (modo aplicar) e depois semanalmente (modo relatório). Divergência diferente de zero indica falha de workflow para investigar no histórico.</p>
+
+<h2 id="testes"><span class="n">08</span>Matriz de testes</h2>
+<div class="tbl"><table><thead><tr><th>#</th><th>Cenário</th><th>Esperado</th></tr></thead><tbody>
+<tr><td>1</td><td>Situação muda para férias no RH</td><td>Conta AD habilitada; atributo com o código de férias</td></tr>
+<tr><td>2</td><td>Ciclo do Connect Sync</td><td>Extensão com o valor no Graph</td></tr>
+<tr><td>3</td><td>Execução agendada do workflow de entrada</td><td>Tarefa concluída; usuário no grupo</td></tr>
+<tr><td>4</td><td>Login no app autorizado</td><td>Acesso com MFA</td></tr>
+<tr><td>5</td><td>Login no Outlook, Teams, portal</td><td>Bloqueado (relatório: falha)</td></tr>
+<tr><td>6</td><td>What If com usuário em férias</td><td>Política de bloqueio aplicada, exceto no app autorizado</td></tr>
+<tr><td>7</td><td>Retorno ao trabalho</td><td>Removido do grupo; acesso normal</td></tr>
+<tr><td>8</td><td>Férias → outro afastamento</td><td>Removido do grupo; conta desabilitada</td></tr>
+<tr><td>9</td><td>Conta de emergência</td><td>Não afetada</td></tr>
+<tr><td>10</td><td>Script de reconciliação</td><td>Divergência zero</td></tr>
+</tbody></table></div>
+
+<h2 id="limites"><span class="n">09</span>Limitações e erros comuns</h2>
+<ul>
+<li><b>Recursos locais não são cobertos.</b> Com a conta habilitada, logon em estação do domínio, VPN via RADIUS/LDAP, compartilhamentos e apps Kerberos continuam funcionando. Use um grupo equivalente no AD com GPO de negação de logon e regra de negação na VPN.</li>
+<li><b>Não é imediato.</b> Some o ciclo do provisionamento, o Connect Sync, até 4 horas de propagação de atributos personalizados para o LCW e o intervalo de agendamento do workflow (configurável de 1 a 24 h). Tokens já emitidos valem até expirar.</li>
+<li><b>Carga inicial esquecida.</b> Quem já estava de férias na ativação não entra no grupo sozinho.</li>
+<li><b>Grupo errado.</b> Grupo dinâmico ou sincronizado do AD faz a tarefa do workflow falhar.</li>
+<li><b>Workflow sem agendamento.</b> Fica "habilitado" e nunca processa ninguém.</li>
+<li><b>Regra case-sensitive.</b> "Ferias" e "FERIAS" são valores diferentes no escopo.</li>
+<li><b>Exceção não formalizada.</b> Se a norma diz "afastado = conta desabilitada", registre que férias passa a ser "conta habilitada com acesso restrito".</li>
+</ul>
+
+<h2 id="checklist"><span class="n">10</span>Checklist</h2>
+<div class="ck-bar"><span id="ck-count">0 concluídos</span><button type="button" id="ck-reset">Limpar marcações</button></div>
+<h3>Preparação</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c1"><span>Código de férias confirmado com o RH</span></label></li><li><label><input type="checkbox" data-k="c2"><span>Férias removida da regra de desabilitação da conta</span></label></li><li><label><input type="checkbox" data-k="c3"><span>Atributo de situação visível no Graph</span></label></li><li><label><input type="checkbox" data-k="c4"><span>Grupo estático cloud-only criado</span></label></li></ul>
+<h3>Automação e políticas</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c5"><span>Workflow de entrada com agendamento habilitado</span></label></li><li><label><input type="checkbox" data-k="c6"><span>Workflow de retorno com agendamento habilitado</span></label></li><li><label><input type="checkbox" data-k="c7"><span>Políticas de bloqueio e MFA em somente relatório</span></label></li><li><label><input type="checkbox" data-k="c8"><span>Contas de emergência excluídas</span></label></li></ul>
+<h3>Ativação</h3><ul class="checklist"><li><label><input type="checkbox" data-k="c9"><span>Carga inicial feita e reconciliação com divergência zero</span></label></li><li><label><input type="checkbox" data-k="c10"><span>Matriz de testes aprovada</span></label></li><li><label><input type="checkbox" data-k="c11"><span>Controle complementar para recursos locais definido</span></label></li><li><label><input type="checkbox" data-k="c12"><span>Políticas ativadas e reconciliação semanal agendada</span></label></li></ul>
+
+<h2 id="fontes"><span class="n">11</span>Fontes para aprofundar</h2>
+<ul><li><a href="https://learn.microsoft.com/pt-br/troubleshoot/entra/entra-id/app-integration/error-code-aadsts50057-user-account-is-disabled" target="_blank" rel="noopener">Erro AADSTS50057: conta de usuário desabilitada</a></li><li><a href="https://learn.microsoft.com/pt-br/entra/identity/conditional-access/policy-block-example" target="_blank" rel="noopener">Exemplo de política de bloqueio de acesso</a></li><li><a href="https://learn.microsoft.com/pt-br/entra/identity/conditional-access/plan-conditional-access" target="_blank" rel="noopener">Planejar uma implantação de Acesso Condicional</a></li><li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/workflow-custom-triggers" target="_blank" rel="noopener">Gatilhos por atributo personalizado no Lifecycle Workflows</a></li><li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/lifecycle-workflow-execution-conditions" target="_blank" rel="noopener">Condições de execução e agendamento</a></li><li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/lifecycle-workflow-tasks" target="_blank" rel="noopener">Tarefas internas do Lifecycle Workflows</a></li><li><a href="https://learn.microsoft.com/pt-br/entra/id-governance/tutorial-mover-custom-workflow-portal" target="_blank" rel="noopener">Tutorial: automatizar tarefas de mover</a></li></ul>
+<div class="call ok"><b class="t">Quer um guia sobre outro tema?</b><p>Faça um <a href="../pedidos/">pedido de guia</a>: os temas mais pedidos viram novos guias.</p></div><div class="call"><p>© 2026 André Ferreira · Guia sob licença <a href="https://creativecommons.org/licenses/by-nc/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-NC 4.0</a>. Material independente, escrito com palavras próprias a partir de documentação pública; não é material oficial de nenhum fornecedor. Microsoft e Entra são marcas da Microsoft Corporation. Fornecido sem garantia: valide em laboratório antes de aplicar em produção. Consultado em novembro de 2026.</p></div>
+</article>
+
+<aside class="gtoc" aria-label="Nesta página"><span class="label">Nesta página</span><ol>
+<li><a href="#antes">00 · Antes de começar</a></li><li><a href="#problema">01 · O problema</a></li><li><a href="#desenho">02 · Desenho</a></li><li><a href="#prereq">03 · Pré-requisitos</a></li><li><a href="#passo">04 · Passo a passo</a></li><li><a href="#workflows">05 · Workflows</a></li><li><a href="#ca">06 · Acesso Condicional</a></li><li><a href="#reconciliacao">07 · Reconciliação</a></li><li><a href="#testes">08 · Testes</a></li><li><a href="#limites">09 · Limitações</a></li><li><a href="#checklist">10 · Checklist</a></li><li><a href="#fontes">11 · Fontes</a></li>
+</ol></aside>
+</div>
+<script>
+(function(){
+  var KEY='acesso-restrito-ferias-checklist', st={};
+  try{st=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=document.querySelectorAll('.checklist input');
+  function upd(){var n=0;boxes.forEach(function(b){if(b.checked)n++});var c=document.getElementById('ck-count');if(c)c.textContent=n+' de '+boxes.length+' concluídos';}
+  boxes.forEach(function(b){b.checked=!!st[b.dataset.k];b.addEventListener('change',function(){st[b.dataset.k]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}upd();});});
+  var r=document.getElementById('ck-reset');if(r)r.addEventListener('click',function(){boxes.forEach(function(b){b.checked=false});st={};try{localStorage.removeItem(KEY)}catch(e){}upd();});
+  upd();
+  var links=document.querySelectorAll('.gtoc a'), secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'0px 0px -70% 0px'});secs.forEach(function(s){s&&io.observe(s)});}
+})();
+</script>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../../">Início</a><a href="../../artigos/">Artigos</a><a href="../">Guias</a><a href="../../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Guias sob licença CC BY-NC 4.0</small>
+</footer>
+</div>
+</body>
+</html>
