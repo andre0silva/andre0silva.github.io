@@ -63,8 +63,19 @@
 .tbl th{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
 .tbl tr:last-child td{border-bottom:0}
 .tbl .sub2{display:block;color:var(--muted);font-size:.8rem}
-.how{background:var(--panel);border-radius:12px;padding:18px 22px;margin-bottom:clamp(48px,7vw,80px);font-size:.93rem;color:var(--muted)}
-.how p{margin:0 0 8px}.how p:last-child{margin:0}
+.how{margin:0 0 clamp(48px,7vw,80px);font-size:.86rem;color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:4px 0}
+.fact{background:var(--panel);border-radius:8px;padding:10px 12px}
+.fact .label{display:block;font-size:.66rem}
+.fact b{font-size:.98rem;font-weight:600}
+.lead2{margin:0;font-size:1rem}
+.st{margin:0;font-size:.95rem;color:var(--muted);border-left:3px solid var(--mark);padding-left:12px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tags .chip{font-size:.68rem}
+.inc dl{margin:10px 0 0;display:grid;gap:10px}
+.inc dt{font-weight:600;font-size:.92rem}
+.inc dd{margin:2px 0 0;font-size:.92rem;color:var(--muted)}
+.orig{font-size:.78rem;color:var(--muted);font-style:italic}
 .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:22px}
 .toolbar .filters{margin:0}
 .toolbar button.reload{margin-left:auto;font:inherit;font-size:.88rem;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:6px;padding:6px 14px;cursor:pointer}
@@ -85,7 +96,7 @@
 <div class="ph">
 <p class="crumb"><a href="../">Início</a> / Status</p>
 <h1>Status de serviços</h1>
-<p class="sub">Status público dos serviços de cloud e SaaS que acompanho, lido dos feeds oficiais de cada fornecedor e atualizado automaticamente.</p>
+<p class="sub">Saúde dos serviços de cloud que acompanho, direto das fontes oficiais.</p>
 <span class="bar"></span>
 </div>
 
@@ -97,8 +108,8 @@
 
 <div class="kpis">
   <div class="kpi"><div class="n" id="k-active">–</div><div class="l">Incidentes ativos</div></div>
-  <div class="kpi"><div class="n" id="k-svc">–</div><div class="l">Serviços monitorados</div></div>
-  <div class="kpi"><div class="n" id="k-down">–</div><div class="l">Feeds sem resposta</div></div>
+  <div class="kpi"><div class="n" id="k-aff">–</div><div class="l">Serviços afetados</div></div>
+  <div class="kpi"><div class="n" id="k-svc">–</div><div class="l">Fontes monitoradas</div></div>
   <div class="kpi"><div class="n" id="k-hist">–</div><div class="l">Incidentes em 90 dias</div></div>
 </div>
 
@@ -107,19 +118,16 @@
   <button type="button" class="reload" id="reload"><svg class="i" style="width:15px;height:15px;vertical-align:-2px"><use href="#i-refresh"/></svg> Atualizar</button>
 </div>
 
-<div class="sec"><h2>Serviços</h2></div>
-<div class="svcs" id="svcs"></div>
-
 <div class="sec"><h2>Incidentes ativos</h2><span class="label" id="inc-count"></span></div>
 <div id="incs"></div>
+
+<div class="sec"><h2>Fontes</h2></div>
+<div class="svcs" id="svcs"></div>
 
 <div class="sec"><h2>Histórico</h2><span class="label">últimos 90 dias</span></div>
 <div id="hist"></div>
 
-<div class="how">
-  <p><strong>Como funciona.</strong> Um GitHub Actions agendado lê os feeds RSS/Atom públicos de cada fornecedor a cada ~10 minutos e publica um JSON que esta página consome. O histórico é montado pelo próprio coletor, porque os feeds mostram só o que está ativo.</p>
-  <p>O atraso pode chegar a 15–30 minutos em relação à página oficial. Para decisão operacional, confirme sempre no link oficial de cada serviço. Status específico de um tenant (Service Health do Microsoft 365 Admin Center) não aparece aqui.</p>
-</div>
+<p class="how">Atualização automática a cada ~10 min a partir dos feeds públicos oficiais. Pode haver atraso de até 30 min; para decisões, confirme no status oficial. Não inclui alertas específicos de tenant.</p>
 </main>
 <footer class="in foot">
   <a class="logo" href="../" aria-label="Início">A<span>/</span>F</a>
@@ -133,7 +141,7 @@
   var DATA_URL = 'https://raw.githubusercontent.com/andre0silva/andre0silva.github.io/status-data/status.json';
   var POLL_MS = 120000, STALE_MIN = 45;
   var LBL = {ok:'Operacional', warn:'Degradação', crit:'Interrupção', info:'Informativo', unknown:'Sem dados'};
-  var OVERALL = {ok:'Todos os serviços monitorados operacionais', warn:'Há serviços com degradação ou investigação em andamento', crit:'Há serviços com interrupção em andamento', unknown:'Status indisponível'};
+  var OVERALL = {ok:'Todos os serviços operacionais', warn:'Degradação em andamento', crit:'Interrupção em andamento', unknown:'Status indisponível'};
   var state = {data:null, cat:'*'};
   try { state.cat = localStorage.getItem('status.cat') || '*'; } catch (e) {}
 
@@ -200,17 +208,18 @@
     if (D.counts && D.counts.sourcesDown === D.counts.sources) sev = 'unknown';
     $('banner').className = 'banner ' + sev;
     $('overall').textContent = OVERALL[sev] || OVERALL.unknown;
-    $('when').textContent = 'Última coleta: ' + fmt(D.generatedAt) + ' (' + ago(D.generatedAt) + ')';
+    $('when').textContent = 'Atualizado ' + ago(D.generatedAt) + ' · ' + fmt(D.generatedAt);
     var age = (Date.now() - (d(D.generatedAt) || 0)) / 60000;
     var st = $('stale');
-    if (age > STALE_MIN) { st.hidden = false; st.textContent = 'Os dados estão desatualizados (' + ago(D.generatedAt) + '). O coletor pode estar atrasado ou pausado; confira o status oficial.'; }
+    if (age > STALE_MIN) { st.hidden = false; st.textContent = 'Dados desatualizados (' + ago(D.generatedAt) + '). Confira o status oficial.'; }
     else st.hidden = true;
   }
 
   function renderKpis(){
     var D = state.data, srcs = (D.sources || []).filter(function(s){ return inCat(s.id); });
     $('k-svc').textContent = srcs.length;
-    $('k-down').textContent = srcs.filter(function(s){ return !s.ok; }).length;
+    var aff = {}; srcs.forEach(function(s){ (s.active || []).forEach(function(a){ ((a.summary && a.summary.affected) || []).forEach(function(x){ aff[x.service] = 1; }); }); });
+    $('k-aff').textContent = Object.keys(aff).length;
     $('k-active').textContent = srcs.reduce(function(n, s){ return n + (s.active || []).length; }, 0);
     $('k-hist').textContent = (D.history || []).filter(function(h){ return inCat(h.source); }).length;
   }
@@ -222,13 +231,15 @@
       var n = (s.active || []).length;
       box.appendChild(el('div', {cls:'svc ' + sev}, [
         el('div', {cls:'row'}, [el('h3', {text:s.name}), pill(sev)]),
-        el('div', {cls:'row'}, [el('span', {cls:'chip', text:s.category}), el('span', {cls:'meta', text: n ? n + (n > 1 ? ' incidentes ativos' : ' incidente ativo') : 'Sem incidentes'})]),
-        el('div', {cls:'meta', text:'Feed atualizado: ' + fmt(s.feedUpdated)}),
-        s.ok ? null : el('div', {cls:'err', text:'Feed sem resposta na última coleta' + (s.lastSuccess ? ' · último sucesso ' + ago(s.lastSuccess) : '')}),
+        el('div', {cls:'row'}, [el('span', {cls:'chip', text:s.category}), el('span', {cls:'meta', text: n ? n + (n > 1 ? ' incidentes' : ' incidente') : 'Sem incidentes'})]),
+        s.ok ? null : el('div', {cls:'err', text:'Fonte sem resposta' + (s.lastSuccess ? ' (último dado ' + ago(s.lastSuccess) + ')' : '')}),
         extLink(s.link, 'Status oficial')
       ]));
     });
   }
+
+  function fact(label, value){ return el('div', {cls:'fact'}, [el('span', {cls:'label', text:label}), el('b', {text:value || '—'})]); }
+  function genericTitle(src, sev){ return src.name + ': ' + ({crit:'interrupção de serviço', warn:'degradação de serviço', ok:'serviço restaurado'}[sev] || 'aviso do fornecedor'); }
 
   function renderIncidents(){
     var box = $('incs'); box.textContent = '';
@@ -238,24 +249,38 @@
       (s.active || []).forEach(function(a){ list.push({s:s, a:a}); });
     });
     $('inc-count').textContent = list.length ? list.length + ' em andamento' : '';
-    if (!list.length) { box.appendChild(el('div', {cls:'empty', text:'Nenhum incidente publicado nos feeds monitorados.'})); return; }
+    if (!list.length) { box.appendChild(el('div', {cls:'empty', text:'Nenhum incidente em andamento.'})); return; }
     var hist = {}; (state.data.history || []).forEach(function(h){ hist[h.key] = h; });
     list.forEach(function(x){
-      var a = x.a, h = hist[a.key];
-      var det = null;
-      if (a.description) {
-        det = el('details', {}, [el('summary', {text:'Detalhes publicados pelo fornecedor'}), el('div', {cls:'desc', text:a.description})]);
-        if (list.length <= 2) det.open = true;
+      var a = x.a, s = x.s, h = hist[a.key], sm = a.summary || {affected:[]};
+      var aff = sm.affected || [];
+      var start = sm.start || (h && h.firstSeen) || a.published;
+      var title = sm.headlinePt || genericTitle(s, a.severity);
+      var lead = sm.introPt || sm.impactPt || (aff.length ? aff.length + ' serviços com impacto. Detalhes por serviço abaixo.' : null);
+
+      var impactDl = null;
+      if (aff.length) {
+        var translated = aff.some(function(f){ return f.impactPt; });
+        impactDl = el('details', {}, [
+          el('summary', {text:'Impacto por serviço (' + aff.length + ')' + (translated ? '' : ' · texto original em inglês')}),
+          el('dl', {}, [].concat.apply([], aff.map(function(f){ return [el('dt', {text:f.service}), el('dd', {text:f.impactPt || f.impact})]; })))
+        ]);
       }
+      var orig = a.description ? el('details', {}, [el('summary', {text:'Comunicado original do fornecedor (inglês)'}), el('div', {cls:'desc', text:a.description})]) : null;
+
       box.appendChild(el('article', {cls:'inc ' + (a.severity || 'unknown')}, [
-        el('div', {cls:'top2'}, [el('h3', {text:a.title}), pill(a.severity, a.statusLabel || LBL[a.severity])]),
-        el('div', {cls:'meta'}, [
-          el('span', {text:x.s.name}),
-          el('span', {text:'Publicado: ' + fmt(a.published) + ' (' + ago(a.published) + ')'}),
-          h ? el('span', {text:'Visto desde: ' + fmt(h.firstSeen) + ' · ' + dur(h.firstSeen)}) : null
+        el('div', {cls:'top2'}, [el('h3', {text:title}), pill(a.severity, LBL[a.severity])]),
+        el('div', {cls:'facts'}, [
+          fact(sm.start ? 'Início' : 'Acompanhado desde', fmt(start)),
+          fact(sm.start ? 'Duração' : 'Acompanhado há', dur(start)),
+          fact('Última atualização', ago(a.published)),
+          fact('Próxima atualização', sm.nextUpdate ? fmt(sm.nextUpdate) : null)
         ]),
-        det,
-        extLink(a.link || x.s.link, 'Abrir no status oficial')
+        lead ? el('p', {cls:'lead2', text:lead}) : null,
+        sm.currentStatusPt ? el('p', {cls:'st', text:sm.currentStatusPt}) : null,
+        aff.length ? el('div', {cls:'tags'}, aff.map(function(f){ return el('span', {cls:'chip m', text:f.service}); })) : null,
+        impactDl, orig,
+        extLink(a.link || s.link, 'Status oficial')
       ]));
     });
   }
@@ -263,19 +288,18 @@
   function renderHistory(){
     var box = $('hist'); box.textContent = '';
     var rows = (state.data.history || []).filter(function(h){ return inCat(h.source); });
-    if (!rows.length) { box.appendChild(el('div', {cls:'empty', text:'Ainda sem histórico. Ele é montado a partir da primeira coleta.'})); return; }
+    if (!rows.length) { box.appendChild(el('div', {cls:'empty', text:'Sem histórico ainda.'})); return; }
     var tb = el('tbody');
     rows.forEach(function(h){
       var active = !h.clearedAt;
       tb.appendChild(el('tr', {}, [
-        el('td', {}, [h.title || '—', el('span', {cls:'sub2', text:h.sourceName})]),
-        el('td', {}, [active ? pill(h.severity, 'Ativo') : pill('ok', 'Encerrado'), el('span', {cls:'sub2', text:'pior: ' + (LBL[h.worstSeverity] || '—')})]),
+        el('td', {}, [h.sourceName || '—', el('span', {cls:'sub2', text:LBL[h.worstSeverity] || ''})]),
+        el('td', {}, [active ? pill(h.severity, 'Ativo') : pill('ok', 'Encerrado')]),
         el('td', {text:fmt(h.firstSeen)}),
-        el('td', {text: active ? '—' : fmt(h.clearedAt)}),
         el('td', {text:dur(h.firstSeen, h.clearedAt)})
       ]));
     });
-    var thead = el('thead', {}, [el('tr', {}, ['Incidente', 'Situação', 'Detectado', 'Saiu do feed', 'Duração'].map(function(t){ return el('th', {text:t}); }))]);
+    var thead = el('thead', {}, [el('tr', {}, ['Serviço', 'Situação', 'Início', 'Duração'].map(function(t){ return el('th', {text:t}); }))]);
     box.appendChild(el('div', {cls:'tbl'}, [el('table', {}, [thead, tb])]));
   }
 
@@ -290,7 +314,7 @@
     $('when').textContent = msg;
     if (!state.data) {
       ['svcs', 'incs', 'hist'].forEach(function(id){ $(id).textContent = ''; });
-      $('incs').appendChild(el('div', {cls:'empty', text:'Não foi possível carregar os dados agora. Tente novamente em alguns minutos.'}));
+      $('incs').appendChild(el('div', {cls:'empty', text:'Dados indisponíveis no momento.'}));
     }
   }
 
@@ -299,7 +323,7 @@
     fetch(DATA_URL + '?t=' + bust, {cache:'no-store'})
       .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
       .then(function(j){ state.data = j; render(); })
-      .catch(function(e){ fail('Falha ao carregar dados (' + e.message + ')'); });
+      .catch(function(e){ fail('Falha ao carregar (' + e.message + ')'); });
   }
 
   $('reload').addEventListener('click', load);

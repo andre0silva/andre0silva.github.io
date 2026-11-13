@@ -8,7 +8,9 @@ Uso: python3 collect.py --sources ../sources.json --previous status.json --out s
 Somente biblioteca padrão (roda no runner do GitHub Actions sem instalar nada).
 """
 import argparse
+import hashlib
 import html
+import os
 import json
 import re
 import sys
@@ -20,7 +22,7 @@ from email.utils import parsedate_to_datetime
 
 HISTORY_DAYS = 90
 HISTORY_MAX = 300
-DESC_MAX = 6000
+DESC_MAX = 20000
 UA = "andre0silva-status-collector/1.0 (+https://andre0silva.github.io/status/)"
 
 SEV_ORDER = {"crit": 0, "warn": 1, "info": 2, "ok": 3}
@@ -155,6 +157,129 @@ def parse_feed(raw):
     return feed_updated, items
 
 
+# ---------- Resumo executivo (formato dos comunicados do Microsoft 365) ----------
+LABELS = {
+    "title": r"title", "impact": r"user impact", "info": r"more info", "status": r"current status",
+    "scope": r"scope of impact", "cause": r"(?:preliminary )?root cause", "start": r"start time",
+    "end": r"end time", "next": r"next update(?: by)?",
+}
+LABEL_RE = re.compile(r"(?im)^\s*(" + "|".join(LABELS.values()) + r")\s*:\s*")
+MONTHS = {m: i for i, m in enumerate(["january", "february", "march", "april", "may", "june", "july",
+                                      "august", "september", "october", "november", "december"], 1)}
+
+
+def parse_human_date(s):
+    """'Friday, November 13, 2026, at 2:00 PM UTC' -> datetime UTC."""
+    if not s:
+        return None
+    m = re.search(r"([A-Za-z]+)\s+(\d{1,2}),?\s+(\d{4}),?\s*(?:at\s*)?(\d{1,2}):(\d{2})\s*(AM|PM)?\s*(UTC|GMT)?", s, re.I)
+    if not m or m.group(1).lower() not in MONTHS:
+        return None
+    h = int(m.group(4)) % 12 if m.group(6) else int(m.group(4))
+    if m.group(6) and m.group(6).upper() == "PM":
+        h += 12
+    try:
+        return datetime(int(m.group(3)), MONTHS[m.group(1).lower()], int(m.group(2)), h, int(m.group(5)), tzinfo=timezone.utc)
+    except ValueError:
+        return None
+
+
+def summarize(text):
+    if not text:
+        return None
+    parts, pos, cur = {}, 0, None
+    for m in LABEL_RE.finditer(text):
+        if cur:
+            parts[cur] = text[pos:m.start()].strip()
+        label = m.group(1).lower()
+        cur = next(k for k, v in LABELS.items() if re.fullmatch(v, label))
+        pos = m.end()
+    if cur:
+        parts[cur] = text[pos:].strip()
+    if not parts:
+        return None
+    affected = []
+    for m in re.finditer(r"(?m)^\s*-\s*([^:\n]{2,80}):\s*(.+)$", parts.get("info", "") + "\n" + parts.get("impact", "")):
+        affected.append({"service": m.group(1).strip(), "impact": m.group(2).strip()})
+    intro = re.split(r"\n\s*-\s", parts.get("info", ""), maxsplit=1)[0].strip()
+    status_first = re.split(r"\n\s*\n", parts.get("status", ""), maxsplit=1)[0].strip()
+    nxt = parse_human_date(parts.get("next"))
+    start = parse_human_date(parts.get("start"))
+    return {
+        "headline": parts.get("title") or "",
+        "intro": intro,
+        "impact": "" if affected and parts.get("impact", "").lstrip().startswith("-") else parts.get("impact", ""),
+        "affected": affected,
+        "currentStatus": status_first,
+        "scope": parts.get("scope", ""),
+        "rootCause": parts.get("cause", ""),
+        "start": iso(start),
+        "nextUpdate": iso(nxt),
+        "nextUpdateRaw": parts.get("next", "")[:120],
+    }
+
+
+# ---------- Tradução opcional (Azure AI Translator, tier gratuito F0) ----------
+class Translator:
+    def __init__(self, cache):
+        self.key = os.environ.get("TRANSLATOR_KEY", "").strip()
+        self.region = os.environ.get("TRANSLATOR_REGION", "").strip()
+        self.cache = dict(cache or {})
+        self.used = {}
+        self.error = None
+
+    @staticmethod
+    def h(t):
+        return hashlib.sha1(t.encode("utf-8")).hexdigest()[:16]
+
+    def run(self, texts):
+        texts = [t for t in dict.fromkeys(texts) if t and t.strip()]
+        todo = [t for t in texts if self.h(t) not in self.cache]
+        if todo and self.key:
+            try:
+                for i in range(0, len(todo), 50):
+                    chunk = todo[i:i + 50]
+                    body = json.dumps([{"Text": t} for t in chunk]).encode("utf-8")
+                    headers = {"Ocp-Apim-Subscription-Key": self.key, "Content-Type": "application/json"}
+                    if self.region:
+                        headers["Ocp-Apim-Subscription-Region"] = self.region
+                    req = urllib.request.Request(
+                        "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&from=en&to=pt-br",
+                        data=body, headers=headers, method="POST")
+                    with urllib.request.urlopen(req, timeout=30) as r:
+                        res = json.loads(r.read())
+                    for t, out in zip(chunk, res):
+                        self.cache[self.h(t)] = out["translations"][0]["text"]
+            except Exception as e:  # noqa: BLE001
+                self.error = f"{type(e).__name__}: {e}"[:200]
+        for t in texts:
+            if self.h(t) in self.cache:
+                self.used[self.h(t)] = self.cache[self.h(t)]
+
+    def get(self, t):
+        return self.used.get(self.h(t)) if t else None
+
+
+def translate_summaries(sources, tr):
+    texts = []
+    for s in sources:
+        for a in s.get("active", []):
+            sm = a.get("summary")
+            if sm:
+                texts += [sm["headline"], sm["intro"], sm["impact"], sm["currentStatus"], sm["scope"], sm["rootCause"]]
+                texts += [x["impact"] for x in sm["affected"]]
+    tr.run(texts)
+    for s in sources:
+        for a in s.get("active", []):
+            sm = a.get("summary")
+            if not sm:
+                continue
+            for k in ("headline", "intro", "impact", "currentStatus", "scope", "rootCause"):
+                sm[k + "Pt"] = tr.get(sm[k])
+            for x in sm["affected"]:
+                x["impactPt"] = tr.get(x["impact"])
+
+
 def collect_source(src, prev_src, checked):
     out = {
         "id": src["id"], "name": src["name"], "category": src.get("category", "Outros"),
@@ -189,6 +314,7 @@ def collect_source(src, prev_src, checked):
             "key": f'{src["id"]}:{key}', "guid": it["guid"], "title": it["title"] or src["name"],
             "link": it["link"] or out["link"], "status": it["status"], "statusLabel": status_label(it["status"]),
             "severity": sev, "published": iso(it["published"]), "description": it["description"],
+            "summary": summarize(it["description"]),
         })
     active.sort(key=lambda a: (SEV_ORDER.get(a["severity"], 9), a["published"] or ""))
     out.update({
@@ -250,6 +376,10 @@ def main():
     checked = now_utc().replace(microsecond=0)
     sources = [collect_source(s, prev_by_id.get(s["id"]), checked) for s in cfg["sources"]]
     history = update_history(prev.get("history"), sources, checked)
+    tr = Translator(prev.get("translations"))
+    translate_summaries(sources, tr)
+    if tr.error:
+        print("tradução:", tr.error)
 
     overall = worst([s["severity"] for s in sources if s["severity"] in SEV_ORDER])
     data = {
@@ -261,8 +391,10 @@ def main():
             "sourcesDown": sum(1 for s in sources if not s["ok"]),
             "active": sum(len(s["active"]) for s in sources),
         },
+        "translation": {"enabled": bool(tr.key), "error": tr.error},
         "sources": sources,
         "history": history,
+        "translations": tr.used,
     }
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=1)

@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           sparse-checkout: status
           fetch-depth: 1
@@ -43,6 +43,10 @@ jobs:
       - name: Coletar feeds
         id: collect
         continue-on-error: true
+        env:
+          # Opcional: Azure AI Translator (F0 gratuito). Sem os secrets, o painel mostra o texto original.
+          TRANSLATOR_KEY: ${{ secrets.TRANSLATOR_KEY }}
+          TRANSLATOR_REGION: ${{ secrets.TRANSLATOR_REGION }}
         run: python3 status/collector/collect.py --sources status/sources.json --previous prev.json --out status.json
 
       - name: Publicar na branch status-data
