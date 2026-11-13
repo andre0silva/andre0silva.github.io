@@ -1,0 +1,13 @@
+{
+  "_comment": "Fontes do painel /status/. Para adicionar um serviço, copie um bloco. mode=active: todo item do feed é incidente em andamento. mode=history: o feed lista eventos passados; o item conta como ativo se publicado há menos de activeHours e o texto não indicar resolução.",
+  "sources": [
+    {
+      "id": "m365",
+      "name": "Microsoft 365",
+      "category": "Microsoft",
+      "url": "https://status.cloud.microsoft/api/feed/mac",
+      "link": "https://status.cloud.microsoft/",
+      "mode": "active"
+    }
+  ]
+}

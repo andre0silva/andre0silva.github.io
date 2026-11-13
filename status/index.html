@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Status de serviços · André Ferreira</title>
+<meta name="description" content="Painel com o status público de serviços de cloud e SaaS (Microsoft 365 e outros), atualizado automaticamente a partir dos feeds oficiais.">
+<meta property="og:title" content="Status de serviços · André Ferreira">
+<meta property="og:description" content="Status público de serviços de cloud e SaaS, atualizado automaticamente a partir dos feeds oficiais.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://andre0silva.github.io/status/">
+<meta property="og:image" content="https://andre0silva.github.io/assets/andre.jpg">
+<link rel="canonical" href="https://andre0silva.github.io/status/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232d2a27'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-size='14' font-weight='800' fill='%23ffffff' text-anchor='middle'%3EAF%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/site.css?v=20261030d">
+<style>
+:root{--ok-fg:#3d5446;--ok-bg:#cfe8d4;--warn-fg:#7a4a00;--warn-bg:#ffe6b0;--crit-fg:#9a2116;--crit-bg:#ffd6cf;--unk-fg:#504e4b;--unk-bg:#ece6e2}
+.banner{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;border-radius:12px;padding:16px 20px;margin-bottom:22px;border-left:6px solid var(--sage);background:var(--panel)}
+.banner strong{font-family:var(--display);font-stretch:112%;font-size:1.2rem}
+.banner .when{margin-left:auto;color:var(--muted);font-size:.88rem}
+.banner.ok{border-left-color:var(--sage);background:#eef6ef}
+.banner.warn{border-left-color:#d99a1e;background:#fff4dc}
+.banner.crit{border-left-color:#c8372a;background:#ffece8}
+.banner.unknown{border-left-color:var(--muted)}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--sage);flex:none;box-shadow:0 0 0 4px rgba(95,110,100,.15)}
+.banner.warn .dot{background:#d99a1e;box-shadow:0 0 0 4px rgba(217,154,30,.2)}
+.banner.crit .dot{background:#c8372a;box-shadow:0 0 0 4px rgba(200,55,42,.2);animation:pulse 1.6s infinite}
+.banner.unknown .dot{background:var(--muted)}
+@keyframes pulse{50%{box-shadow:0 0 0 9px rgba(200,55,42,0)}}
+.stale{flex-basis:100%;font-size:.88rem;color:var(--warn-fg)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:30px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:16px 18px}
+.kpi .n{font-family:var(--display);font-stretch:112%;font-size:2rem;font-weight:800;line-height:1}
+.kpi .l{color:var(--muted);font-size:.86rem;margin-top:6px}
+.sec{margin:8px 0 14px;display:flex;align-items:baseline;gap:10px}
+.sec h2{font-size:1.25rem;font-weight:800}
+.sec .label{margin-left:auto}
+.pill{display:inline-block;font-family:var(--mono);font-size:.7rem;font-weight:500;padding:3px 10px;border-radius:999px;white-space:nowrap;background:var(--unk-bg);color:var(--unk-fg)}
+.pill.ok{background:var(--ok-bg);color:var(--ok-fg)}
+.pill.warn{background:var(--warn-bg);color:var(--warn-fg)}
+.pill.crit{background:var(--crit-bg);color:var(--crit-fg)}
+.svcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-bottom:34px}
+.svc{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--sage);border-radius:12px;box-shadow:var(--shadow);padding:16px 18px;display:grid;gap:8px}
+.svc.warn{border-top-color:#d99a1e}.svc.crit{border-top-color:#c8372a}.svc.unknown{border-top-color:var(--muted)}
+.svc h3{font-size:1.05rem;font-weight:700}
+.svc .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.svc .meta{font-size:.82rem;color:var(--muted)}
+.svc .err{font-size:.82rem;color:var(--crit-fg)}
+.svc a{font-size:.86rem;font-weight:600;text-decoration:none;display:inline-flex;gap:6px;align-items:center}
+.inc{background:var(--card);border:1px solid var(--line);border-left:5px solid #d99a1e;border-radius:12px;box-shadow:var(--shadow);padding:18px 20px;margin-bottom:14px;display:grid;gap:8px}
+.inc.crit{border-left-color:#c8372a}.inc.ok{border-left-color:var(--sage)}.inc.info,.inc.unknown{border-left-color:var(--muted)}
+.inc .top2{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.inc h3{font-size:1.1rem;font-weight:700;flex:1 1 280px}
+.inc .meta{font-size:.84rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 14px}
+.inc details summary{cursor:pointer;font-size:.88rem;color:var(--accent);font-weight:600}
+.inc .desc{white-space:pre-line;font-size:.94rem;color:var(--fg);background:var(--panel);border-radius:8px;padding:14px 16px;margin-top:10px;max-height:460px;overflow:auto}
+.inc a{font-size:.86rem;font-weight:600;text-decoration:none;display:inline-flex;gap:6px;align-items:center}
+.empty{background:var(--panel);border-radius:12px;padding:18px 20px;color:var(--muted);margin-bottom:34px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin-bottom:30px;background:var(--card)}
+.tbl table{border-collapse:collapse;width:100%;font-size:.92rem}
+.tbl th,.tbl td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--panel)}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .sub2{display:block;color:var(--muted);font-size:.8rem}
+.how{background:var(--panel);border-radius:12px;padding:18px 22px;margin-bottom:clamp(48px,7vw,80px);font-size:.93rem;color:var(--muted)}
+.how p{margin:0 0 8px}.how p:last-child{margin:0}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:22px}
+.toolbar .filters{margin:0}
+.toolbar button.reload{margin-left:auto;font:inherit;font-size:.88rem;border:1px solid var(--line);background:var(--card);color:var(--fg);border-radius:6px;padding:6px 14px;cursor:pointer}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.7M20 4v5h-5"/></symbol>
+</svg>
+<div class="frame">
+<header class="in top">
+  <a class="logo" href="../" aria-label="André Ferreira, início">A<span>/</span>F</a>
+  <nav aria-label="Seções"><a href="../#projetos">Projetos</a><a href="../artigos/">Artigos</a><a href="../guias/">Guias</a><a href="../status/" aria-current="page">Status</a><a href="../#contato">Contato</a></nav>
+</header>
+<main class="in">
+<div class="ph">
+<p class="crumb"><a href="../">Início</a> / Status</p>
+<h1>Status de serviços</h1>
+<p class="sub">Status público dos serviços de cloud e SaaS que acompanho, lido dos feeds oficiais de cada fornecedor e atualizado automaticamente.</p>
+<span class="bar"></span>
+</div>
+
+<div class="banner unknown" id="banner" role="status" aria-live="polite">
+  <span class="dot"></span><strong id="overall">Carregando…</strong>
+  <span class="when" id="when"></span>
+  <span class="stale" id="stale" hidden></span>
+</div>
+
+<div class="kpis">
+  <div class="kpi"><div class="n" id="k-active">–</div><div class="l">Incidentes ativos</div></div>
+  <div class="kpi"><div class="n" id="k-svc">–</div><div class="l">Serviços monitorados</div></div>
+  <div class="kpi"><div class="n" id="k-down">–</div><div class="l">Feeds sem resposta</div></div>
+  <div class="kpi"><div class="n" id="k-hist">–</div><div class="l">Incidentes em 90 dias</div></div>
+</div>
+
+<div class="toolbar">
+  <div class="filters" id="filters" role="group" aria-label="Filtrar por categoria"></div>
+  <button type="button" class="reload" id="reload"><svg class="i" style="width:15px;height:15px;vertical-align:-2px"><use href="#i-refresh"/></svg> Atualizar</button>
+</div>
+
+<div class="sec"><h2>Serviços</h2></div>
+<div class="svcs" id="svcs"></div>
+
+<div class="sec"><h2>Incidentes ativos</h2><span class="label" id="inc-count"></span></div>
+<div id="incs"></div>
+
+<div class="sec"><h2>Histórico</h2><span class="label">últimos 90 dias</span></div>
+<div id="hist"></div>
+
+<div class="how">
+  <p><strong>Como funciona.</strong> Um GitHub Actions agendado lê os feeds RSS/Atom públicos de cada fornecedor a cada ~10 minutos e publica um JSON que esta página consome. O histórico é montado pelo próprio coletor, porque os feeds mostram só o que está ativo.</p>
+  <p>O atraso pode chegar a 15–30 minutos em relação à página oficial. Para decisão operacional, confirme sempre no link oficial de cada serviço. Status específico de um tenant (Service Health do Microsoft 365 Admin Center) não aparece aqui.</p>
+</div>
+</main>
+<footer class="in foot">
+  <a class="logo" href="../" aria-label="Início">A<span>/</span>F</a>
+  <nav aria-label="Rodapé"><a href="../">Início</a><a href="../artigos/">Artigos</a><a href="../guias/">Guias</a><a href="../status/">Status</a><a href="../#contato">Contato</a><a href="https://www.linkedin.com/in/andreferreira-infrati/" target="_blank" rel="noopener">LinkedIn</a></nav>
+  <small>© 2026 André Ferreira · Dados dos feeds públicos oficiais de cada fornecedor</small>
+</footer>
+</div>
+<script>
+(function(){
+  'use strict';
+  var DATA_URL = 'https://raw.githubusercontent.com/andre0silva/andre0silva.github.io/status-data/status.json';
+  var POLL_MS = 120000, STALE_MIN = 45;
+  var LBL = {ok:'Operacional', warn:'Degradação', crit:'Interrupção', info:'Informativo', unknown:'Sem dados'};
+  var OVERALL = {ok:'Todos os serviços monitorados operacionais', warn:'Há serviços com degradação ou investigação em andamento', crit:'Há serviços com interrupção em andamento', unknown:'Status indisponível'};
+  var state = {data:null, cat:'*'};
+  try { state.cat = localStorage.getItem('status.cat') || '*'; } catch (e) {}
+
+  function $(id){ return document.getElementById(id); }
+  function el(tag, attrs, kids){
+    var n = document.createElement(tag);
+    if (attrs) for (var k in attrs) {
+      if (attrs[k] == null) continue;
+      if (k === 'text') n.textContent = attrs[k];
+      else if (k === 'cls') n.className = attrs[k];
+      else n.setAttribute(k, attrs[k]);
+    }
+    (kids || []).forEach(function(c){ if (c != null) n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+    return n;
+  }
+  function safeUrl(u){ return /^https?:\/\//i.test(u || '') ? u : null; }
+  function d(s){ var t = s ? new Date(s) : null; return t && !isNaN(t) ? t : null; }
+  function fmt(s){
+    var t = d(s); if (!t) return '—';
+    return t.toLocaleString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'});
+  }
+  function ago(s){
+    var t = d(s); if (!t) return '';
+    var m = Math.round((Date.now() - t) / 60000);
+    if (m < 1) return 'agora';
+    if (m < 60) return 'há ' + m + ' min';
+    var h = Math.round(m / 60); if (h < 48) return 'há ' + h + ' h';
+    return 'há ' + Math.round(h / 24) + ' dias';
+  }
+  function dur(a, b){
+    var x = d(a), y = d(b) || new Date(); if (!x) return '';
+    var m = Math.max(0, Math.round((y - x) / 60000));
+    if (m < 60) return m + ' min';
+    var h = Math.floor(m / 60); return h < 48 ? h + ' h ' + (m % 60) + ' min' : Math.round(h / 24) + ' dias';
+  }
+  function pill(sev, text){ return el('span', {cls:'pill ' + (sev || 'unknown'), text: text || LBL[sev] || LBL.unknown}); }
+  function extLink(href, text){
+    var u = safeUrl(href); if (!u) return null;
+    var a = el('a', {href:u, target:'_blank', rel:'noopener'}, [text + ' ']);
+    a.insertAdjacentHTML('beforeend', '<svg class="i" style="width:14px;height:14px"><use href="#i-ext"/></svg>');
+    return a;
+  }
+  function inCat(srcId){
+    if (state.cat === '*') return true;
+    var s = (state.data.sources || []).filter(function(x){ return x.id === srcId; })[0];
+    return s && s.category === state.cat;
+  }
+
+  function renderFilters(){
+    var cats = ['*'];
+    (state.data.sources || []).forEach(function(s){ if (cats.indexOf(s.category) < 0) cats.push(s.category); });
+    if (cats.indexOf(state.cat) < 0) state.cat = '*';
+    var f = $('filters'); f.textContent = '';
+    f.hidden = cats.length <= 2;
+    cats.forEach(function(c){
+      var b = el('button', {type:'button', 'aria-pressed': String(c === state.cat), text: c === '*' ? 'Todos' : c});
+      b.addEventListener('click', function(){ state.cat = c; try { localStorage.setItem('status.cat', c); } catch (e) {} render(); });
+      f.appendChild(b);
+    });
+  }
+
+  function renderBanner(){
+    var D = state.data, sev = D.overall || 'unknown';
+    if (D.counts && D.counts.sourcesDown === D.counts.sources) sev = 'unknown';
+    $('banner').className = 'banner ' + sev;
+    $('overall').textContent = OVERALL[sev] || OVERALL.unknown;
+    $('when').textContent = 'Última coleta: ' + fmt(D.generatedAt) + ' (' + ago(D.generatedAt) + ')';
+    var age = (Date.now() - (d(D.generatedAt) || 0)) / 60000;
+    var st = $('stale');
+    if (age > STALE_MIN) { st.hidden = false; st.textContent = 'Os dados estão desatualizados (' + ago(D.generatedAt) + '). O coletor pode estar atrasado ou pausado; confira o status oficial.'; }
+    else st.hidden = true;
+  }
+
+  function renderKpis(){
+    var D = state.data, srcs = (D.sources || []).filter(function(s){ return inCat(s.id); });
+    $('k-svc').textContent = srcs.length;
+    $('k-down').textContent = srcs.filter(function(s){ return !s.ok; }).length;
+    $('k-active').textContent = srcs.reduce(function(n, s){ return n + (s.active || []).length; }, 0);
+    $('k-hist').textContent = (D.history || []).filter(function(h){ return inCat(h.source); }).length;
+  }
+
+  function renderServices(){
+    var box = $('svcs'); box.textContent = '';
+    (state.data.sources || []).filter(function(s){ return inCat(s.id); }).forEach(function(s){
+      var sev = s.ok ? s.severity : (s.severity === 'unknown' ? 'unknown' : s.severity);
+      var n = (s.active || []).length;
+      box.appendChild(el('div', {cls:'svc ' + sev}, [
+        el('div', {cls:'row'}, [el('h3', {text:s.name}), pill(sev)]),
+        el('div', {cls:'row'}, [el('span', {cls:'chip', text:s.category}), el('span', {cls:'meta', text: n ? n + (n > 1 ? ' incidentes ativos' : ' incidente ativo') : 'Sem incidentes'})]),
+        el('div', {cls:'meta', text:'Feed atualizado: ' + fmt(s.feedUpdated)}),
+        s.ok ? null : el('div', {cls:'err', text:'Feed sem resposta na última coleta' + (s.lastSuccess ? ' · último sucesso ' + ago(s.lastSuccess) : '')}),
+        extLink(s.link, 'Status oficial')
+      ]));
+    });
+  }
+
+  function renderIncidents(){
+    var box = $('incs'); box.textContent = '';
+    var list = [];
+    (state.data.sources || []).forEach(function(s){
+      if (!inCat(s.id)) return;
+      (s.active || []).forEach(function(a){ list.push({s:s, a:a}); });
+    });
+    $('inc-count').textContent = list.length ? list.length + ' em andamento' : '';
+    if (!list.length) { box.appendChild(el('div', {cls:'empty', text:'Nenhum incidente publicado nos feeds monitorados.'})); return; }
+    var hist = {}; (state.data.history || []).forEach(function(h){ hist[h.key] = h; });
+    list.forEach(function(x){
+      var a = x.a, h = hist[a.key];
+      var det = null;
+      if (a.description) {
+        det = el('details', {}, [el('summary', {text:'Detalhes publicados pelo fornecedor'}), el('div', {cls:'desc', text:a.description})]);
+        if (list.length <= 2) det.open = true;
+      }
+      box.appendChild(el('article', {cls:'inc ' + (a.severity || 'unknown')}, [
+        el('div', {cls:'top2'}, [el('h3', {text:a.title}), pill(a.severity, a.statusLabel || LBL[a.severity])]),
+        el('div', {cls:'meta'}, [
+          el('span', {text:x.s.name}),
+          el('span', {text:'Publicado: ' + fmt(a.published) + ' (' + ago(a.published) + ')'}),
+          h ? el('span', {text:'Visto desde: ' + fmt(h.firstSeen) + ' · ' + dur(h.firstSeen)}) : null
+        ]),
+        det,
+        extLink(a.link || x.s.link, 'Abrir no status oficial')
+      ]));
+    });
+  }
+
+  function renderHistory(){
+    var box = $('hist'); box.textContent = '';
+    var rows = (state.data.history || []).filter(function(h){ return inCat(h.source); });
+    if (!rows.length) { box.appendChild(el('div', {cls:'empty', text:'Ainda sem histórico. Ele é montado a partir da primeira coleta.'})); return; }
+    var tb = el('tbody');
+    rows.forEach(function(h){
+      var active = !h.clearedAt;
+      tb.appendChild(el('tr', {}, [
+        el('td', {}, [h.title || '—', el('span', {cls:'sub2', text:h.sourceName})]),
+        el('td', {}, [active ? pill(h.severity, 'Ativo') : pill('ok', 'Encerrado'), el('span', {cls:'sub2', text:'pior: ' + (LBL[h.worstSeverity] || '—')})]),
+        el('td', {text:fmt(h.firstSeen)}),
+        el('td', {text: active ? '—' : fmt(h.clearedAt)}),
+        el('td', {text:dur(h.firstSeen, h.clearedAt)})
+      ]));
+    });
+    var thead = el('thead', {}, [el('tr', {}, ['Incidente', 'Situação', 'Detectado', 'Saiu do feed', 'Duração'].map(function(t){ return el('th', {text:t}); }))]);
+    box.appendChild(el('div', {cls:'tbl'}, [el('table', {}, [thead, tb])]));
+  }
+
+  function render(){
+    if (!state.data) return;
+    renderFilters(); renderBanner(); renderKpis(); renderServices(); renderIncidents(); renderHistory();
+  }
+
+  function fail(msg){
+    $('banner').className = 'banner unknown';
+    $('overall').textContent = OVERALL.unknown;
+    $('when').textContent = msg;
+    if (!state.data) {
+      ['svcs', 'incs', 'hist'].forEach(function(id){ $(id).textContent = ''; });
+      $('incs').appendChild(el('div', {cls:'empty', text:'Não foi possível carregar os dados agora. Tente novamente em alguns minutos.'}));
+    }
+  }
+
+  function load(){
+    var bust = Math.floor(Date.now() / 60000);
+    fetch(DATA_URL + '?t=' + bust, {cache:'no-store'})
+      .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(function(j){ state.data = j; render(); })
+      .catch(function(e){ fail('Falha ao carregar dados (' + e.message + ')'); });
+  }
+
+  $('reload').addEventListener('click', load);
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden) load(); });
+  load();
+  setInterval(function(){ if (!document.hidden) load(); }, POLL_MS);
+  setInterval(function(){ if (state.data) renderBanner(); }, 30000);
+})();
+</script>
+</body>
+</html>
