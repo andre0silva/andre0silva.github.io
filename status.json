@@ -1,0 +1,180 @@
+{
+ "schema": 1,
+ "generatedAt": "2026-11-13T12:16:49Z",
+ "overall": "warn",
+ "counts": {
+  "sources": 1,
+  "sourcesDown": 0,
+  "active": 1
+ },
+ "translation": {
+  "enabled": false,
+  "error": null
+ },
+ "sources": [
+  {
+   "id": "m365",
+   "name": "Microsoft 365",
+   "category": "Microsoft",
+   "link": "https://status.cloud.microsoft/",
+   "feed": "https://status.cloud.microsoft/api/feed/mac",
+   "mode": "active",
+   "checkedAt": "2026-11-13T12:16:49Z",
+   "ok": true,
+   "error": null,
+   "lastSuccess": "2026-11-13T12:16:49Z",
+   "feedUpdated": "2026-11-13T12:16:49Z",
+   "active": [
+    {
+     "key": "m365:85753d52-7358-41e9-bc7f-d8d36b56bef5",
+     "guid": "85753d52-7358-41e9-bc7f-d8d36b56bef5",
+     "title": "Microsoft Admin Center",
+     "link": "https://status.cloud.microsoft/",
+     "status": "ServiceDegradation",
+     "statusLabel": "Degradação",
+     "severity": "warn",
+     "published": "2026-11-13T12:00:37Z",
+     "description": "More info: Features of the Microsoft 365 services below that interact with Exchange Online and email services are impacted. Elements of those services that do not depend on interaction with Exchange Online remain functional.\n\n- Exchange Online: Users may be unable to access their mailbox using Outlook on the web, Outlook desktop (MAPI), Exchange ActiveSync (EAS), or REST-based connections, and email delivery may be delayed.\n\n- Microsoft 365 admin center: Admins may be unable to load some admin center pages.\n\n- Microsoft 365 apps: Users may be unable to view their recently used files.\n\n- Microsoft 365 Apps Admin Center: Multiple services including Cloud Update, Cloud Policy, and Inventory are affected.\n\n- Microsoft 365 Education: Features including Assignments, Reading Progress, and Speaker Progress may be impacted.\n\n- Microsoft Copilot 365: Users may be unable to load Copilot Chat or receive responses in the web and desktop apps, and Copilot experiences may be unable to access work data such as email, calendar, and files.\n\n- Microsoft Defender for Office 365: Some Defender for Office 365 experiences that rely on Purview DLP/Information Protection signals may experience delays or failures in policy evaluation and governance action enforcement. Admins/SOCs may experience delays or failures when accessing NHI features that rely on Data Classification Sensitivity Labels, including Tenant Metrics, Policy, and Data Usage, across the Identity, OAuth, and App Governance pages in the Security portal on Microsoft Defender for Cloud Apps.\n\n- Microsoft Defender XDR: Users may be unable to load Microsoft Defender portal pages or solution tabs.\n\n- Microsoft Fabric: Users may encounter failures when exporting reports with sensitivity labels to PDF or PowerPoint, when updating artifacts with sensitivity labels, or opening pbix with sensitivity label in Power BI Desktop. As a workaround, users can remove the sensitivity label from the affected item to complete the operation, if their organization's data protection policies allow it.\n\n- Microsoft Graph: API requests that access Exchange Online data, such as mail, calendar, and contacts, may time out and prevent users from managing Teams, Channels, Membership, Apps management and send activity notifications using Graph API.\n\n- Microsoft Intune: Scenarios including device enrollment, device check-in, and device compliance policies may have been intermittently impacted.\n\n- Microsoft Planner: Users are experiencing Plan and Task operation reliability issues.\n\n- Microsoft Power Apps: Users may be intermittently unable to sign-in to the Power Apps or Field Service mobile apps. Affected users may be able to utilize Power Apps or Field Service on the web as a way to circumvent impact, and users who are already signed in can potentially avoid impact by not signing out, clearing app data, or reinstalling while the issue is ongoing.\n\n- Microsoft Purview: Multiple Purview services including Authorization, auto-labeling, Data Loss Prevention (DLP) across Microsoft 365 services, Communication Compliance, Information Protection label and auto-labeling policies, Role-Based Access Control (RBAC) and Data Classification are impacted, and users may be unable to open or load Microsoft Purview portal pages or protected content. Audit searches, protected content creation, eDiscovery tasks such as search and export, Data Classification and On Demand Scan features may also be impacted.\n\n- Microsoft Teams: Most of the core functionality including joining calls, meetings, group chats, and channel messages are not impacted. Scenarios that depend on Exchange Online, including Calendar related failures with scheduling, invites, viewing, and meeting edits. Creation of Live or Virtual events fail. Failures with Copilot responses for outlook, calendar, or M365 files, read history, or adding to new chats. Navigating to App chats, adding new contacts or syncing contacts in settings fail. Standard channels are working fine but users may experience the inability to create or delete private or shared channels.\n\n- Microsoft To Do: The app may not load, and users may see operation failures.\n\n- Power BI: All users may intermittently be unable to export reports with MIP sensitivity labels to PDF in Power BI.\n\n- SharePoint Online: Some users may experience issues when sharing SharePoint Online files with people outside their organization, where external sharing is permitted by both organization-level and site-level settings. Additionally, features that depend on Exchange Online may be impacted. Accessing files stored directly in SharePoint Online remains functional.\n\n- Universal Print: Users may encounter errors submitting print jobs or using admin features.\n\n- Windows 365: Customers who have configured their tenant and Cloud PCs to use Microsoft Purview Customer Key for Windows 365 Cloud PCs may have users who are unable to connect to their Cloud PCs.\n\nCurrent status: We’re seeing encouraging recovery progress in Europe, with service availability and email delivery performance improving across a growing portion of affected Microsoft 365 infrastructure. Japan remains comparatively more stable, while North America is also improving; however, some users may still experience intermittent issues as recovery actions continue.\n\nWe're focused on addressing the remaining areas of disruption and improving service consistency across affected regions. Reducing email queues and backlogs remains a priority, and the extended 48-hour email timeout window remains in place to help protect delayed messages as delivery catches up.\n\nAt this time, we have no evidence of malicious activity associated with this incident. We will continue to treat this with urgency until full mitigation, and we will share a full Post-Incident Report with root cause and defense-in-depth actions after mitigation is complete.\n\nScope of impact: This issue may affect users attempting to access the affected Microsoft 365 services.\n\nNext update by: Friday, November 13, 2026, at 1:00 PM UTC",
+     "summary": {
+      "headline": "",
+      "intro": "Features of the Microsoft 365 services below that interact with Exchange Online and email services are impacted. Elements of those services that do not depend on interaction with Exchange Online remain functional.",
+      "impact": "",
+      "affected": [
+       {
+        "service": "Exchange Online",
+        "impact": "Users may be unable to access their mailbox using Outlook on the web, Outlook desktop (MAPI), Exchange ActiveSync (EAS), or REST-based connections, and email delivery may be delayed.",
+        "impactPt": null
+       },
+       {
+        "service": "Microsoft 365 admin center",
+        "impact": "Admins may be unable to load some admin center pages.",
+        "impactPt": null
+       },
+       {
+        "service": "Microsoft 365 apps",
+        "impact": "Users may be unable to view their recently used files.",
+        "impactPt": null
+       },
+       {
+        "service": "Microsoft 365 Apps Admin Center",
+        "impact": "Multiple services including Cloud Update, Cloud Policy, and Inventory are affected.",
+        "impactPt": null
+       },
+       {
+        "service": "Microsoft 365 Education",
+        "impact": "Features including Assignments, Reading Progress, and Speaker Progress may be impacted.",
+        "impactPt": null
+       },
+       {
+        "service": "Microsoft Copilot 365",
+        "impact": "Users may be unable to load Copilot Chat or receive responses in the web and desktop apps, and Copilot experiences may be unable to access work data such as email, calendar, and files.",
+        "impactPt": null
+       },
+       {
+        "service": "Microsoft Defender for Office 365",
+        "impact": "Some Defender for Office 365 experiences that rely on Purview DLP/Information Protection signals may experience delays or failures in policy evaluation and governance action enforcement. Admins/SOCs may experience delays or failures when accessing NHI features that rely on Data Classification Sensitivity Labels, including Tenant Metrics, Policy, and Data Usage, across the Identity, OAuth, and App Governance pages in the Security portal on Microsoft Defender for Cloud Apps.",
+        "impactPt": null
+       },
+       {
+        "service": "Microsoft Defender XDR",
+        "impact": "Users may be unable to load Microsoft Defender portal pages or solution tabs.",
+        "impactPt": null
+       },
+       {
+        "service": "Microsoft Fabric",
+        "impact": "Users may encounter failures when exporting reports with sensitivity labels to PDF or PowerPoint, when updating artifacts with sensitivity labels, or opening pbix with sensitivity label in Power BI Desktop. As a workaround, users can remove the sensitivity label from the affected item to complete the operation, if their organization's data protection policies allow it.",
+        "impactPt": null
+       },
+       {
+        "service": "Microsoft Graph",
+        "impact": "API requests that access Exchange Online data, such as mail, calendar, and contacts, may time out and prevent users from managing Teams, Channels, Membership, Apps management and send activity notifications using Graph API.",
+        "impactPt": null
+       },
+       {
+        "service": "Microsoft Intune",
+        "impact": "Scenarios including device enrollment, device check-in, and device compliance policies may have been intermittently impacted.",
+        "impactPt": null
+       },
+       {
+        "service": "Microsoft Planner",
+        "impact": "Users are experiencing Plan and Task operation reliability issues.",
+        "impactPt": null
+       },
+       {
+        "service": "Microsoft Power Apps",
+        "impact": "Users may be intermittently unable to sign-in to the Power Apps or Field Service mobile apps. Affected users may be able to utilize Power Apps or Field Service on the web as a way to circumvent impact, and users who are already signed in can potentially avoid impact by not signing out, clearing app data, or reinstalling while the issue is ongoing.",
+        "impactPt": null
+       },
+       {
+        "service": "Microsoft Purview",
+        "impact": "Multiple Purview services including Authorization, auto-labeling, Data Loss Prevention (DLP) across Microsoft 365 services, Communication Compliance, Information Protection label and auto-labeling policies, Role-Based Access Control (RBAC) and Data Classification are impacted, and users may be unable to open or load Microsoft Purview portal pages or protected content. Audit searches, protected content creation, eDiscovery tasks such as search and export, Data Classification and On Demand Scan features may also be impacted.",
+        "impactPt": null
+       },
+       {
+        "service": "Microsoft Teams",
+        "impact": "Most of the core functionality including joining calls, meetings, group chats, and channel messages are not impacted. Scenarios that depend on Exchange Online, including Calendar related failures with scheduling, invites, viewing, and meeting edits. Creation of Live or Virtual events fail. Failures with Copilot responses for outlook, calendar, or M365 files, read history, or adding to new chats. Navigating to App chats, adding new contacts or syncing contacts in settings fail. Standard channels are working fine but users may experience the inability to create or delete private or shared channels.",
+        "impactPt": null
+       },
+       {
+        "service": "Microsoft To Do",
+        "impact": "The app may not load, and users may see operation failures.",
+        "impactPt": null
+       },
+       {
+        "service": "Power BI",
+        "impact": "All users may intermittently be unable to export reports with MIP sensitivity labels to PDF in Power BI.",
+        "impactPt": null
+       },
+       {
+        "service": "SharePoint Online",
+        "impact": "Some users may experience issues when sharing SharePoint Online files with people outside their organization, where external sharing is permitted by both organization-level and site-level settings. Additionally, features that depend on Exchange Online may be impacted. Accessing files stored directly in SharePoint Online remains functional.",
+        "impactPt": null
+       },
+       {
+        "service": "Universal Print",
+        "impact": "Users may encounter errors submitting print jobs or using admin features.",
+        "impactPt": null
+       },
+       {
+        "service": "Windows 365",
+        "impact": "Customers who have configured their tenant and Cloud PCs to use Microsoft Purview Customer Key for Windows 365 Cloud PCs may have users who are unable to connect to their Cloud PCs.",
+        "impactPt": null
+       }
+      ],
+      "currentStatus": "We’re seeing encouraging recovery progress in Europe, with service availability and email delivery performance improving across a growing portion of affected Microsoft 365 infrastructure. Japan remains comparatively more stable, while North America is also improving; however, some users may still experience intermittent issues as recovery actions continue.",
+      "scope": "This issue may affect users attempting to access the affected Microsoft 365 services.",
+      "rootCause": "",
+      "start": null,
+      "nextUpdate": "2026-11-13T13:00:00Z",
+      "nextUpdateRaw": "Friday, November 13, 2026, at 1:00 PM UTC",
+      "headlinePt": null,
+      "introPt": null,
+      "impactPt": null,
+      "currentStatusPt": null,
+      "scopePt": null,
+      "rootCausePt": null
+     }
+    }
+   ],
+   "severity": "warn"
+  }
+ ],
+ "history": [
+  {
+   "key": "m365:85753d52-7358-41e9-bc7f-d8d36b56bef5",
+   "source": "m365",
+   "sourceName": "Microsoft 365",
+   "firstSeen": "2026-11-13T12:12:10Z",
+   "worstSeverity": "warn",
+   "title": "Microsoft Admin Center",
+   "link": "https://status.cloud.microsoft/",
+   "status": "ServiceDegradation",
+   "statusLabel": "Degradação",
+   "severity": "warn",
+   "published": "2026-11-13T12:00:37Z",
+   "lastSeen": "2026-11-13T12:16:49Z",
+   "clearedAt": null
+  }
+ ],
+ "translations": {}
+}
